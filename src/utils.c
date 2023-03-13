@@ -6,7 +6,7 @@
 /*   By: yaretel- <yaretel-@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/08 17:38:05 by yaretel-          #+#    #+#             */
-/*   Updated: 2023/03/10 20:49:46 by yaretel-         ###   ########.fr       */
+/*   Updated: 2023/03/13 11:23:57 by yaretel-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@ void	yikes(char *msg, unsigned int ac, ...)
 	va_list			list;
 	unsigned int	i;
 
+	i = 0;
 	write(2, msg, ft_strlen(msg));
 	va_start(list, ac);
 	while (i < ac)
