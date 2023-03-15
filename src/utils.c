@@ -12,9 +12,8 @@
 
 #include "../includes/minishell.h"
 
-void	yikes(char *msg, unsigned int ac, ...)
+size_t	strclen(const char *s, char c)
 {
-	va_list			list;
 	unsigned int	i;
 
 	i = 0;
