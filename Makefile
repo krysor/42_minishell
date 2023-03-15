@@ -14,11 +14,17 @@ PROJECT =		minishell
 NAME =			$(PROJECT)
 HEADER =		includes/$(PROJECT).h
 LIB =			lib$(PROJECT).a
-SRCS =			create_wrdcod\
-				utils
+DEPS_NAME =		ft
+DEPS =			$(foreach dep, $(DEPS_NAME), deps/$(dep)/lib$(dep).a)
+SRCS =			create_tokcod\
+				utils\
+				utils2\
+				create_tokenlist
+#				expand.c
 SRC_MAIN = 		main
 OBJS =			$(addprefix obj/, $(addsuffix .o, $(SRCS)))
 OBJS_MAIN =		$(addprefix obj/, $(addsuffix .o, $(SRC_MAIN)))
+OBJS_DEPS :=		$(foreach dep, $(DEPS_NAME), $(addprefix deps/$(dep)/, $(shell $(MAKE) --no-print-directory -C deps/$(dep) print_obj_names)))
 CFLAGS =		
 FTFLAGS = 		-Wall -Wextra -Werror
 FLAGS =			$(CFLAGS) $(FTFLAGS)
@@ -32,10 +38,13 @@ obj/%.o: src/%.c $(HEADER)
 	mkdir -p $(dir $@)
 	$(CC) -c $(FLAGS) -o $@ $<
 
+$(DEPS):
+	make -C $(dir $@) FLAGS='$(FLAGS)'
+
 lib: fclean debug $(LIB)
 
 $(LIB): $(DEPS) $(OBJS)
-	ar -rcs $(LIB) $(OBJS)
+	ar -rcs $(LIB) $(OBJS) $(OBJS_DEPS)
 
 clean:
 	rm -rf $(dir $(OBJS))
@@ -43,6 +52,7 @@ clean:
 fclean: clean
 	rm -rf $(NAME)
 	rm -rf $(LIB)
+	rm -rf $(DEPS)
 
 re: fclean all
 

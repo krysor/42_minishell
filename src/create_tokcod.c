@@ -1,31 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   lexer.c                                            :+:      :+:    :+:   */
+/*   create_tokcod.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yaretel- <yaretel-@student.s19.be>         +#+  +:+       +#+        */
+/*   By: yaretel- <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/03/08 16:57:45 by yaretel-          #+#    #+#             */
-/*   Updated: 2023/03/11 09:59:30 by yaretel-         ###   ########.fr       */
+/*   Created: 2023/03/14 13:30:55 by yaretel-          #+#    #+#             */
+/*   Updated: 2023/03/14 13:30:57 by yaretel-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-void	mark(char *wrdcod, unsigned int amount, char marking)
+void	mark(char *tokcod, unsigned int amount, char marking)
 {
 	unsigned int	i;
 
-	if (wrdcod == NULL)
+	if (tokcod == NULL)
 	{
 		return ;
 	}
 	i = 0;
 	while (i < amount)
-		wrdcod[i++] = marking;
+		tokcod[i++] = marking;
 }
 
-void	mark_words(char *pt, size_t len, char *wrdcod)
+void	mark_words(char *pt, size_t len, char *tokcod)
 {
 	unsigned int	i;
 
@@ -34,13 +34,17 @@ void	mark_words(char *pt, size_t len, char *wrdcod)
 	{
 		if (!(is_mchar(&pt[i])))
 		{
-			wrdcod[i] = 'w';
+			tokcod[i] = 'w';
+		}
+		else if (is_operator(&pt[i]))
+		{
+			tokcod[i] = pt[i];
 		}
 		i++;
 	}
 }
 
-void	mark_quotes(char *pt, size_t len, char *wrdcod)
+void	mark_quotes(char *pt, size_t len, char *tokcod)
 {
 	unsigned int	i;
 	char			*cquot;
@@ -53,7 +57,7 @@ void	mark_quotes(char *pt, size_t len, char *wrdcod)
 			cquot = find_next(is_quote(&pt[i]));
 			if (cquot)
 			{
-				mark(&wrdcod[i], cquot - &pt[i] + 1, *is_quote(&pt[i]));
+				mark(&tokcod[i], cquot - &pt[i] + 1, *is_quote(&pt[i]));
 				i += cquot - &pt[i];
 			}
 		}
@@ -87,34 +91,28 @@ char	*find_next(char *s)
 // A sequence of '"' characters represents a double quoted word
 // 
 // Examples:
-// "wwwww.wwwww" == create_wrdcod("hello world");
-// "'''''''.wwwww" == create_wrdcod("'hello' world");
-// "\"\"\"\"\"\"\"\".wwwwww" == create_wrdcod("\"he'llo\" wor'ld");
-char	*create_wrdcod(char *pt)
+// "wwwww.wwwww" == create_tokcod("hello world");
+// "'''''''.wwwww" == create_tokcod("'hello' world");
+// "\"\"\"\"\"\"\"\".wwwwww" == create_tokcod("\"he'llo\" wor'ld");
+char	*create_tokcod(char *pt)
 {
-	char			*wrdcod;
+	char			*tokcod;
 	unsigned int	i;
 	size_t			len;
 
 	if (!pt)
 		yikes("Error: no input in pt during parsing", 0);
 	len = ft_strlen(pt);
-	wrdcod = malloc(sizeof(*wrdcod) * (len + 1));
-	if (wrdcod == NULL)
+	tokcod = malloc(sizeof(*tokcod) * (len + 1));
+	if (tokcod == NULL)
 		yikes("Error: malloc failed", 0);
 	i = 0;
 	while (i < len)
 	{
-		wrdcod[i++] = '.';
+		tokcod[i++] = '.';
 	}
-	wrdcod[i] = '\0';
-	mark_words(pt, len, wrdcod);
-	mark_quotes(pt, len, wrdcod);
-	return (wrdcod);
+	tokcod[i] = '\0';
+	mark_words(pt, len, tokcod);
+	mark_quotes(pt, len, tokcod);
+	return (tokcod);
 }
-
-/*
-t_lex	lexer(char *str)
-{
-	
-*/
