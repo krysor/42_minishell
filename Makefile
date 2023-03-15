@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: yaretel- <marvin@42.fr>                    +#+  +:+       +#+         #
+#    By: kkaczoro <kkaczoro@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/03/08 14:17:01 by yaretel-          #+#    #+#              #
-#    Updated: 2023/03/09 11:12:19 by yaretel-         ###   ########.fr        #
+#    Updated: 2023/03/13 13:41:51 by kkaczoro         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,7 +14,7 @@ PROJECT =		minishell
 NAME =			$(PROJECT)
 HEADER =		includes/$(PROJECT).h
 LIB =			lib$(PROJECT).a
-SRCS =			lexer\
+SRCS =			create_wrdcod\
 				utils
 SRC_MAIN = 		main
 OBJS =			$(addprefix obj/, $(addsuffix .o, $(SRCS)))
@@ -26,7 +26,7 @@ FLAGS =			$(CFLAGS) $(FTFLAGS)
 all: 		$(NAME)
 
 $(NAME): $(DEPS) $(OBJS) $(OBJS_MAIN)
-	$(CC) $(FLAGS) -o $(NAME) $(OBJS) $(OBJS_MAIN) $(DEPS)
+	$(CC) -lreadline $(FLAGS) -o $(NAME) $(OBJS) $(OBJS_MAIN) $(DEPS)
 
 obj/%.o: src/%.c $(HEADER)
 	mkdir -p $(dir $@)
