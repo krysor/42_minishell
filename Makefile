@@ -6,7 +6,7 @@
 #    By: kkaczoro <kkaczoro@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/03/08 14:17:01 by yaretel-          #+#    #+#              #
-#    Updated: 2023/03/13 13:41:51 by kkaczoro         ###   ########.fr        #
+#    Updated: 2023/03/16 12:10:07 by kkaczoro         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -25,14 +25,14 @@ SRC_MAIN = 		main
 OBJS =			$(addprefix obj/, $(addsuffix .o, $(SRCS)))
 OBJS_MAIN =		$(addprefix obj/, $(addsuffix .o, $(SRC_MAIN)))
 OBJS_DEPS :=		$(foreach dep, $(DEPS_NAME), $(addprefix deps/$(dep)/, $(shell $(MAKE) --no-print-directory -C deps/$(dep) print_obj_names)))
-CFLAGS =		
+CFLAGS =		#-fsanitize=address
 FTFLAGS = 		-Wall -Wextra -Werror
 FLAGS =			$(CFLAGS) $(FTFLAGS)
 
 all: 		$(NAME)
 
 $(NAME): $(DEPS) $(OBJS) $(OBJS_MAIN)
-	$(CC) -lreadline $(FLAGS) -o $(NAME) $(OBJS) $(OBJS_MAIN) $(DEPS)
+	$(CC) $(FLAGS) -o $(NAME) $(OBJS) $(OBJS_MAIN) $(DEPS) -lreadline -L /Users/$(USER)/.brew/opt/readline/lib
 
 obj/%.o: src/%.c $(HEADER)
 	mkdir -p $(dir $@)
