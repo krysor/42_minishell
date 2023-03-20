@@ -6,7 +6,7 @@
 /*   By: kkaczoro <kkaczoro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/13 13:26:04 by kkaczoro          #+#    #+#             */
-/*   Updated: 2023/03/20 09:56:10 by kkaczoro         ###   ########.fr       */
+/*   Updated: 2023/03/20 15:38:33 by kkaczoro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,25 +19,55 @@ int		line_is_not_CMD_EXIT(char *line);
 char 	*get_line(void);
 char	*get_prompt(void);
 void	clean_shell(void);
+void	free_lst_tok(t_token *lst);
+
+void	free_arr(char **arr);
+
+void	print_tokenlist(t_token *tokenlist)
+{
+	unsigned int	i;
+
+	i = 0;
+	while (tokenlist)
+	{
+		printf("%i)\taddress: %p\ttoken: %s\tnext: %p\n", i, tokenlist, tokenlist->token, tokenlist->next);
+		tokenlist = tokenlist->next;
+		i++;
+	}
+}
 
 int main(int argc, char *argv[], char *envp[])
 {
-	char	*line;
+	char		*line;
+	t_token		*lst_tok;
+	t_command	**arr_cmd;
 
 	(void)argc;
 	(void)argv;
 	(void)envp;
 	init_shell();
+
 	line = malloc(1);
+	lst_tok = malloc(1);
+	arr_cmd = malloc(1);
+	
 	while (line_is_not_CMD_EXIT(line))
 	{
 		free(line);
+		free_lst_tok(lst_tok);
+
+		free(arr_cmd);//replace by a function
+
 		line = get_line();
-		//DO THE SHELL THING WITH THE STR HERE
+		lst_tok = lex_it(line, TRUE, NULL);
+		print_tokenlist(lst_tok);
+
+		arr_cmd = parser(lst_tok);
 	}
 	free(line);
+	free_lst_tok(lst_tok);
 	clean_shell();
-	//system("leaks minishell");
+	system("leaks minishell");
 	return (0);
 }
 
@@ -104,4 +134,44 @@ void	clean_shell(void)
 	ft_putstr_fd(CMD_EXIT, 1);
 	ft_putchar_fd('\n', 1);
 	rl_clear_history();
+}
+
+void	free_lst_tok(t_token *lst)
+{
+	t_token	*temp;
+	
+	while (lst)
+	{
+		temp = lst->next;
+		free(lst->token);
+		free(lst);
+		lst = temp;
+	}
+}
+
+void	free_arr_argv(t_command **arr_argv)
+{
+	int			i;
+
+	if (!arr_argv)
+		return ;
+	i = 0;
+	while (arr_argv[i])
+	{
+		free(arr_argv[i]->file);
+		free_arr(arr_argv[i]->args);//double array free here
+		i++;		
+	}
+}
+
+void	free_arr(char **arr)
+{
+	int	i;
+
+	if (!arr)
+		return ;
+	i = 0;
+	while (arr[i])
+		free(arr[i++]);
+	free(arr);
 }

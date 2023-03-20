@@ -6,7 +6,7 @@
 #    By: kkaczoro <kkaczoro@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/03/08 14:17:01 by yaretel-          #+#    #+#              #
-#    Updated: 2023/03/20 09:50:52 by yaretel-         ###   ########.fr        #
+#    Updated: 2023/03/20 13:54:05 by kkaczoro         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,7 +22,8 @@ SRCS =			create_tokcod\
 				create_tokenlist\
 				create_wrdcod\
 				expand_node\
-				lex_it
+				lex_it\
+				parser
 SRC_MAIN = 		main
 OBJS =			$(addprefix obj/, $(addsuffix .o, $(SRCS)))
 OBJS_MAIN =		$(addprefix obj/, $(addsuffix .o, $(SRC_MAIN)))
@@ -34,7 +35,7 @@ FLAGS =			$(CFLAGS) $(FTFLAGS)
 all: 		$(NAME)
 
 $(NAME): $(DEPS) $(OBJS) $(OBJS_MAIN)
-	$(CC) $(FLAGS) -o $(NAME) $(OBJS) $(OBJS_MAIN) $(DEPS) -lreadline 
+	$(CC) $(FLAGS) -o $(NAME) $(OBJS) $(OBJS_MAIN) $(DEPS) -lreadline -L/Users/$(USER)/.brew/opt/readline/lib
 
 obj/%.o: src/%.c $(HEADER)
 	mkdir -p $(dir $@)
