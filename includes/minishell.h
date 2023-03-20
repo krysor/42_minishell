@@ -6,11 +6,7 @@
 /*   By: kkaczoro <kkaczoro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/08 16:57:36 by yaretel-          #+#    #+#             */
-<<<<<<< includes/minishell.h
-/*   Updated: 2023/03/20 10:03:39 by yaretel-         ###   ########.fr       */
-=======
-/*   Updated: 2023/03/16 12:27:42 by kkaczoro         ###   ########.fr       */
->>>>>>> includes/minishell.h
+/*   Updated: 2023/03/20 11:09:48 by yaretel-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +52,6 @@ typedef struct	s_envvar
 }				t_envvar;
 
 // These are all the functions in Minishell
-<<<<<<< includes/minishell.h
 char			*is_mchar(char *c);
 char			*is_quote(char *c);
 char			*is_operator(char *c);
