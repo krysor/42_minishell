@@ -6,18 +6,66 @@
 /*   By: kkaczoro <kkaczoro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/08 17:38:05 by yaretel-          #+#    #+#             */
-/*   Updated: 2023/03/15 13:25:58 by kkaczoro         ###   ########.fr       */
+/*   Updated: 2023/03/17 16:18:55 by yaretel-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-size_t	strclen(const char *s, char c)
+int		is_in_set(char c, const char *set)
 {
 	unsigned int	i;
 
 	i = 0;
-	while (s[i] && s[i] != c)
+	if (!set)
+		yikes("unexpected NULL pointer\n", 0);
+	while (set[i])
+	{
+		if (set[i] == c)
+			return (1);
+		i++;
+	}
+	return (0);
+}
+
+// returns the size of the string
+// or until the first occurence of another value than the first argument
+size_t	seqstrlen(char *seq, char *s)
+{
+	size_t	i;
+
+	if (!seq || !s)
+		yikes("unexpected NULL pointer\n", 0);
+	i = 0;
+	while (is_in_set(s[i], seq) && s[i])
+		i++;
+	return (i);
+}
+
+// returns the size of the string
+// or until the first occurence of another value than the first argument
+size_t	cstrlen(char c, char *s)
+{
+	size_t	i;
+
+	if (!s)
+		yikes("unexpected NULL pointer\n", 0);
+	i = 0;
+	while (s[i] == c && s[i])
+		i++;
+	return (i);
+}
+
+// returns the size of the string
+// or until any delimeter pointed to by the second argument is found
+size_t	strdlen(const char *s, const char *d)
+{
+	unsigned int	i;
+
+	i = 0;
+	if (!s || !d)
+		yikes("unexpected NULL pointer\n", 0);
+	while (s[i] && !is_in_set(s[i], d))
 		i++;
 	return (i);
 }

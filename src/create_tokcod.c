@@ -6,7 +6,7 @@
 /*   By: yaretel- <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/14 13:30:55 by yaretel-          #+#    #+#             */
-/*   Updated: 2023/03/14 13:30:57 by yaretel-         ###   ########.fr       */
+/*   Updated: 2023/03/19 14:59:45 by yaretel-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ void	mark(char *tokcod, unsigned int amount, char marking)
 		tokcod[i++] = marking;
 }
 
-void	mark_words(char *pt, size_t len, char *tokcod)
+void	mark_words_operators(char *pt, size_t len, char *tokcod)
 {
 	unsigned int	i;
 
@@ -89,9 +89,10 @@ char	*find_next(char *s)
 // A sequence of 'w' characters represents a 'regular' words 
 // A sequence of '\'' characters represents a single quoted word
 // A sequence of '"' characters represents a double quoted word
+// Unquoted operators remain unchanged
 // 
 // Examples:
-// "wwwww.wwwww" == create_tokcod("hello world");
+// "wwwww.wwwww.<<.www" == create_tokcod("hello world << EOF");
 // "'''''''.wwwww" == create_tokcod("'hello' world");
 // "\"\"\"\"\"\"\"\".wwwwww" == create_tokcod("\"he'llo\" wor'ld");
 char	*create_tokcod(char *pt)
@@ -112,7 +113,7 @@ char	*create_tokcod(char *pt)
 		tokcod[i++] = '.';
 	}
 	tokcod[i] = '\0';
-	mark_words(pt, len, tokcod);
+	mark_words_operators(pt, len, tokcod);
 	mark_quotes(pt, len, tokcod);
 	return (tokcod);
 }
