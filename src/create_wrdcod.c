@@ -1,29 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   lexer.c                                            :+:      :+:    :+:   */
+/*   create_wrdcod.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: yaretel- <yaretel-@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/08 16:57:45 by yaretel-          #+#    #+#             */
-/*   Updated: 2023/03/11 10:37:54 by yaretel-         ###   ########.fr       */
+/*   Updated: 2023/03/20 10:02:49 by yaretel-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
-
-void	mark(char *wrdcod, unsigned int amount, char marking)
-{
-	unsigned int	i;
-
-	if (wrdcod == NULL)
-	{
-		return ;
-	}
-	i = 0;
-	while (i < amount)
-		wrdcod[i++] = marking;
-}
 
 void	mark_words(char *pt, size_t len, char *wrdcod)
 {
@@ -38,45 +25,6 @@ void	mark_words(char *pt, size_t len, char *wrdcod)
 		}
 		i++;
 	}
-}
-
-void	mark_quotes(char *pt, size_t len, char *wrdcod)
-{
-	unsigned int	i;
-	char			*cquot;
-
-	i = 0;
-	while (i < len)
-	{
-		if (is_quote(&pt[i]))
-		{
-			cquot = find_next(is_quote(&pt[i]));
-			if (cquot)
-			{
-				mark(&wrdcod[i], cquot - &pt[i] + 1, *is_quote(&pt[i]));
-				i += cquot - &pt[i];
-			}
-		}
-		i++;
-	}
-}
-
-char	*find_next(char *s)
-{
-	char			c;
-
-	if (s == NULL)
-		return (NULL);
-	c = *s;
-	s++;
-	while (*s != c)
-	{
-		if (!(*s))
-			return (NULL);
-		else
-			s++;
-	}
-	return (s);
 }
 
 // creates a malloced 'wordcoded' string, which marks the words

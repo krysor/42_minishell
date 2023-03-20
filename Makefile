@@ -6,7 +6,7 @@
 #    By: kkaczoro <kkaczoro@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/03/08 14:17:01 by yaretel-          #+#    #+#              #
-#    Updated: 2023/03/16 12:10:07 by kkaczoro         ###   ########.fr        #
+#    Updated: 2023/03/20 09:50:52 by yaretel-         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -19,8 +19,10 @@ DEPS =			$(foreach dep, $(DEPS_NAME), deps/$(dep)/lib$(dep).a)
 SRCS =			create_tokcod\
 				utils\
 				utils2\
-				create_tokenlist
-#				expand.c
+				create_tokenlist\
+				create_wrdcod\
+				expand_node\
+				lex_it
 SRC_MAIN = 		main
 OBJS =			$(addprefix obj/, $(addsuffix .o, $(SRCS)))
 OBJS_MAIN =		$(addprefix obj/, $(addsuffix .o, $(SRC_MAIN)))
@@ -32,7 +34,7 @@ FLAGS =			$(CFLAGS) $(FTFLAGS)
 all: 		$(NAME)
 
 $(NAME): $(DEPS) $(OBJS) $(OBJS_MAIN)
-	$(CC) $(FLAGS) -o $(NAME) $(OBJS) $(OBJS_MAIN) $(DEPS) -lreadline -L /Users/$(USER)/.brew/opt/readline/lib
+	$(CC) $(FLAGS) -o $(NAME) $(OBJS) $(OBJS_MAIN) $(DEPS) -lreadline 
 
 obj/%.o: src/%.c $(HEADER)
 	mkdir -p $(dir $@)

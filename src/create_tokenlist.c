@@ -6,7 +6,7 @@
 /*   By: yaretel- <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/14 13:37:19 by yaretel-          #+#    #+#             */
-/*   Updated: 2023/03/14 14:29:25 by yaretel-         ###   ########.fr       */
+/*   Updated: 2023/03/19 16:45:59 by yaretel-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,15 +22,53 @@ t_token	*newtoken(char *token)
 	if (!new)
 		yikes("malloc error\n", 1, token);
 	new->token = token;
+	new->next = NULL;
 	return (new);
 }
 
-t_token	*create_tokenlist(char *pt, char *tokcod)
+// when given the start of a token in tokcod, it returns the length
+// of this token, considering every repeated operation char as one token
+size_t	get_tokenlen(char *tokcod)
+{
+	size_t	i;
+
+	i = 0;
+	if (is_operator(tokcod))
+		return (cstrlen(tokcod[i], tokcod + i));
+	while (tokcod[i] && !is_in_set(tokcod[i], "<>|."))
+		i += cstrlen(tokcod[i], tokcod + i);
+	return (i);
+}
+
+unsigned int	add_token_node(t_token **start, t_token **head, char *pt, char *tokcod, unsigned int i)
+{
+	size_t	tokenlen;
+
+	tokenlen = get_tokenlen(tokcod + i);
+	if (!start || !head || !pt || !tokcod)
+	{
+		yikes("unexpected NULL pointer\n", 0);
+	}
+	if (!(*start))
+	{
+		*start = newtoken(ft_substr(pt, i, tokenlen));
+		*head = *start;
+	}
+	else
+	{
+		(*head)->next = newtoken(ft_substr(pt, i, tokenlen));
+		*head = (*head)->next;
+	}
+	return (tokenlen);
+}
+
+// when given a string and its tokencoding,
+// it will give a back a linked list of tokens
+t_token	*tokcod_to_list(char *pt, char *tokcod, int interprete, t_token *end)
 {
 	unsigned int	i;
 	t_token			*start;
 	t_token			*head;
-	size_t			tokenlen;
 
 	i = 0;
 	start = NULL;
@@ -40,18 +78,9 @@ t_token	*create_tokenlist(char *pt, char *tokcod)
 			i++;
 		if (!pt[i] || !tokcod[i])
 			break ;
-		tokenlen = strclen(tokcod + i, '.');
-		if (!start)
-		{
-			start = newtoken(ft_substr(pt, i, tokenlen));
-			head = start;
-		}
-		else
-		{
-			head->next = newtoken(ft_substr(pt, i, tokenlen));
-			head = head->next;
-		}
-		i += tokenlen;
+		i += add_token_node(&start, &head, pt, tokcod, i);
+		head->interprete = interprete;
+		head->next = end;
 	}
 	return (start);
 }
