@@ -19,6 +19,9 @@
 # include <stdint.h>
 # include "../deps/ft/libft.h"
 
+//this guy to open a file
+#include <fcntl.h>
+
 //These headers are required for the readline function
 # include <stdio.h>
 # include <readline/readline.h>
@@ -51,10 +54,16 @@ typedef struct	s_envvar
 	struct s_envvar	*next;
 }				t_envvar;
 
+//typedef struct	s_io
+//{
+//	char	*type; // can be ">", ">>", "<", "<<", "|"
+//	char	*arg; // extra argument for any case but "|"
+//}								t_io;
+
 typedef struct	s_io
 {
-	char	*type; // can be ">", ">>", "<", "<<", "|"
-	char	*arg; // extra argument for any case but "|"
+	int	fd;
+	int	flag;
 }								t_io;
 
 typedef struct	s_command

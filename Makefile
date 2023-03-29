@@ -6,7 +6,7 @@
 #    By: kkaczoro <kkaczoro@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/03/08 14:17:01 by yaretel-          #+#    #+#              #
-#    Updated: 2023/03/20 13:54:05 by kkaczoro         ###   ########.fr        #
+#    Updated: 2023/03/23 10:58:18 by kkaczoro         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -28,7 +28,7 @@ SRC_MAIN = 		main
 OBJS =			$(addprefix obj/, $(addsuffix .o, $(SRCS)))
 OBJS_MAIN =		$(addprefix obj/, $(addsuffix .o, $(SRC_MAIN)))
 OBJS_DEPS :=		$(foreach dep, $(DEPS_NAME), $(addprefix deps/$(dep)/, $(shell $(MAKE) --no-print-directory -C deps/$(dep) print_obj_names)))
-CFLAGS =		#-fsanitize=address
+CFLAGS =		-fsanitize=address
 FTFLAGS = 		-Wall -Wextra -Werror
 FLAGS =			$(CFLAGS) $(FTFLAGS)
 
