@@ -6,7 +6,7 @@
 /*   By: kkaczoro <kkaczoro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/13 13:26:04 by kkaczoro          #+#    #+#             */
-/*   Updated: 2023/03/20 15:38:33 by kkaczoro         ###   ########.fr       */
+/*   Updated: 2023/03/28 15:00:48 by kkaczoro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,15 +22,18 @@ void	clean_shell(void);
 void	free_lst_tok(t_token *lst);
 
 void	free_arr(char **arr);
+void	free_arr_argv(t_command **arr_argv);
 
-void	print_tokenlist(t_token *tokenlist)
+void	print_tokenlist(t_token *tokenlist_og)
 {
 	unsigned int	i;
+	t_token 		*tokenlist;
 
 	i = 0;
+	tokenlist = tokenlist_og;
 	while (tokenlist)
 	{
-		printf("%i)\taddress: %p\ttoken: %s\tnext: %p\n", i, tokenlist, tokenlist->token, tokenlist->next);
+		printf("%i)\taddress: %p\ttoken: %s\tinterprete: %i\tnext: %p\n", i, tokenlist, tokenlist->token, tokenlist->interprete, tokenlist->next);
 		tokenlist = tokenlist->next;
 		i++;
 	}
@@ -47,16 +50,17 @@ int main(int argc, char *argv[], char *envp[])
 	(void)envp;
 	init_shell();
 
-	line = malloc(1);
-	lst_tok = malloc(1);
-	arr_cmd = malloc(1);
+	line = NULL;
+	lst_tok = NULL;
+	arr_cmd = NULL;
 	
 	while (line_is_not_CMD_EXIT(line))
 	{
 		free(line);
 		free_lst_tok(lst_tok);
 
-		free(arr_cmd);//replace by a function
+		free_arr_argv(arr_cmd);//replace by a function
+		//free_arr(arr_cmd);
 
 		line = get_line();
 		lst_tok = lex_it(line, TRUE, NULL);
@@ -66,8 +70,12 @@ int main(int argc, char *argv[], char *envp[])
 	}
 	free(line);
 	free_lst_tok(lst_tok);
+	free_arr_argv(arr_cmd);//replace by a function
+
 	clean_shell();
-	system("leaks minishell");
+	
+	//system("leaks minishell");
+	
 	return (0);
 }
 
@@ -109,11 +117,11 @@ char *get_line(void)
 	//if (!prompt)
 	//	; //SOME KIND OF FREEING REQUIRED HERE
 	line = readline(prompt);
+	free(prompt);
 	if (!line)
 		line = ft_strdup(CMD_EXIT);//This happens when 1)CTRL+D on empty line & 2)malloc inside readline fails
 	else
 		add_history(line);
-	free(prompt);
 	return (line);
 }
 
@@ -152,16 +160,19 @@ void	free_lst_tok(t_token *lst)
 void	free_arr_argv(t_command **arr_argv)
 {
 	int			i;
+	t_command	*temp;
 
 	if (!arr_argv)
 		return ;
 	i = 0;
 	while (arr_argv[i])
 	{
-		free(arr_argv[i]->file);
-		free_arr(arr_argv[i]->args);//double array free here
-		i++;		
+		temp = arr_argv[i++];
+		free(temp->file);
+		free_arr(temp->args);//double array free here
+		free(temp);	
 	}
+	free(arr_argv);
 }
 
 void	free_arr(char **arr)
