@@ -6,7 +6,7 @@
 /*   By: yaretel- <yaretel-@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/13 13:44:18 by yaretel-          #+#    #+#             */
-/*   Updated: 2023/03/16 12:00:50 by yaretel-         ###   ########.fr       */
+/*   Updated: 2023/03/21 09:00:34 by yaretel-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,3 +56,21 @@ char	*is_quote(char *c)
 		return (NULL);
 }
 
+// returns the next occurence of the first argument
+char	*find_next(char *s)
+{
+	char			c;
+
+	if (s == NULL)
+		return (NULL);
+	c = *s;
+	s++;
+	while (*s != c)
+	{
+		if (!(*s))
+			return (NULL);
+		else
+			s++;
+	}
+	return (s);
+}

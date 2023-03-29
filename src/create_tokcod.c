@@ -6,7 +6,7 @@
 /*   By: yaretel- <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/14 13:30:55 by yaretel-          #+#    #+#             */
-/*   Updated: 2023/03/19 14:59:45 by yaretel-         ###   ########.fr       */
+/*   Updated: 2023/03/25 15:17:51 by yaretel-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ void	mark_words_operators(char *pt, size_t len, char *tokcod)
 		{
 			tokcod[i] = 'w';
 		}
-		else if (is_operator(&pt[i]))
+		else if (is_operator(&pt[i]) || pt[i] == '$')
 		{
 			tokcod[i] = pt[i];
 		}
@@ -63,24 +63,6 @@ void	mark_quotes(char *pt, size_t len, char *tokcod)
 		}
 		i++;
 	}
-}
-
-char	*find_next(char *s)
-{
-	char			c;
-
-	if (s == NULL)
-		return (NULL);
-	c = *s;
-	s++;
-	while (*s != c)
-	{
-		if (!(*s))
-			return (NULL);
-		else
-			s++;
-	}
-	return (s);
 }
 
 // creates a malloced 'wordcoded' string, which marks the words
