@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   create_tokenlist.c                                 :+:      :+:    :+:   */
+/*   tokcod_to_list.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: yaretel- <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/14 13:37:19 by yaretel-          #+#    #+#             */
-/*   Updated: 2023/03/19 16:45:59 by yaretel-         ###   ########.fr       */
+/*   Updated: 2023/03/23 09:10:13 by yaretel-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,24 +40,24 @@ size_t	get_tokenlen(char *tokcod)
 	return (i);
 }
 
-unsigned int	add_token_node(t_token **start, t_token **head, char *pt, char *tokcod, unsigned int i)
+unsigned int	addtoknode(t_token **strt, t_token **hd, char *pt, char *tokcod)
 {
 	size_t	tokenlen;
 
-	tokenlen = get_tokenlen(tokcod + i);
-	if (!start || !head || !pt || !tokcod)
+	tokenlen = get_tokenlen(tokcod);
+	if (!strt || !hd || !pt || !tokcod)
 	{
 		yikes("unexpected NULL pointer\n", 0);
 	}
-	if (!(*start))
+	if (!(*strt))
 	{
-		*start = newtoken(ft_substr(pt, i, tokenlen));
-		*head = *start;
+		*strt = newtoken(ft_substr(pt, 0, tokenlen));
+		*hd = *strt;
 	}
 	else
 	{
-		(*head)->next = newtoken(ft_substr(pt, i, tokenlen));
-		*head = (*head)->next;
+		(*hd)->next = newtoken(ft_substr(pt, 0, tokenlen));
+		*hd = (*hd)->next;
 	}
 	return (tokenlen);
 }
@@ -78,7 +78,7 @@ t_token	*tokcod_to_list(char *pt, char *tokcod, int interprete, t_token *end)
 			i++;
 		if (!pt[i] || !tokcod[i])
 			break ;
-		i += add_token_node(&start, &head, pt, tokcod, i);
+		i += addtoknode(&start, &head, pt + i, tokcod + i);
 		head->interprete = interprete;
 		head->next = end;
 	}

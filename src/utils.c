@@ -6,13 +6,40 @@
 /*   By: kkaczoro <kkaczoro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/08 17:38:05 by yaretel-          #+#    #+#             */
-/*   Updated: 2023/03/17 16:18:55 by yaretel-         ###   ########.fr       */
+/*   Updated: 2023/03/25 14:36:22 by yaretel-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-int		is_in_set(char c, const char *set)
+//commented out because not necessary anymore
+/*
+char	*strsquash(char x, const char *str)
+{
+	unsigned int	i;
+	unsigned int	j;
+	unsigned int	count;
+	char			*new;
+
+	i = 0;
+	count = 0;
+	while (str[i])
+		if (str[i++] == x)
+			count++;
+	new = malloc(sizeof(*new) * (i - count + 1));
+	if (!new)
+		yikes("malloc failed", 0);
+	i = 0;
+	j = 0;
+	while (str[i])
+		if (!(str[i++] == x))
+			new[j++] = x;
+	new[j] = '\0';
+	return (new);
+}
+*/
+
+int	is_in_set(char c, const char *set)
 {
 	unsigned int	i;
 
@@ -37,7 +64,7 @@ size_t	seqstrlen(char *seq, char *s)
 	if (!seq || !s)
 		yikes("unexpected NULL pointer\n", 0);
 	i = 0;
-	while (is_in_set(s[i], seq) && s[i])
+	while (is_in_set(seq[i], s) && seq[i])
 		i++;
 	return (i);
 }

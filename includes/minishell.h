@@ -6,7 +6,7 @@
 /*   By: kkaczoro <kkaczoro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/08 16:57:36 by yaretel-          #+#    #+#             */
-/*   Updated: 2023/03/20 14:53:43 by kkaczoro         ###   ########.fr       */
+/*   Updated: 2023/03/28 13:43:24 by yaretel-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,9 @@
 # define TRUE		1
 # define FALSE		0
 
+//macro's for invisible character
+# define INVIS		24
+
 //This struct is used to make a linked list of all the words and tokens during the lexer stage
 typedef struct	s_token
 {
@@ -54,28 +57,20 @@ typedef struct	s_envvar
 	struct s_envvar	*next;
 }				t_envvar;
 
-//typedef struct	s_io
-//{
-//	char	*type; // can be ">", ">>", "<", "<<", "|"
-//	char	*arg; // extra argument for any case but "|"
-//}								t_io;
-
-typedef struct	s_io
+typedef struct		s_rdr
 {
-	int	fd;
-	int	flag;
-}								t_io;
+	char			*type; // can be ">", ">>", "<", "<<" or NULL
+	char			*file; // the file that comes after the redirection
+	struct s_rdr	*next;
+}					t_rdr;
 
-typedef struct	s_command
+typedef struct	s_cmd
 {
-	//struct s_command	*prev; // a pointer to the prev token
-	char				*file; // a string pointing to the command executable, NULL if command is builtin
-	int					(*builtin)(char *args[]); // a pointer to the builtin function, NULL if not a builtin function
-	char				**args; // the arguments to pass to the command
-	t_io				input;
-	t_io				output;
-	//struct s_command	*next; // a pointer to the next token
-}								t_command;
+	char		*file; // a string pointing to the command executable, NULL if command is builtin
+	int			(*builtin)(char *args[]); // a pointer to the builtin function, NULL if not a builtin function
+	char		*args[]; // the arguments to pass to the command
+	t_rdr		*rdr;
+}				t_cmd;
 
 // These are all the functions in Minishell
 char			*is_mchar(char *c);
@@ -96,11 +91,14 @@ int				is_in_set(char c, const char *set);
 unsigned int	add_token_node(t_token **start, t_token **head, char *pt, char *tokcod, unsigned int i);
 t_token			*tokcod_to_list(char *pt, char *tokcod, int interprete, t_token *end);
 t_token			*lex_it(char *pt, int interprete, t_token *end);
-void			expand_node(t_token *node, t_token *prev);
+t_token			*tokcod_to_list(char *pt, char *tokcod, int interprete, t_token *end);
+void			expand_toknode(t_token **node, t_token *prev, char *toknod);
 size_t			seqstrlen(char *seq, char *s);
 void			mark_quotes(char *pt, size_t len, char *tokcod);
-t_command		**parser(t_token	*lst_tok);
-
+ssize_t			value_len_diff(char *dlr);
+void			expand_var(char *dest, char *dollar, unsigned int *i, unsigned int *j);
+char			*strsquash(char x, const char *str);
+void			mark_outer_quotes(char *pt, char *tokcod, char marking);
 void			rl_clear_history (void);
 void			rl_replace_line (const char *text, int clear_undo);
 void			rl_keep_mark_active (void);

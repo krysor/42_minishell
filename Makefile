@@ -6,7 +6,7 @@
 #    By: kkaczoro <kkaczoro@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/03/08 14:17:01 by yaretel-          #+#    #+#              #
-#    Updated: 2023/03/23 10:58:18 by kkaczoro         ###   ########.fr        #
+#    Updated: 2023/03/23 09:44:08 by yaretel-         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -19,11 +19,11 @@ DEPS =			$(foreach dep, $(DEPS_NAME), deps/$(dep)/lib$(dep).a)
 SRCS =			create_tokcod\
 				utils\
 				utils2\
-				create_tokenlist\
+				tokcod_to_list\
 				create_wrdcod\
-				expand_node\
-				lex_it\
-				parser
+				expand_toknode\
+				expand_toknode_utils\
+				lex_it
 SRC_MAIN = 		main
 OBJS =			$(addprefix obj/, $(addsuffix .o, $(SRCS)))
 OBJS_MAIN =		$(addprefix obj/, $(addsuffix .o, $(SRC_MAIN)))
@@ -35,7 +35,7 @@ FLAGS =			$(CFLAGS) $(FTFLAGS)
 all: 		$(NAME)
 
 $(NAME): $(DEPS) $(OBJS) $(OBJS_MAIN)
-	$(CC) $(FLAGS) -o $(NAME) $(OBJS) $(OBJS_MAIN) $(DEPS) -lreadline -L/Users/$(USER)/.brew/opt/readline/lib
+	$(CC) $(FLAGS) -o $(NAME) $(OBJS) $(OBJS_MAIN) $(DEPS) -lreadline -L/$(HOME)/.brew/opt/readline/lib
 
 obj/%.o: src/%.c $(HEADER)
 	mkdir -p $(dir $@)
