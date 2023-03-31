@@ -6,7 +6,7 @@
 /*   By: kkaczoro <kkaczoro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/30 17:28:30 by kkaczoro          #+#    #+#             */
-/*   Updated: 2023/03/30 17:35:40 by kkaczoro         ###   ########.fr       */
+/*   Updated: 2023/03/31 13:54:26 by kkaczoro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 static int	get_nb_tokens_before_pipe(t_token *lst_tok);
 
-int	set_cmd_default(t_command *arr, t_token *token)
+int	set_cmd_default(t_cmd *arr, t_token *token)
 {
 	int	nb_tokens_before_pipe;
 	
@@ -61,7 +61,7 @@ int	is_token_operator(char *str)
 }
 
 //decalre a pnt to a pnt one scope outside the loop
-void	handle_operator(t_token *token, t_command *arr)
+void	handle_operator(t_token *token, t_cmd *arr)
 {	
 	(void)arr;
 	if (*token->token == '|')

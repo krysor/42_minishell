@@ -6,7 +6,7 @@
 /*   By: kkaczoro <kkaczoro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/30 16:49:39 by kkaczoro          #+#    #+#             */
-/*   Updated: 2023/03/30 17:25:33 by kkaczoro         ###   ########.fr       */
+/*   Updated: 2023/03/31 13:54:55 by kkaczoro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ void	print_tokenlist(t_token *tokenlist_og)
 	}
 }
 
-void	print_arrcmd(t_command **arr)
+void	print_arrcmd(t_cmd **arr)
 {
 	int	i;
 	int	j;

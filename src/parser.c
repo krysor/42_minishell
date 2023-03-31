@@ -6,20 +6,20 @@
 /*   By: kkaczoro <kkaczoro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/20 11:51:12 by kkaczoro          #+#    #+#             */
-/*   Updated: 2023/03/31 10:27:57 by kkaczoro         ###   ########.fr       */
+/*   Updated: 2023/03/31 13:52:53 by kkaczoro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
 static int	get_nb_pipes(t_token *lst_tok);
-static void	set_arr(t_command **arr, int nb_cmd, t_token **lst_tok_pnt);
-static int	set_cmd(t_command *arr, t_token **lst_tok_pnt);
+static void	set_arr(t_cmd **arr, int nb_cmd, t_token **lst_tok_pnt);
+static int	set_cmd(t_cmd *arr, t_token **lst_tok_pnt);
 
-t_command	**parser(t_token *lst_tok)
+t_cmd	**parser(t_token *lst_tok)
 {
 	int			nb_cmd;
-	t_command	**arr;
+	t_cmd	**arr;
 	
 	t_token		**lst_tok_pnt;
 	lst_tok_pnt = &lst_tok;
@@ -27,7 +27,7 @@ t_command	**parser(t_token *lst_tok)
 	if (!lst_tok)
 		return (NULL);
 	nb_cmd = get_nb_pipes(lst_tok) + 1;
-	arr = malloc(sizeof(t_command *) * (nb_cmd + 1));
+	arr = malloc(sizeof(t_cmd *) * (nb_cmd + 1));
 	if (!arr)
 		return (NULL);//some special quitting here?
 	arr[nb_cmd] = NULL;
@@ -61,21 +61,21 @@ int	token_is_pipe(t_token *token)
 	return (0);
 }
 
-static void	set_arr(t_command **arr, int nb_cmd, t_token **lst_tok_pnt)
+static void	set_arr(t_cmd **arr, int nb_cmd, t_token **lst_tok_pnt)
 {
 	int		i;
 
 	i = 0;
 	while (i < nb_cmd)
 	{
-		arr[i] = malloc(sizeof(t_command));
+		arr[i] = malloc(sizeof(t_cmd));
 		if (!arr[i] || set_cmd(arr[i], lst_tok_pnt))
 			break ;//some freeing necessary here
 		i++;
 	}
 }
 
-static int	set_cmd(t_command *arr, t_token **lst_tok_pnt)
+static int	set_cmd(t_cmd *arr, t_token **lst_tok_pnt)
 {
 	int		i;
 	t_token	*token;

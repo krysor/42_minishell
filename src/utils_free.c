@@ -6,7 +6,7 @@
 /*   By: kkaczoro <kkaczoro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/30 16:50:29 by kkaczoro          #+#    #+#             */
-/*   Updated: 2023/03/30 17:01:51 by kkaczoro         ###   ########.fr       */
+/*   Updated: 2023/03/31 13:54:41 by kkaczoro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,10 +25,10 @@ void	free_lst_tok(t_token *lst)
 	}
 }
 
-void	free_arr_argv(t_command **arr_argv)
+void	free_arr_argv(t_cmd **arr_argv)
 {
 	int			i;
-	t_command	*temp;
+	t_cmd	*temp;
 
 	if (!arr_argv)
 		return ;
@@ -56,7 +56,7 @@ void	free_arr(char **arr)
 	free(arr);
 }
 
-void	free_intermediates(char *line, t_token *lst_tok, t_command **arr_cmd)
+void	free_intermediates(char *line, t_token *lst_tok, t_cmd **arr_cmd)
 {
 	free(line);
 	free_lst_tok(lst_tok);

@@ -3,14 +3,19 @@
 /*                                                        :::      ::::::::   */
 /*   executor.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yaretel- <yaretel-@student.s19.be>         +#+  +:+       +#+        */
+/*   By: kkaczoro <kkaczoro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/25 17:41:31 by yaretel-          #+#    #+#             */
-/*   Updated: 2023/03/31 13:36:28 by yaretel-         ###   ########.fr       */
+/*   Updated: 2023/03/31 13:51:27 by kkaczoro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
+
+int		process_redirections(void)
+{
+	return (-1);
+}
 
 int		get_oflag(char *type)
 {
@@ -38,6 +43,7 @@ int		get_rdr_fd(char *type)
 		return (STDOUT_FILENO);
 	else
 		yikes("wrong input for get_oflag\n", 0);
+	return (-1);
 }
 
 // opens the file with the right flags and redirects the stdin/stdout accordingly
@@ -61,6 +67,7 @@ void	prepare_and_exec(t_cmd *cmd, char *ep[])
 	int		pipefd[2];
 	pid_t	pid;
 
+	(void)current;
 	if (pipe(pipefd) == -1)
 		yikes("pipe failed", 0);
 	pid = fork();
@@ -72,7 +79,7 @@ void	prepare_and_exec(t_cmd *cmd, char *ep[])
 		if (dup2(STDOUT_FILENO, pipefd[1]) == -1)
 			yikes("dup2() failed", 0);
 		close(pipefd[1]);
-		if (process_redirections(&(cmd->io_rdr)) == -1)
+		if (process_redirections() == -1)
 			yikes("processing of redirections failed", 0);
 		execve(cmd->file, cmd->args, ep);
 	}
@@ -82,16 +89,19 @@ void	prepare_and_exec(t_cmd *cmd, char *ep[])
 		if (dup2(STDIN_FILENO, pipefd[0]) == -1)
 			yikes("dup2() failed", 0);
 		close(pipefd[0]);
-		if (waitpid(pid) == -1)
+		if (waitpid(pid, NULL, 0) == -1)
 			yikes("waitpid() failed", 0);
 	}
 }
 
-void	executor(t_cmd *lst, char *ep[])
+void	executor(t_cmd **lst, char *ep[])
 {
-	while (lst)
+	int	i;
+	
+	i = 0;
+	while (lst[i])
 	{
-		prepare_and_exec(lst, ep);
-		lst = lst->next;
+		prepare_and_exec(lst[i], ep);
+		i++;
 	}
 }

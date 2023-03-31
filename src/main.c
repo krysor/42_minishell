@@ -6,7 +6,7 @@
 /*   By: kkaczoro <kkaczoro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/13 13:26:04 by kkaczoro          #+#    #+#             */
-/*   Updated: 2023/03/30 17:10:05 by kkaczoro         ###   ########.fr       */
+/*   Updated: 2023/03/31 13:55:14 by kkaczoro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ int main(int argc, char *argv[], char *envp[])
 {
 	char		*line;
 	t_token		*lst_tok;
-	t_command	**arr_cmd;
+	t_cmd		**arr_cmd;
 
 	(void)argc;
 	(void)argv;
