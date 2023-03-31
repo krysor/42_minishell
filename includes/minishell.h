@@ -6,7 +6,7 @@
 /*   By: kkaczoro <kkaczoro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/08 16:57:36 by yaretel-          #+#    #+#             */
-/*   Updated: 2023/03/28 13:43:24 by yaretel-         ###   ########.fr       */
+/*   Updated: 2023/03/30 17:35:35 by kkaczoro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,28 +64,28 @@ typedef struct		s_rdr
 	struct s_rdr	*next;
 }					t_rdr;
 
-typedef struct	s_cmd
+typedef struct	s_command
 {
 	char		*file; // a string pointing to the command executable, NULL if command is builtin
 	int			(*builtin)(char *args[]); // a pointer to the builtin function, NULL if not a builtin function
-	char		*args[]; // the arguments to pass to the command
 	t_rdr		*rdr;
-}				t_cmd;
+	char		**args; // the arguments to pass to the command
+}				t_command;
 
 // These are all the functions in Minishell
 char			*is_mchar(char *c);
 char			*is_quote(char *c);
 char			*is_operator(char *c);
-size_t			ft_strlen(const char *str);
+//size_t			ft_strlen(const char *str);
 void			mark_sequence(char *s, unsigned int amount, char marking);
 char			*find_next(char *s);
 char			*create_tokcod(char *cmd_line);
 void			yikes(char *msg, unsigned int ac, ...);
 size_t			strdlen(const char *s, const char *c);
 char			*ft_get_env_val(char *envp[], char *env);
-int				ft_strncmp(const char *s1, const char *s2, size_t n);
-char			*ft_strdup(const char *s);
-void			ft_putstr_fd(char *s, int fd);
+//int				ft_strncmp(const char *s1, const char *s2, size_t n);
+//char			*ft_strdup(const char *s);
+//void			ft_putstr_fd(char *s, int fd);
 size_t			cstrlen(char c, char *s);
 int				is_in_set(char c, const char *set);
 unsigned int	add_token_node(t_token **start, t_token **head, char *pt, char *tokcod, unsigned int i);
@@ -99,9 +99,38 @@ ssize_t			value_len_diff(char *dlr);
 void			expand_var(char *dest, char *dollar, unsigned int *i, unsigned int *j);
 char			*strsquash(char x, const char *str);
 void			mark_outer_quotes(char *pt, char *tokcod, char marking);
+
+//functions for the main and basic shell interface
+void			init_shell(void);
+void			ft_ctrl_c(int i);
+int				line_is_not_CMD_EXIT(char *line);
+char 			*get_line(void);
+char			*get_prompt(void);
+void			clean_shell(void);
+
+//readline functions for the prompt
 void			rl_clear_history (void);
 void			rl_replace_line (const char *text, int clear_undo);
 void			rl_keep_mark_active (void);
 int				rl_on_new_line (void);
+
+t_command		**parser(t_token	*lst_tok);
+
+//parser and utils_parser functions
+int				token_is_pipe(t_token *token);
+int				set_cmd_default(t_command *arr, t_token *token);
+int				is_token_operator(char *str);
+void			handle_operator(t_token *token, t_command *arr);
+
+//frees all the stuff
+void			free_lst_tok(t_token *lst);
+void			free_arr_argv(t_command **arr_argv);
+void			free_arr(char **arr);
+void			free_intermediates(char *line, t_token *lst_tok, t_command **arr_cmd);
+
+//for printing intermediate results; delete before final pushing
+void			print_tokenlist(t_token *tokenlist_og);
+void			print_arrcmd(t_command **arr);
+void			print_rdr(t_rdr *rdr);
 
 #endif
