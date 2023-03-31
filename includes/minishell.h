@@ -6,7 +6,7 @@
 /*   By: kkaczoro <kkaczoro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/08 16:57:36 by yaretel-          #+#    #+#             */
-/*   Updated: 2023/03/30 17:35:35 by kkaczoro         ###   ########.fr       */
+/*   Updated: 2023/03/31 13:33:05 by yaretel-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,10 @@
 
 # include <stdlib.h>
 # include <unistd.h>
+# include <sys/types.h>
 # include <stdarg.h>
 # include <stdint.h>
+# include <fcntl.h>
 # include "../deps/ft/libft.h"
 
 //this guy to open a file
@@ -66,11 +68,11 @@ typedef struct		s_rdr
 
 typedef struct	s_command
 {
+	t_rdr		*rdr;
 	char		*file; // a string pointing to the command executable, NULL if command is builtin
 	int			(*builtin)(char *args[]); // a pointer to the builtin function, NULL if not a builtin function
-	t_rdr		*rdr;
-	char		**args; // the arguments to pass to the command
-}				t_command;
+	char		*args[]; // the arguments to pass to the command
+}				t_cmd;
 
 // These are all the functions in Minishell
 char			*is_mchar(char *c);

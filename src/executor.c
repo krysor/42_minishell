@@ -6,9 +6,11 @@
 /*   By: yaretel- <yaretel-@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/25 17:41:31 by yaretel-          #+#    #+#             */
-/*   Updated: 2023/03/28 14:25:18 by yaretel-         ###   ########.fr       */
+/*   Updated: 2023/03/31 13:36:28 by yaretel-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+#include "../includes/minishell.h"
 
 int		get_oflag(char *type)
 {
@@ -21,7 +23,7 @@ int		get_oflag(char *type)
 	{
 		oflag |= O_WRONLY;
 		if (ft_strncmp(type, ">>", 3) == 0)
-			oflag|= O_APPEND:
+			oflag|= O_APPEND;
 	}
 	else
 		yikes("wrong input for get_oflag\n", 0);
@@ -39,12 +41,12 @@ int		get_rdr_fd(char *type)
 }
 
 // opens the file with the right flags and redirects the stdin/stdout accordingly
-int		handle_io(char *type, char *arg)
+int		handle_rdr(char *type, char *arg)
 {
 	int	fd;
 
 	fd = open(arg, get_oflag(type));
-	if (open == -1)
+	if (fd == -1)
 		return (1);
 	if (dup2(fd, get_rdr_fd(type)) == -1)
 		return (1);
@@ -53,18 +55,18 @@ int		handle_io(char *type, char *arg)
 }
 
 // question: how to dup2() back the default standard output / input
-void	prepare_and_exec(t_command *cmd, char *ep[])
+void	prepare_and_exec(t_cmd *cmd, char *ep[])
 {
 	t_rdr	*current;
-	fd		pipefd[2];
-	t_pid	pid;
+	int		pipefd[2];
+	pid_t	pid;
 
 	if (pipe(pipefd) == -1)
 		yikes("pipe failed", 0);
 	pid = fork();
 	if (pid == -1)
 		yikes("fork() failed", 0);
-	if (pid = 0)
+	if (pid == 0)
 	{
 		close(pipefd[0]);
 		if (dup2(STDOUT_FILENO, pipefd[1]) == -1)
