@@ -6,7 +6,7 @@
 /*   By: kkaczoro <kkaczoro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/08 16:57:36 by yaretel-          #+#    #+#             */
-/*   Updated: 2023/03/31 13:53:54 by kkaczoro         ###   ########.fr       */
+/*   Updated: 2023/03/31 17:08:34 by kkaczoro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,8 @@ typedef struct		s_rdr
 
 typedef struct	s_cmd
 {
-	t_rdr		*rdr;
+	//t_rdr		*rdr;
+	t_rdr		rdr;
 	char		*file; // a string pointing to the command executable, NULL if command is builtin
 	int			(*builtin)(char *args[]); // a pointer to the builtin function, NULL if not a builtin function
 	char		**args; // the arguments to pass to the command
@@ -122,7 +123,7 @@ t_cmd		**parser(t_token	*lst_tok);
 int				token_is_pipe(t_token *token);
 int				set_cmd_default(t_cmd *arr, t_token *token);
 int				is_token_operator(char *str);
-void			handle_operator(t_token *token, t_cmd *arr);
+void			handle_operator(t_token **lst_tok_pnt, t_cmd *arr);
 
 //frees all the stuff
 void			free_lst_tok(t_token *lst);

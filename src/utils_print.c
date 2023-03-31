@@ -6,7 +6,7 @@
 /*   By: kkaczoro <kkaczoro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/30 16:49:39 by kkaczoro          #+#    #+#             */
-/*   Updated: 2023/03/31 13:54:55 by kkaczoro         ###   ########.fr       */
+/*   Updated: 2023/03/31 17:21:54 by kkaczoro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,10 @@ void	print_arrcmd(t_cmd **arr)
 		printf("arr[%d]->file\t: %s\n", i, arr[i]->file);
 		printf("arr[%d]->builtin\t: %p\n", i, arr[i]->builtin);
 		printf("arr[%d]->rdr:\n", i);
-		print_rdr(arr[i]->rdr);
+		
+		//print_rdr(&arr[i]->rdr);
+		print_rdr(&arr[i]->rdr);
+		
 		j = -1;
 		while (arr[i]->args[++j])
 			printf("arr[%d]->args[%d]\t: %s\n", i, j, arr[i]->args[j]);

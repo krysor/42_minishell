@@ -6,7 +6,7 @@
 /*   By: kkaczoro <kkaczoro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/30 17:28:30 by kkaczoro          #+#    #+#             */
-/*   Updated: 2023/03/31 13:54:26 by kkaczoro         ###   ########.fr       */
+/*   Updated: 2023/03/31 17:23:09 by kkaczoro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,12 @@ int	set_cmd_default(t_cmd *arr, t_token *token)
 	
 	arr->file = NULL;
 	arr->builtin = NULL;
-	arr->rdr = NULL;//possibly needs correction if contents of rdr struct change
+	
+	//arr->rdr = NULL;//possibly needs correction if contents of rdr struct change
+	arr->rdr.type = NULL;
+	arr->rdr.file = NULL;
+	arr->rdr.next = NULL;
+	
 	nb_tokens_before_pipe = get_nb_tokens_before_pipe(token);
 	//printf("nb_tokens_before_pipe: %d\n", nb_tokens_before_pipe);
 	arr->args = malloc(sizeof(char *) * (nb_tokens_before_pipe + 1));
@@ -61,13 +66,20 @@ int	is_token_operator(char *str)
 }
 
 //decalre a pnt to a pnt one scope outside the loop
-void	handle_operator(t_token *token, t_cmd *arr)
+void	handle_operator(t_token **lst_tok_pnt, t_cmd *arr)
 {	
-	(void)arr;
-	if (*token->token == '|')
-		printf("pipe\n");//pipe overpowers input rediretction BUT NOT OUTPUT REDIRECTION
-	else if (*token->token == '<')
-		printf("input: %s\n", token->next->token);
-	else if (*token->token == '>')
-		printf("output: %s\n", token->next->token);
+	char	*token;
+	
+	if (!lst_tok_pnt || !*lst_tok_pnt || !arr)
+		return ;
+	token = (*lst_tok_pnt)->token;
+	if (*token == '|')
+		*lst_tok_pnt = (*lst_tok_pnt)->next;
+	else if ((*lst_tok_pnt)->next &&
+		(*token == '<' || *token == '<'))
+	{
+		arr->rdr.type = ft_strdup(token);
+		arr->rdr.file = ft_strdup(token);
+		*lst_tok_pnt = ((*lst_tok_pnt)->next)->next;
+	}
 }

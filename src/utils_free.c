@@ -6,7 +6,7 @@
 /*   By: kkaczoro <kkaczoro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/30 16:50:29 by kkaczoro          #+#    #+#             */
-/*   Updated: 2023/03/31 13:54:41 by kkaczoro         ###   ########.fr       */
+/*   Updated: 2023/03/31 17:21:06 by kkaczoro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,11 @@ void	free_arr_argv(t_cmd **arr_argv)
 	{
 		temp = arr_argv[i++];
 		free(temp->file);
-		free(temp->rdr);
+
+		//free(temp->rdr);
+		free(temp->rdr.type);
+		free(temp->rdr.file);
+		
 		free_arr(temp->args);
 		free(temp);	
 	}

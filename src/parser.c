@@ -6,7 +6,7 @@
 /*   By: kkaczoro <kkaczoro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/20 11:51:12 by kkaczoro          #+#    #+#             */
-/*   Updated: 2023/03/31 13:52:53 by kkaczoro         ###   ########.fr       */
+/*   Updated: 2023/03/31 14:49:37 by kkaczoro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,22 +78,20 @@ static void	set_arr(t_cmd **arr, int nb_cmd, t_token **lst_tok_pnt)
 static int	set_cmd(t_cmd *arr, t_token **lst_tok_pnt)
 {
 	int		i;
-	t_token	*token;
 	
-	token = *lst_tok_pnt;
-	if (set_cmd_default(arr, token))
+	if (set_cmd_default(arr, *lst_tok_pnt))
 		return (1);
 	i = 0;
-	while (token && !token_is_pipe(token))
+	while (*lst_tok_pnt && !token_is_pipe(*lst_tok_pnt))
 	{
 		//arr->args[i] = NULL;
 		
 		//check if meta
 		
-		if ((token)->interprete && is_token_operator(token->token))
-		 	handle_operator(token, arr);
+		if ((*lst_tok_pnt)->interprete && is_token_operator((*lst_tok_pnt)->token))
+		 	handle_operator(lst_tok_pnt, arr);
 		else
-			arr->args[i++] = ft_strdup(token->token);
+			arr->args[i++] = ft_strdup((*lst_tok_pnt)->token);
 		//	if yes look at the next one
 
 		//else check if first
@@ -109,10 +107,10 @@ static int	set_cmd(t_cmd *arr, t_token **lst_tok_pnt)
 		// 	set_cmd_file(arr, token);
 		// here gotta add statements to fill in all cmd struct elements
 		
-		token = token->next;
+		(*lst_tok_pnt) = (*lst_tok_pnt)->next;
 	}
 	arr->args[i] = NULL;
-	if (token && token->next)
-		token = token->next;
+	if ((*lst_tok_pnt) && (*lst_tok_pnt)->next)
+		(*lst_tok_pnt) = (*lst_tok_pnt)->next;
 	return (0);
 }
