@@ -6,7 +6,11 @@
 #    By: kkaczoro <kkaczoro@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/03/08 14:17:01 by yaretel-          #+#    #+#              #
+<<<<<<< Makefile
+#    Updated: 2023/03/31 13:32:31 by yaretel-         ###   ########.fr        #
+=======
 #    Updated: 2023/03/30 17:36:30 by kkaczoro         ###   ########.fr        #
+>>>>>>> Makefile
 #                                                                              #
 # **************************************************************************** #
 
@@ -24,6 +28,7 @@ SRCS =			create_tokcod\
 				expand_toknode\
 				expand_toknode_utils\
 				lex_it\
+				executor\
 				parser\
 				utils_parser\
 				utils_free\
