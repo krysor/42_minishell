@@ -6,7 +6,7 @@
 /*   By: kkaczoro <kkaczoro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/30 17:28:30 by kkaczoro          #+#    #+#             */
-/*   Updated: 2023/03/31 17:23:09 by kkaczoro         ###   ########.fr       */
+/*   Updated: 2023/04/05 15:50:48 by kkaczoro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 static int	get_nb_tokens_before_pipe(t_token *lst_tok);
 
+// Sets default values for all the fields of a a t_cmd struct.
 int	set_cmd_default(t_cmd *arr, t_token *token)
 {
 	int	nb_tokens_before_pipe;
@@ -50,17 +51,19 @@ static int	get_nb_tokens_before_pipe(t_token *lst_tok)
 	return (nb);
 }
 
-int	is_token_operator(char *str)
+int	token_is_operator(t_token *lst_tok)
 {
-	int	len;
-	
-	if (!is_operator(str))
+	int		len;
+	char	*token;
+
+	token = lst_tok->token;
+	if (!is_operator(token) || !interprete)
 		return (0);
-	len = ft_strlen(str);
+	len = ft_strlen(token);
 	if (len == 1)
 		return (1);
 	else if (len == 2
-		&& (str[1] == '<' || str[1] == '>'))
+		&& (token[1] == '<' || token[1] == '>'))
 		return (1);
 	return (0);
 }
@@ -68,18 +71,17 @@ int	is_token_operator(char *str)
 //decalre a pnt to a pnt one scope outside the loop
 void	handle_operator(t_token **lst_tok_pnt, t_cmd *arr)
 {	
+	t_token	*lst_tok;
 	char	*token;
 	
 	if (!lst_tok_pnt || !*lst_tok_pnt || !arr)
 		return ;
-	token = (*lst_tok_pnt)->token;
-	if (*token == '|')
-		*lst_tok_pnt = (*lst_tok_pnt)->next;
-	else if ((*lst_tok_pnt)->next &&
-		(*token == '<' || *token == '<'))
+	lst_tok = *lst_tok_pnt;
+	token = lst_tok->token;
+	if (lst_tok->next && (*token == '<' || *token == '>'))
 	{
 		arr->rdr.type = ft_strdup(token);
-		arr->rdr.file = ft_strdup(token);
-		*lst_tok_pnt = ((*lst_tok_pnt)->next)->next;
+		arr->rdr.file = ft_strdup(lst_tok->next->token);
 	}
+	*lst_tok_pnt = lst_tok->next;
 }

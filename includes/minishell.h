@@ -6,7 +6,7 @@
 /*   By: kkaczoro <kkaczoro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/08 16:57:36 by yaretel-          #+#    #+#             */
-/*   Updated: 2023/03/31 17:08:34 by kkaczoro         ###   ########.fr       */
+/*   Updated: 2023/04/05 15:52:08 by kkaczoro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 # include <stdlib.h>
 # include <unistd.h>
 # include <sys/types.h>
+# include <sys/wait.h>
 # include <stdarg.h>
 # include <stdint.h>
 # include <fcntl.h>
@@ -122,7 +123,7 @@ t_cmd		**parser(t_token	*lst_tok);
 //parser and utils_parser functions
 int				token_is_pipe(t_token *token);
 int				set_cmd_default(t_cmd *arr, t_token *token);
-int				is_token_operator(char *str);
+int				token_is_operator(t_token *lst_tok);
 void			handle_operator(t_token **lst_tok_pnt, t_cmd *arr);
 
 //frees all the stuff
