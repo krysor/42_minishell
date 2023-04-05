@@ -6,7 +6,7 @@
 /*   By: kkaczoro <kkaczoro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/30 16:49:39 by kkaczoro          #+#    #+#             */
-/*   Updated: 2023/03/31 17:21:54 by kkaczoro         ###   ########.fr       */
+/*   Updated: 2023/04/03 16:29:55 by kkaczoro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,8 +61,8 @@ void	print_rdr(t_rdr *rdr)
 	while (temp)
 	{
 		printf("\tnode:%p\n", temp);
-		printf("type: %s\n", temp->type);
-		printf("file: %s\n", temp->file);
+		printf("\t\ttype: %s\n", temp->type);
+		printf("\t\tfile: %s\n", temp->file);
 		temp = temp->next;
 	}
 }
