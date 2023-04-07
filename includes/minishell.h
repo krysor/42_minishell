@@ -6,7 +6,7 @@
 /*   By: kkaczoro <kkaczoro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/08 16:57:36 by yaretel-          #+#    #+#             */
-/*   Updated: 2023/04/05 15:52:08 by kkaczoro         ###   ########.fr       */
+/*   Updated: 2023/04/07 17:43:59 by kkaczoro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,14 @@
 //macro's for invisible character
 # define INVIS		24
 
+//macro's for builtins
+# define CD			"cd"
+# define PWD		"pwd"
+# define EXPORT		"export"
+# define UNSET		"unset"
+# define ENV		"env"
+# define EXIT		"exit"
+
 //This struct is used to make a linked list of all the words and tokens during the lexer stage
 typedef struct	s_token
 {
@@ -69,8 +77,7 @@ typedef struct		s_rdr
 
 typedef struct	s_cmd
 {
-	//t_rdr		*rdr;
-	t_rdr		rdr;
+	t_rdr		*rdr;
 	char		*file; // a string pointing to the command executable, NULL if command is builtin
 	int			(*builtin)(char *args[]); // a pointer to the builtin function, NULL if not a builtin function
 	char		**args; // the arguments to pass to the command
@@ -118,13 +125,20 @@ void			rl_replace_line (const char *text, int clear_undo);
 void			rl_keep_mark_active (void);
 int				rl_on_new_line (void);
 
-t_cmd		**parser(t_token	*lst_tok);
+t_cmd			**parser(t_token	*lst_tok);
+char			*getpath(char *cmd);
 
 //parser and utils_parser functions
 int				token_is_pipe(t_token *token);
 int				set_cmd_default(t_cmd *arr, t_token *token);
+int				update_cmd(t_token **lst_tok_pnt, t_token *lst_tok, t_cmd *cmd);
 int				token_is_operator(t_token *lst_tok);
-void			handle_operator(t_token **lst_tok_pnt, t_cmd *arr);
+int				handle_operator(t_token **lst_tok_pnt, t_cmd *arr);
+
+//redirection struct functions
+t_rdr	*rdr_new(char *type, char *file);
+t_rdr	*lst_rdr_last(t_rdr *lst_rdr);
+void	lst_rdr_add(t_rdr **lst_rdr, t_rdr *rdr);
 
 //frees all the stuff
 void			free_lst_tok(t_token *lst);
@@ -136,5 +150,14 @@ void			free_intermediates(char *line, t_token *lst_tok, t_cmd **arr_cmd);
 void			print_tokenlist(t_token *tokenlist_og);
 void			print_arrcmd(t_cmd **arr);
 void			print_rdr(t_rdr *rdr);
+
+//builtins
+int	ft_echo(char **args);
+int	ft_cd(char **args);
+int	ft_pwd(char **args);
+int ft_export(char **args);
+int ft_unset(char **args);
+int ft_env(char **args);
+int ft_exit(char **args);
 
 #endif
