@@ -12,6 +12,8 @@
 
 #include "../includes/minishell.h"
 
+static void	free_lst_rdr(t_rdr *rdr);
+
 void	free_lst_tok(t_token *lst)
 {
 	t_token	*temp;
@@ -36,12 +38,8 @@ void	free_arr_argv(t_cmd **arr_argv)
 	while (arr_argv[i])
 	{
 		temp = arr_argv[i++];
+		free_lst_rdr(temp->rdr);
 		free(temp->file);
-
-		//free(temp->rdr);
-		free(temp->rdr.type);
-		free(temp->rdr.file);
-		
 		free_arr(temp->args);
 		free(temp);	
 	}
@@ -65,4 +63,20 @@ void	free_intermediates(char *line, t_token *lst_tok, t_cmd **arr_cmd)
 	free(line);
 	free_lst_tok(lst_tok);
 	free_arr_argv(arr_cmd);
+}
+
+static void	free_lst_rdr(t_rdr *rdr)
+{
+	t_rdr	*temp;
+
+	if (!rdr)
+		return ;
+	while (rdr)
+	{
+		temp = rdr->next;
+		free(rdr->type);
+		free(rdr->file);
+		free(rdr);
+		rdr = temp;
+	}
 }

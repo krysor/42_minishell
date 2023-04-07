@@ -6,7 +6,7 @@
 /*   By: kkaczoro <kkaczoro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/30 16:49:39 by kkaczoro          #+#    #+#             */
-/*   Updated: 2023/04/03 16:29:55 by kkaczoro         ###   ########.fr       */
+/*   Updated: 2023/04/07 18:07:04 by kkaczoro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,17 +37,15 @@ void	print_arrcmd(t_cmd **arr)
 		return ;
 	while (arr[i])
 	{
-		printf("arr[%d]:\n", i);
-		printf("arr[%d]->file\t: %s\n", i, arr[i]->file);
-		printf("arr[%d]->builtin\t: %p\n", i, arr[i]->builtin);
-		printf("arr[%d]->rdr:\n", i);
-		
-		//print_rdr(&arr[i]->rdr);
-		print_rdr(&arr[i]->rdr);
-		
+		printf("cmd[%d]:\n", i);
+		printf("cmd[%d]->file\t: %s\n", i, arr[i]->file);
+		printf("cmd[%d]->builtin\t: %p\n", i, arr[i]->builtin);
+		printf("cmd[%d]->rdr:\n", i);
+		print_rdr(arr[i]->rdr);
 		j = -1;
+		printf("cmd[%d]->args\t\n", i);
 		while (arr[i]->args[++j])
-			printf("arr[%d]->args[%d]\t: %s\n", i, j, arr[i]->args[j]);
+			printf("\tcmd[%d]->args[%d]\t: %s\n", i, j, arr[i]->args[j]);
 		printf("\n");
 		i++;
 	}
@@ -58,6 +56,7 @@ void	print_rdr(t_rdr *rdr)
 	t_rdr	*temp;
 	
 	temp = rdr;
+	//printf("here or nah?\n");
 	while (temp)
 	{
 		printf("\tnode:%p\n", temp);
