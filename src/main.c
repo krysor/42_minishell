@@ -6,7 +6,7 @@
 /*   By: kkaczoro <kkaczoro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/13 13:26:04 by kkaczoro          #+#    #+#             */
-/*   Updated: 2023/04/07 14:12:21 by kkaczoro         ###   ########.fr       */
+/*   Updated: 2023/04/07 19:41:35 by kkaczoro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ int main(int argc, char *argv[], char *envp[])
 	
 	init_shell();
 	line = NULL;
+	
 	lst_tok = NULL;
 	arr_cmd = NULL;
 	while (line_is_not_CMD_EXIT(line))
@@ -43,9 +44,10 @@ int main(int argc, char *argv[], char *envp[])
 		arr_cmd = parser(lst_tok);
 		print_arrcmd(arr_cmd);
 	}
+
 	free_intermediates(line, lst_tok, arr_cmd);
+	
 	clean_shell();
 	// system("leaks minishell");
 	return (0);
 }
-
