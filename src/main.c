@@ -6,7 +6,7 @@
 /*   By: kkaczoro <kkaczoro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/13 13:26:04 by kkaczoro          #+#    #+#             */
-/*   Updated: 2023/04/07 19:41:35 by kkaczoro         ###   ########.fr       */
+/*   Updated: 2023/04/10 11:18:37 by kkaczoro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,12 +17,16 @@ char 	*get_line(void);
 char	*get_prompt(void);
 void	clean_shell(void);
 
+void	print_arr(char **arr);
+
 int main(int argc, char *argv[], char *envp[])
 {
 	char		*line;
 	t_token		*lst_tok;
 	t_cmd		**arr_cmd;
 
+	// print_arr(envp);
+	
 	(void)argc;
 	(void)argv;
 	(void)envp;
@@ -39,15 +43,29 @@ int main(int argc, char *argv[], char *envp[])
 		line = get_line();
 		
 		lst_tok = lex_it(line, TRUE, NULL);
-		print_tokenlist(lst_tok);
+		//print_tokenlist(lst_tok);
 
 		arr_cmd = parser(lst_tok);
-		print_arrcmd(arr_cmd);
+		//print_arrcmd(arr_cmd);
+
+		executor(arr_cmd, envp);
 	}
 
 	free_intermediates(line, lst_tok, arr_cmd);
 	
 	clean_shell();
-	// system("leaks minishell");
+	//system("leaks minishell");
 	return (0);
 }
+
+// void	print_arr(char **arr)
+// {
+// 	int	i;
+	
+// 	if (!arr)
+// 		return ;
+// 	i = 0;
+// 	while (arr[i])
+// 		printf("%s\n", arr[i++]);
+// }
+

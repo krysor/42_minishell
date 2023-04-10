@@ -15,13 +15,15 @@
 void	print_tokenlist(t_token *tokenlist_og)
 {
 	unsigned int	i;
-	t_token 		*tokenlist;
+	t_token			*tokenlist;
 
 	i = 0;
 	tokenlist = tokenlist_og;
 	while (tokenlist)
 	{
-		printf("%i)\taddress: %p\ttoken: %s\tinterprete: %i\tnext: %p\n", i, tokenlist, tokenlist->token, tokenlist->interprete, tokenlist->next);
+		printf("%i)\taddress: %p\ttoken: %s\tinterprete: %i\tnext: %p\n",
+			i, tokenlist, tokenlist->token, tokenlist->interprete,
+			tokenlist->next);
 		tokenlist = tokenlist->next;
 		i++;
 	}
@@ -54,9 +56,8 @@ void	print_arrcmd(t_cmd **arr)
 void	print_rdr(t_rdr *rdr)
 {
 	t_rdr	*temp;
-	
+
 	temp = rdr;
-	//printf("here or nah?\n");
 	while (temp)
 	{
 		printf("\tnode:%p\n", temp);

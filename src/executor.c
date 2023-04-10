@@ -6,7 +6,7 @@
 /*   By: kkaczoro <kkaczoro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/25 17:41:31 by yaretel-          #+#    #+#             */
-/*   Updated: 2023/04/08 15:08:13 by yaretel-         ###   ########.fr       */
+/*   Updated: 2023/04/08 15:55:20 by kkaczoro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,8 +80,13 @@ void	prepare_and_exec(t_cmd *cmd, char *ep[])
 			yikes("dup2() failed", 0);
 		close(pipefd[1]);
 		if (process_redirections() == -1)
-			yikes("processing of redirections failed", 0);
-		execve(cmd->file, cmd->args, ep);
+			yikes("processing of redirections failed\n", 0);
+		// execve(cmd->file, cmd->args, ep);
+
+		if (!cmd->builtin)
+			execve(cmd->file, cmd->args, ep);
+		else
+			(void)cmd->builtin(cmd->args);
 	}
 	else
 	{

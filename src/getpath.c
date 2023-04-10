@@ -6,7 +6,7 @@
 /*   By: kkaczoro <kkaczoro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/06 15:36:10 by kkaczoro          #+#    #+#             */
-/*   Updated: 2023/04/06 16:52:59 by kkaczoro         ###   ########.fr       */
+/*   Updated: 2023/04/08 16:01:37 by kkaczoro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,10 +34,7 @@ char	*getpath(char *cmd)
 	free(s);
 	free_arr(arr);
 	if (!path)
-	{
-		if (!access(cmd, X_OK))
-			return (cmd);
-	}
+		return (ft_strdup(cmd));
 	return (path);
 }
 

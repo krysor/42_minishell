@@ -17,7 +17,7 @@ static void	free_lst_rdr(t_rdr *rdr);
 void	free_lst_tok(t_token *lst)
 {
 	t_token	*temp;
-	
+
 	while (lst)
 	{
 		temp = lst->next;
@@ -29,7 +29,7 @@ void	free_lst_tok(t_token *lst)
 
 void	free_arr_argv(t_cmd **arr_argv)
 {
-	int			i;
+	int		i;
 	t_cmd	*temp;
 
 	if (!arr_argv)
@@ -41,9 +41,25 @@ void	free_arr_argv(t_cmd **arr_argv)
 		free_lst_rdr(temp->rdr);
 		free(temp->file);
 		free_arr(temp->args);
-		free(temp);	
+		free(temp);
 	}
 	free(arr_argv);
+}
+
+static void	free_lst_rdr(t_rdr *rdr)
+{
+	t_rdr	*temp;
+
+	if (!rdr)
+		return ;
+	while (rdr)
+	{
+		temp = rdr->next;
+		free(rdr->type);
+		free(rdr->file);
+		free(rdr);
+		rdr = temp;
+	}
 }
 
 void	free_arr(char **arr)
@@ -63,20 +79,4 @@ void	free_intermediates(char *line, t_token *lst_tok, t_cmd **arr_cmd)
 	free(line);
 	free_lst_tok(lst_tok);
 	free_arr_argv(arr_cmd);
-}
-
-static void	free_lst_rdr(t_rdr *rdr)
-{
-	t_rdr	*temp;
-
-	if (!rdr)
-		return ;
-	while (rdr)
-	{
-		temp = rdr->next;
-		free(rdr->type);
-		free(rdr->file);
-		free(rdr);
-		rdr = temp;
-	}
 }
