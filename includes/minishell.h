@@ -6,7 +6,7 @@
 /*   By: kkaczoro <kkaczoro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/08 16:57:36 by yaretel-          #+#    #+#             */
-/*   Updated: 2023/04/08 15:09:12 by yaretel-         ###   ########.fr       */
+/*   Updated: 2023/04/08 15:31:21 by kkaczoro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,9 @@
 # include <signal.h>
 # include <termios.h>
 
+//These headers are required for builtins
+#include <dirent.h>
+
 //Macro's for readline and main loop
 # define CMD_EXIT 	"exit"
 # define MSG_HELLO 	"Bonjournooo je suis un pika pika pikachuuuu en dis is SPARTA!!!! jk diz iz notre MINIseaSHELL\n"
@@ -52,6 +55,8 @@
 # define UNSET		"unset"
 # define ENV		"env"
 # define EXIT		"exit"
+
+# define BUFFER_SIZE_PWD	100
 
 //This struct is used to make a linked list of all the words and tokens during the lexer stage
 typedef struct	s_token
@@ -127,7 +132,6 @@ void			rl_keep_mark_active (void);
 int				rl_on_new_line (void);
 
 t_cmd			**parser(t_token	*lst_tok);
-char			*getpath(char *cmd);
 
 //parser and utils_parser functions
 int				token_is_pipe(t_token *token);
@@ -135,6 +139,7 @@ int				set_cmd_default(t_cmd *arr, t_token *token);
 int				update_cmd(t_token **lst_tok_pnt, t_token *lst_tok, t_cmd *cmd);
 int				token_is_operator(t_token *lst_tok);
 int				handle_operator(t_token **lst_tok_pnt, t_cmd *arr);
+char			*getpath(char *cmd);
 
 //redirection struct functions
 t_rdr	*rdr_new(char *type, char *file);
