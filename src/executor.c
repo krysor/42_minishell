@@ -6,7 +6,7 @@
 /*   By: kkaczoro <kkaczoro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/25 17:41:31 by yaretel-          #+#    #+#             */
-/*   Updated: 2023/04/08 15:55:20 by kkaczoro         ###   ########.fr       */
+/*   Updated: 2023/04/10 17:40:53 by kkaczoro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int		process_redirections(void)
 {
-	return (-1);
+	return (0);
 }
 
 int		get_oflag(char *type)
@@ -66,6 +66,9 @@ void	prepare_and_exec(t_cmd *cmd, char *ep[])
 	t_rdr	*current;
 	int		pipefd[2];
 	pid_t	pid;
+	
+	(void)cmd;
+	(void)ep;
 
 	(void)current;
 	if (pipe(pipefd) == -1)
@@ -86,7 +89,7 @@ void	prepare_and_exec(t_cmd *cmd, char *ep[])
 		if (!cmd->builtin)
 			execve(cmd->file, cmd->args, ep);
 		else
-			(void)cmd->builtin(cmd->args);
+			exit(cmd->builtin(cmd->args));
 	}
 	else
 	{
@@ -103,6 +106,8 @@ void	executor(t_cmd **lst, char *ep[])
 {
 	int	i;
 	
+	if (!lst)
+	 	return ;
 	i = 0;
 	while (lst[i])
 	{
