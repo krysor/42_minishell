@@ -6,7 +6,7 @@
 /*   By: kkaczoro <kkaczoro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/25 17:41:31 by yaretel-          #+#    #+#             */
-/*   Updated: 2023/04/10 17:40:53 by kkaczoro         ###   ########.fr       */
+/*   Updated: 2023/04/12 17:31:38 by kkaczoro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,10 @@ void	prepare_and_exec(t_cmd *cmd, char *ep[])
 		// execve(cmd->file, cmd->args, ep);
 
 		if (!cmd->builtin)
-			execve(cmd->file, cmd->args, ep);
+		{
+			if (execve(cmd->file, cmd->args, ep) == -1)
+				exit(-1);//gotta exit in case of a wrong cmd <ultra fast parrot>
+		}
 		else
 			exit(cmd->builtin(cmd->args));
 	}
@@ -111,7 +114,12 @@ void	executor(t_cmd **lst, char *ep[])
 	i = 0;
 	while (lst[i])
 	{
-		prepare_and_exec(lst[i], ep);
+		if (i == 0 && lst[1] == NULL
+			&& (lst[i]->builtin == &ft_cd))
+			//	|| lst[i]->builtin == &ft_exit))//need this cardcode, else cd only modifies the child
+			(void)lst[i]->builtin(lst[i]->args);
+		else
+			prepare_and_exec(lst[i], ep);
 		i++;
 	}
 }
