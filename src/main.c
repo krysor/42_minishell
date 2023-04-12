@@ -6,7 +6,7 @@
 /*   By: kkaczoro <kkaczoro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/13 13:26:04 by kkaczoro          #+#    #+#             */
-/*   Updated: 2023/04/10 17:43:53 by kkaczoro         ###   ########.fr       */
+/*   Updated: 2023/04/12 17:35:51 by kkaczoro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ int main(int argc, char *argv[], char *envp[])
 	
 	lst_tok = NULL;
 	arr_cmd = NULL;
-	while (line_is_not_CMD_EXIT(line))
+	while (1)
 	{
 		free_intermediates(line, lst_tok, arr_cmd);
 
@@ -48,14 +48,17 @@ int main(int argc, char *argv[], char *envp[])
 		arr_cmd = parser(lst_tok);
 		//print_arrcmd(arr_cmd);
 
+		if (arr_cmd && arr_cmd[0] && arr_cmd[1] == NULL
+			&& (arr_cmd[0]->builtin == &ft_exit))
+			break ;
+
 		executor(arr_cmd, envp);
 	}
-
+	//use arr_cmd[0] to set errno
 	free_intermediates(line, lst_tok, arr_cmd);
-	
 	clean_shell();
 	//system("leaks minishell");
-	return (0);
+	return (0); //return errno instead
 }
 
 // void	print_arr(char **arr)
@@ -68,4 +71,5 @@ int main(int argc, char *argv[], char *envp[])
 // 	while (arr[i])
 // 		printf("%s\n", arr[i++]);
 // }
+
 
