@@ -6,7 +6,7 @@
 /*   By: kkaczoro <kkaczoro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/08 16:57:36 by yaretel-          #+#    #+#             */
-/*   Updated: 2023/04/08 15:31:21 by kkaczoro         ###   ########.fr       */
+/*   Updated: 2023/04/14 11:13:31 by yaretel-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,6 +116,7 @@ void			expand_var(char *dest, char *dollar, unsigned int *i, unsigned int *j);
 char			*strsquash(char x, const char *str);
 void			mark_outer_quotes(char *pt, char *tokcod, char marking);
 void			executor(t_cmd **lst, char *ep[]);
+t_token			*expander(t_token *lst);
 
 //functions for the main and basic shell interface
 void			init_shell(void);

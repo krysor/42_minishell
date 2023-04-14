@@ -6,13 +6,16 @@
 /*   By: yaretel- <yaretel-@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/14 11:06:42 by yaretel-          #+#    #+#             */
-/*   Updated: 2023/04/14 11:08:58 by yaretel-         ###   ########.fr       */
+/*   Updated: 2023/04/14 11:12:12 by yaretel-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+#include "../includes/minishell.h"
 
 t_token	*expander(t_token *lst)
 {
 	char	*tokcod;
+	t_token *prev;
 
 	while (lst)
 	{
@@ -23,4 +26,5 @@ t_token	*expander(t_token *lst)
 		prev = lst;
 		lst = lst->next;
 	}
+	return (lst);
 }
