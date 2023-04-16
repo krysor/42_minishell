@@ -6,7 +6,7 @@
 /*   By: kkaczoro <kkaczoro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/21 11:00:44 by yaretel-          #+#    #+#             */
-/*   Updated: 2023/04/16 16:28:59 by kkaczoro         ###   ########.fr       */
+/*   Updated: 2023/04/16 23:03:48 by yaretel-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,4 +57,22 @@ void	expand_var(char *dest, char *dollar, unsigned int *i, unsigned int *j)
 	*j += ft_strlcpy(dest, getenv(dollar), SIZE_MAX) + 1;
 	dollar[dlen] = temp;
 	*i += dlen;
+}
+
+char	*ft_getenv(char *ep[], const char *name)
+{
+	unsigned int	i;
+	char			*d;
+
+	if (!ep || !ep[0] || !name)
+		return (NULL);
+	i = 0;
+	while (ep[i] && (ft_strncmp(ep[i], name, strdlen(ep[i], "=")) || ft_strncmp(ep[i], name, ft_strlen(name))))//find member that has same value as second parameter
+		i++;
+	if (!ep[i])
+		return (NULL);
+	d = ft_strchr(ep[i], '=');//look for the '=' in the string
+	if (d && *d)
+		return (d + 1);//return the first character of the value part of the string
+	return (NULL);
 }
