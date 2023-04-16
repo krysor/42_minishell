@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expander.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yaretel- <yaretel-@student.s19.be>         +#+  +:+       +#+        */
+/*   By: kkaczoro <kkaczoro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/14 11:06:42 by yaretel-          #+#    #+#             */
-/*   Updated: 2023/04/14 11:12:12 by yaretel-         ###   ########.fr       */
+/*   Updated: 2023/04/16 13:58:32 by kkaczoro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,11 @@ t_token	*expander(t_token *lst)
 	char	*tokcod;
 	t_token *prev;
 
+	t_token	*first;
+	first = lst;
 	while (lst)
 	{
+		//printf("hey\n");
 		tokcod = create_tokcod(lst->token);
 		mark_outer_quotes(lst->token, tokcod, -1);
 		expand_toknode(&lst, prev, tokcod);
@@ -26,5 +29,5 @@ t_token	*expander(t_token *lst)
 		prev = lst;
 		lst = lst->next;
 	}
-	return (lst);
+	return (first);
 }
