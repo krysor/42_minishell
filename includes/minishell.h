@@ -115,7 +115,8 @@ ssize_t			value_len_diff(char *dlr);
 void			expand_var(char *dest, char *dollar, unsigned int *i, unsigned int *j);
 char			*strsquash(char x, const char *str);
 void			mark_outer_quotes(char *pt, char *tokcod, char marking);
-void			executor(t_cmd **lst, char **ep[]);
+void			executor(t_cmd **lst, char *ep[]);
+t_token			*expander(t_token *lst);
 
 //functions for the main and basic shell interface
 void			init_shell(void);

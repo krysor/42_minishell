@@ -52,6 +52,8 @@ int main(int argc, char *argv[], char *envp[])
 		
 		lst_tok = lex_it(line, TRUE, NULL);
 		//print_tokenlist(lst_tok);
+		
+		lst_tok = expander(lst_tok);
 
 		arr_cmd = parser(lst_tok);
 		//print_arrcmd(arr_cmd);
