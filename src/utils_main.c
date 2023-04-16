@@ -6,7 +6,7 @@
 /*   By: kkaczoro <kkaczoro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/30 17:03:35 by kkaczoro          #+#    #+#             */
-/*   Updated: 2023/03/30 17:05:14 by kkaczoro         ###   ########.fr       */
+/*   Updated: 2023/04/12 17:56:14 by kkaczoro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,13 +33,13 @@ void	ft_ctrl_c(int i)
 	rl_redisplay();//Change what’s displayed on the screen to reflect the current contents of rl_line_buffer. 
 }
 
-int		line_is_not_CMD_EXIT(char *line)
-{
-	if (ft_strlen(CMD_EXIT) != ft_strlen(line) ||
-			ft_strncmp(CMD_EXIT, line, ft_strlen(CMD_EXIT)))
-		return (1);
-	return (0);
-}
+// int		line_is_not_CMD_EXIT(char *line)
+// {
+// 	if (ft_strlen(CMD_EXIT) != ft_strlen(line) ||
+// 			ft_strncmp(CMD_EXIT, line, ft_strlen(CMD_EXIT)))
+// 		return (1);
+// 	return (0);
+// }
 
 char *get_line(void)
 {

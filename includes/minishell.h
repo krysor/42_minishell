@@ -6,7 +6,7 @@
 /*   By: kkaczoro <kkaczoro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/08 16:57:36 by yaretel-          #+#    #+#             */
-/*   Updated: 2023/04/08 15:31:21 by kkaczoro         ###   ########.fr       */
+/*   Updated: 2023/04/14 14:43:28 by kkaczoro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,7 +115,7 @@ ssize_t			value_len_diff(char *dlr);
 void			expand_var(char *dest, char *dollar, unsigned int *i, unsigned int *j);
 char			*strsquash(char x, const char *str);
 void			mark_outer_quotes(char *pt, char *tokcod, char marking);
-void			executor(t_cmd **lst, char *ep[]);
+void			executor(t_cmd **lst, char **ep[]);
 
 //functions for the main and basic shell interface
 void			init_shell(void);
@@ -162,7 +162,9 @@ int	ft_echo(char **args);
 int	ft_cd(char **args);
 int	ft_pwd(char **args);
 int ft_export(char **args);
+int	ft_export_real(char **args, char ***envp);
 int ft_unset(char **args);
+int ft_unset_real(char **args, char ***envp);
 int ft_env(char **args);
 int ft_exit(char **args);
 
