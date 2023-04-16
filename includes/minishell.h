@@ -6,7 +6,7 @@
 /*   By: kkaczoro <kkaczoro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/08 16:57:36 by yaretel-          #+#    #+#             */
-/*   Updated: 2023/04/14 11:13:31 by yaretel-         ###   ########.fr       */
+/*   Updated: 2023/04/14 14:43:28 by kkaczoro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -163,7 +163,9 @@ int	ft_echo(char **args);
 int	ft_cd(char **args);
 int	ft_pwd(char **args);
 int ft_export(char **args);
+int	ft_export_real(char **args, char ***envp);
 int ft_unset(char **args);
+int ft_unset_real(char **args, char ***envp);
 int ft_env(char **args);
 int ft_exit(char **args);
 
