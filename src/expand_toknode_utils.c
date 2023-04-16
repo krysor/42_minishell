@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expand_toknode_utils.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yaretel- <yaretel-@student.s19.be>         +#+  +:+       +#+        */
+/*   By: kkaczoro <kkaczoro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/21 11:00:44 by yaretel-          #+#    #+#             */
-/*   Updated: 2023/03/25 14:44:07 by yaretel-         ###   ########.fr       */
+/*   Updated: 2023/04/16 16:28:59 by kkaczoro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,11 +25,11 @@ ssize_t	value_len_diff(char *dlr)
 		return (0);
 	while (dlr[var_len] && !is_mchar(&dlr[var_len]) && !is_quote(&dlr[var_len]))
 		var_len++;
-	var = malloc(sizeof(*var) * ((var_len + 1) - 1));
+	var = malloc(sizeof(char) * ((var_len + 1) - 1));
 	if (!var)
 		yikes("malloc failed\n", 0);
 	ft_memcpy(var, dlr + 1, var_len - 1);
-	var[var_len] = '\0';
+	var[var_len - 1] = '\0';
 	value_len = ft_strlen(getenv(var));
 	free(var);
 	return (value_len - var_len);
@@ -48,8 +48,11 @@ void	expand_var(char *dest, char *dollar, unsigned int *i, unsigned int *j)
 		return ;
 	}
 	allowed = "0123456789_ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+	printf("segf1?\n");
 	dlen = seqstrlen(dollar, allowed);
+	//temp = dollar[dlen];
 	temp = dollar[dlen + 1];
+	//printf("segf2?\n");
 	dollar[dlen + 1] = '\0';
 	*j += ft_strlcpy(dest, getenv(dollar), SIZE_MAX) + 1;
 	dollar[dlen] = temp;
