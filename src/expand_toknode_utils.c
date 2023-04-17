@@ -32,6 +32,7 @@ ssize_t	value_len_diff(char *dlr)
 	var[var_len - 1] = '\0';
 	value_len = ft_strlen(getenv(var));
 	free(var);
+	//printf("value_len_dif: %ld\n", value_len - var_len);
 	return (value_len - var_len);
 }
 
@@ -39,7 +40,7 @@ void	expand_var(char *dest, char *dollar, unsigned int *i, unsigned int *j)
 {
 	size_t			dlen;
 	char			*allowed;
-	char			temp;
+	//char			temp;
 
 	dollar++;
 	if (!getenv(dollar))
@@ -48,14 +49,16 @@ void	expand_var(char *dest, char *dollar, unsigned int *i, unsigned int *j)
 		return ;
 	}
 	allowed = "0123456789_ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
-	printf("segf1?\n");
 	dlen = seqstrlen(dollar, allowed);
+	// printf("segf1?\n");
+	// printf("dollar : %s\n", dollar);
+	// printf("dlen : %ld\n", dlen);
 	//temp = dollar[dlen];
-	temp = dollar[dlen + 1];
-	//printf("segf2?\n");
-	dollar[dlen + 1] = '\0';
+	// temp = dollar[dlen + 1];
+	// printf("segf2?\n");
+	//dollar[dlen + 1] = '\0';
 	*j += ft_strlcpy(dest, getenv(dollar), SIZE_MAX) + 1;
-	dollar[dlen] = temp;
+	//dollar[dlen] = temp;
 	*i += dlen;
 }
 

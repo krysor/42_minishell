@@ -74,6 +74,6 @@ static char	*findpath(char **arr, char *s)
 		i++;
 	}
 	if (arr[i])
-		return(ft_strdup(arr[i]));
+		return (ft_strdup(arr[i]));
 	return (NULL);
 }

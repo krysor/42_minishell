@@ -18,7 +18,7 @@ char	*expand_token(char *token, size_t newlen, char *tokcod)
 	unsigned int	j;
 	char			*new;
 
-	new = malloc(sizeof(*new) * (newlen + 1));
+	new = malloc(sizeof(*new) * (newlen + 1));//think + 1 isnt necessary here
 	if (!new)
 		yikes("malloc failed\n", 0);
 	i = 0;
@@ -84,6 +84,7 @@ void	expand_toknode(t_token **node, t_token *prev, char *tokcod)
 	if (!is_in_set('$', (*node)->token))
 		return ;
 	expandedlen = ft_strlen((*node)->token);
+	//printf("expandedlen: %d\n", expandedlen);
 	i = 0;
 	while ((*node)->token[i])
 	{
@@ -91,6 +92,7 @@ void	expand_toknode(t_token **node, t_token *prev, char *tokcod)
 			expandedlen += value_len_diff((*node)->token + i);
 		i++;
 	}
+	//expandedlen has place for all the chars + terminating null
 	expanded = expand_token((*node)->token, expandedlen, tokcod);
 	expandedtokcod = create_tokcod(expanded);
 	free((*node)->token);
