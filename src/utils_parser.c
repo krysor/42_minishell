@@ -6,7 +6,7 @@
 /*   By: kkaczoro <kkaczoro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/30 17:28:30 by kkaczoro          #+#    #+#             */
-/*   Updated: 2023/04/13 11:19:15 by kkaczoro         ###   ########.fr       */
+/*   Updated: 2023/04/17 15:57:02 by yaretel-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ int	set_cmd_default(t_cmd *arr, t_token *token)
 	return (0);
 }
 
-int	update_cmd(t_token **lst_tok_pnt, t_token *lst_tok, t_cmd *cmd)
+int	update_cmd(t_token **lst_tok_pnt, t_token *lst_tok, t_cmd *cmd, char **envp)
 {
 	int	i;
 
@@ -54,7 +54,7 @@ int	update_cmd(t_token **lst_tok_pnt, t_token *lst_tok, t_cmd *cmd)
 	*lst_tok_pnt = lst_tok;
 	cmd->args[i] = NULL;
 	if (cmd->args[0] && set_cmd_builtin(cmd))
-		cmd->file = getpath(cmd->args[0]);
+		cmd->file = getpath(cmd->args[0], envp);
 	return (0);
 }
 

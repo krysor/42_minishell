@@ -6,19 +6,19 @@
 /*   By: yaretel- <yaretel-@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 16:36:53 by yaretel-          #+#    #+#             */
-/*   Updated: 2023/03/25 14:14:25 by yaretel-         ###   ########.fr       */
+/*   Updated: 2023/04/17 10:10:38 by yaretel-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-char	*expand_token(char *token, size_t newlen, char *tokcod)
+char	*expand_token(char *token, size_t newlen, char *tokcod, char **envp)
 {
 	unsigned int	i;
 	unsigned int	j;
 	char			*new;
 
-	new = malloc(sizeof(*new) * (newlen + 1));//think + 1 isnt necessary here
+	new = malloc(sizeof(*new) * (newlen + 1));
 	if (!new)
 		yikes("malloc failed\n", 0);
 	i = 0;
@@ -26,7 +26,7 @@ char	*expand_token(char *token, size_t newlen, char *tokcod)
 	while (token[i])
 	{
 		if (token[i] == '$' && !(tokcod[i] == '\''))
-			expand_var(new + j, token + i, &i, &j);
+			expand_var(new + j, token + i, &i, &j, envp);
 		else
 			new[j++] = token[i++];
 	}
@@ -74,7 +74,7 @@ void	remove_quotes(char **pt, char **tokcod)
 }
 */
 
-void	expand_toknode(t_token **node, t_token *prev, char *tokcod)
+void	expand_toknode(t_token **node, t_token *prev, char *tokcod, char **envp)
 {
 	char			*expanded;
 	char			*expandedtokcod;
@@ -84,16 +84,14 @@ void	expand_toknode(t_token **node, t_token *prev, char *tokcod)
 	if (!is_in_set('$', (*node)->token))
 		return ;
 	expandedlen = ft_strlen((*node)->token);
-	//printf("expandedlen: %d\n", expandedlen);
 	i = 0;
 	while ((*node)->token[i])
 	{
 		if ((*node)->token[i] == '$' && (tokcod[i] != '\''))
-			expandedlen += value_len_diff((*node)->token + i);
+			expandedlen += value_len_diff((*node)->token + i, envp);
 		i++;
 	}
-	//expandedlen has place for all the chars + terminating null
-	expanded = expand_token((*node)->token, expandedlen, tokcod);
+	expanded = expand_token((*node)->token, expandedlen, tokcod, envp);
 	expandedtokcod = create_tokcod(expanded);
 	free((*node)->token);
 	free((*node));

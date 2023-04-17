@@ -6,16 +6,16 @@
 /*   By: kkaczoro <kkaczoro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/06 15:36:10 by kkaczoro          #+#    #+#             */
-/*   Updated: 2023/04/08 16:01:37 by kkaczoro         ###   ########.fr       */
+/*   Updated: 2023/04/17 10:13:24 by yaretel-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
 static char	*findpath(char **arr, char *s);
-static char	**getallpaths(void);
+static char	**getallpaths(char **envp);
 
-char	*getpath(char *cmd)
+char	*getpath(char *cmd, char **envp)
 {
 	char	*s;
 	char	**arr;
@@ -24,7 +24,7 @@ char	*getpath(char *cmd)
 	s = ft_strjoin("/", cmd);
 	if (!s)
 		return (NULL);
-	arr = getallpaths();
+	arr = getallpaths(envp);
 	if (!arr)
 	{
 		free(s);
@@ -38,12 +38,12 @@ char	*getpath(char *cmd)
 	return (path);
 }
 
-static char	**getallpaths(void)
+static char	**getallpaths(char **envp)
 {
 	char	*env_path;
 	char	**paths;
 
-	env_path = getenv("PATH");
+	env_path = ft_getenv(envp, "PATH");
 	if (!env_path)
 		return (NULL);
 	paths = ft_split(env_path + 5, ':');

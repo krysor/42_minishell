@@ -6,13 +6,13 @@
 /*   By: kkaczoro <kkaczoro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/21 11:00:44 by yaretel-          #+#    #+#             */
-/*   Updated: 2023/04/16 23:03:48 by yaretel-         ###   ########.fr       */
+/*   Updated: 2023/04/17 10:11:57 by yaretel-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-ssize_t	value_len_diff(char *dlr)
+ssize_t	value_len_diff(char *dlr, char **envp)
 {
 	char			*var;
 	size_t			var_len;
@@ -30,35 +30,32 @@ ssize_t	value_len_diff(char *dlr)
 		yikes("malloc failed\n", 0);
 	ft_memcpy(var, dlr + 1, var_len - 1);
 	var[var_len - 1] = '\0';
-	value_len = ft_strlen(getenv(var));
+	value_len = ft_strlen(ft_getenv(envp, var));
 	free(var);
-	//printf("value_len_dif: %ld\n", value_len - var_len);
 	return (value_len - var_len);
 }
 
-void	expand_var(char *dest, char *dollar, unsigned int *i, unsigned int *j)
+void	expand_var(char *dest, char *dollar, unsigned int *i, unsigned int *j, char **envp)
 {
 	size_t			dlen;
 	char			*allowed;
-	//char			temp;
+	char			temp;
 
 	dollar++;
-	if (!getenv(dollar))
+	if (!ft_getenv(envp, dollar))
 	{
 		(*i)++;
 		return ;
 	}
 	allowed = "0123456789_ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+	printf("segf1?\n");
 	dlen = seqstrlen(dollar, allowed);
-	// printf("segf1?\n");
-	// printf("dollar : %s\n", dollar);
-	// printf("dlen : %ld\n", dlen);
 	//temp = dollar[dlen];
-	// temp = dollar[dlen + 1];
-	// printf("segf2?\n");
-	//dollar[dlen + 1] = '\0';
-	*j += ft_strlcpy(dest, getenv(dollar), SIZE_MAX) + 1;
-	//dollar[dlen] = temp;
+	temp = dollar[dlen + 1];
+	//printf("segf2?\n");
+	dollar[dlen + 1] = '\0';
+	*j += ft_strlcpy(dest, ft_getenv(envp, dollar), SIZE_MAX) + 1;
+	dollar[dlen] = temp;
 	*i += dlen;
 }
 

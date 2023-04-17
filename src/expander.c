@@ -6,13 +6,13 @@
 /*   By: kkaczoro <kkaczoro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/14 11:06:42 by yaretel-          #+#    #+#             */
-/*   Updated: 2023/04/16 13:58:32 by kkaczoro         ###   ########.fr       */
+/*   Updated: 2023/04/17 10:06:51 by yaretel-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-t_token	*expander(t_token *lst)
+t_token	*expander(t_token *lst, char **envp)
 {
 	char	*tokcod;
 	t_token *prev;
@@ -21,13 +21,12 @@ t_token	*expander(t_token *lst)
 	first = lst;
 	while (lst)
 	{
+		//printf("hey\n");
 		tokcod = create_tokcod(lst->token);
-		//printf("tokcod before outerquotes: %s\n", tokcod);
 		mark_outer_quotes(lst->token, tokcod, -1);
-		//printf("tokcod after outerquotes: %s\n", tokcod);
-		expand_toknode(&lst, prev, tokcod);
+		expand_toknode(&lst, prev, tokcod, envp);
 		free(tokcod);
-		prev = lst;//possibly this on first call causing error?!!!!
+		prev = lst;
 		lst = lst->next;
 	}
 	return (first);

@@ -6,20 +6,20 @@
 /*   By: kkaczoro <kkaczoro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/20 11:51:12 by kkaczoro          #+#    #+#             */
-/*   Updated: 2023/04/07 15:48:10 by kkaczoro         ###   ########.fr       */
+/*   Updated: 2023/04/17 16:43:25 by yaretel-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
 static int	get_nb_pipes(t_token *lst_tok);
-static int	set_arr(t_cmd **arr, int nb_cmd, t_token **lst_tok_pnt);
-static int	set_cmd(t_cmd *arr, t_token **lst_tok_pnt);
+static int	set_arr(t_cmd **arr, int nb_cmd, t_token **lst_tok_pnt, char **envp);
+static int	set_cmd(t_cmd *arr, t_token **lst_tok_pnt, char **envp);
 
 // Allocates, sets and returns a pointer to an array of t_cmd structs.
 // Size is equal to 1 + the number of commands found in the t_token list.
 // In case of an error it returns NULL.
-t_cmd	**parser(t_token *lst_tok)
+t_cmd	**parser(t_token *lst_tok, char **envp)
 {
 	int		nb_cmd;
 	t_token	**lst_tok_pnt;
@@ -33,7 +33,7 @@ t_cmd	**parser(t_token *lst_tok)
 		return (NULL);
 	arr[nb_cmd] = NULL;
 	lst_tok_pnt = &lst_tok;
-	if (set_arr(arr, nb_cmd, lst_tok_pnt))
+	if (set_arr(arr, nb_cmd, lst_tok_pnt, envp))
 	{	
 		free_arr_argv(arr);
 		return (NULL);
@@ -72,7 +72,7 @@ int	token_is_pipe(t_token *token)
 
 // Allocates and sets the elements of a t_cmd struct array.
 // Returns 1 in case of an error and 0 on success.
-static int	set_arr(t_cmd **arr, int nb_cmd, t_token **lst_tok_pnt)
+static int	set_arr(t_cmd **arr, int nb_cmd, t_token **lst_tok_pnt, char **envp)
 {
 	int	i;
 
@@ -81,9 +81,9 @@ static int	set_arr(t_cmd **arr, int nb_cmd, t_token **lst_tok_pnt)
 	{
 		arr[i] = malloc(sizeof(t_cmd));
 		if (!arr[i])
-			return (1);
-		if (set_cmd(arr[i], lst_tok_pnt))
-			return (1);
+			return (1);//not sure if it would segfault
+		if (set_cmd(arr[i], lst_tok_pnt, envp))
+			return (1);//not sure if it would segfault
 		i++;
 	}
 	return (0);
@@ -92,21 +92,21 @@ static int	set_arr(t_cmd **arr, int nb_cmd, t_token **lst_tok_pnt)
 // Allocates and sets a single t_cmd struct element.
 // Firstly it sets default values to all the variables of the element.
 // Secondly it iterates over a t_token list and saves all it's token values
-//		as fields until it reaches a to be interpreted pipe.
-//		This signals beginning of next command.
+//		as fields until it reaches a to be interpreted pipe. This signals beginning of next command.
 // Returns 1 in case of an error and 0 on success.
-static int	set_cmd(t_cmd *cmd, t_token **lst_tok_pnt)
+static int	set_cmd(t_cmd *cmd, t_token **lst_tok_pnt, char **envp)
 {
+	//int		i;
 	t_token	*lst_tok;
-
-	if (!lst_tok_pnt)
+	
+	if (!lst_tok_pnt)//not sure if this protection necessary
 		return (1);
 	lst_tok = *lst_tok_pnt;
 	if (token_is_pipe(lst_tok) && lst_tok->next)
 		lst_tok = lst_tok->next;
 	if (set_cmd_default(cmd, lst_tok))
 		return (1);
-	if (update_cmd(lst_tok_pnt, lst_tok, cmd))
+	if (update_cmd(lst_tok_pnt, lst_tok, cmd, envp))
 		return (1);
 	return (0);
 }
