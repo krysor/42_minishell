@@ -4,9 +4,10 @@ static int	var_in_envp(char *var, char **envp);
 static int	ft_export_var(char *arg, char ***envp_pnt);
 static int	envp_cpy(char **envp_new, char **envp_old, char *arg);
 
-int	ft_export(char **args)
+int ft_export(char **args, char ***envp)
 {
 	(void)args;
+	(void)envp;
 	return (0);
 }
 

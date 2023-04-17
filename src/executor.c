@@ -6,7 +6,7 @@
 /*   By: kkaczoro <kkaczoro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/25 17:41:31 by yaretel-          #+#    #+#             */
-/*   Updated: 2023/04/17 09:47:37 by yaretel-         ###   ########.fr       */
+/*   Updated: 2023/04/17 17:04:28 by kkaczoro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,22 +84,11 @@ void	prepare_and_exec(t_cmd *cmd, char *ep[])
 		close(pipefd[1]);
 		if (process_redirections() == -1)
 			yikes("processing of redirections failed\n", 0);
-		// execve(cmd->file, cmd->args, ep);
 
-//		if (cmd->file)
-//		{
-			if (execve(cmd->file, cmd->args, ep) == -1)
-				exit(-1);//gotta exit in case of a wrong cmd <ultra fast parrot>
-
-
-//		}
-/*		What the heck is this? :
-		else
-		{
-			if (cmd->builtin == &ft_env) 
-			 	exit(cmd->builtin(ep));
-			exit(cmd->builtin(cmd->args));
-		}*/	
+		if (cmd->builtin) 
+			exit(cmd->builtin(cmd->args, &ep));
+		if (execve(cmd->file, cmd->args, ep) == -1)
+			exit(-1);//gotta exit in case of a wrong cmd <ultra fast parrot>
 	}
 	else
 	{
@@ -112,21 +101,17 @@ void	prepare_and_exec(t_cmd *cmd, char *ep[])
 	}
 }
 
-void	executor(t_cmd **lst, char **ep[])
+void	executor(t_cmd **lst, char ***ep)
 {
 	int	i;
 	
-	if (!lst)
+	if (!lst || !*lst)
 	 	return ;
-	i = 0;
-	if (lst[1] == NULL && lst[i]->builtin)//possibly simplify the if tree later
-	{
-		lst[i]->builtin(lst[i]->args, ep);
-		i++;
-	}
+	i = 1;
+	if (lst[1] == NULL && lst[0]->builtin)
+		lst[0]->builtin(lst[0]->args, ep);
+	else
+		i = 0;
 	while (lst[i])
-	{
-		prepare_and_exec(lst[i], *ep);
-		i++;
-	}
+		prepare_and_exec(lst[i++], *ep);
 }

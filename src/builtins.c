@@ -6,7 +6,7 @@
 /*   By: kkaczoro <kkaczoro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/07 16:26:26 by kkaczoro          #+#    #+#             */
-/*   Updated: 2023/04/17 09:57:00 by yaretel-         ###   ########.fr       */
+/*   Updated: 2023/04/17 16:29:55 by kkaczoro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,10 +21,11 @@ TO DO:
 1. error codes
 2. update OLDPWD and PWD in env
 */
-int	ft_cd(char **args)
+int	ft_cd(char **args, char ***envp)
 {
 	char	*cwd_next;
 
+	(void)envp;
 	if (!args || !*args)
 		return (1);
 	cwd_next = args[1];
@@ -77,22 +78,17 @@ char	*ft_getcwd(void)
 	return (cwd);
 }
 
-int ft_export(char **args, char ***envp)
-{
-	(void)envp;
-	(void)args;
-	return (0);
-}
-
+int ft_env(char **args, char ***envp)
 {
 	int	i;
 
-	if (!envp)
+	(void)args;
+	if (!envp || !*envp)
 		return (0);
 	i = 0;
-	while (envp[i])
+	while ((*envp)[i])
 	{
-		ft_putstr_fd(envp[i], 1);
+		ft_putstr_fd((*envp)[i], 1);
 		ft_putchar_fd('\n', 1);
 		i++;
 	}

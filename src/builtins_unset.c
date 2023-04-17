@@ -2,9 +2,10 @@
 
 static int	ft_unset_var(char *arg, char ***envp_pnt);
 
-int	ft_unset(char **args)
+int	ft_unset(char **args, char ***envp)
 {
 	(void)args;
+	(void)envp;
 	return (0);
 }
 
