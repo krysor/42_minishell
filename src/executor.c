@@ -6,7 +6,7 @@
 /*   By: kkaczoro <kkaczoro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/25 17:41:31 by yaretel-          #+#    #+#             */
-/*   Updated: 2023/04/14 14:43:00 by kkaczoro         ###   ########.fr       */
+/*   Updated: 2023/04/17 09:47:37 by yaretel-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,17 +86,20 @@ void	prepare_and_exec(t_cmd *cmd, char *ep[])
 			yikes("processing of redirections failed\n", 0);
 		// execve(cmd->file, cmd->args, ep);
 
-		if (!cmd->builtin)
-		{
+//		if (cmd->file)
+//		{
 			if (execve(cmd->file, cmd->args, ep) == -1)
 				exit(-1);//gotta exit in case of a wrong cmd <ultra fast parrot>
-		}
+
+
+//		}
+/*		What the heck is this? :
 		else
 		{
-			if (cmd->builtin == &ft_env)
+			if (cmd->builtin == &ft_env) 
 			 	exit(cmd->builtin(ep));
 			exit(cmd->builtin(cmd->args));
-		}	
+		}*/	
 	}
 	else
 	{
@@ -116,21 +119,14 @@ void	executor(t_cmd **lst, char **ep[])
 	if (!lst)
 	 	return ;
 	i = 0;
+	if (lst[1] == NULL && lst[i]->builtin)//possibly simplify the if tree later
+	{
+		lst[i]->builtin(lst[i]->args, ep);
+		i++;
+	}
 	while (lst[i])
 	{
-		if (i == 0 && lst[1] == NULL)//possibly simplify the if tree later
-		{
-			if (lst[i]->builtin == &ft_cd)
-				(void)lst[i]->builtin(lst[i]->args);
-			else if (lst[i]->builtin == &ft_export)
-				(void)ft_export_real(lst[i]->args, ep);
-			else if (lst[i]->builtin == &ft_unset)
-				(void)ft_unset_real(lst[i]->args, ep);
-			else
-				prepare_and_exec(lst[i], *ep);	
-		}
-		else
-			prepare_and_exec(lst[i], *ep);
+		prepare_and_exec(lst[i], *ep);
 		i++;
 	}
 }

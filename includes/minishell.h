@@ -6,7 +6,7 @@
 /*   By: kkaczoro <kkaczoro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/08 16:57:36 by yaretel-          #+#    #+#             */
-/*   Updated: 2023/04/16 22:43:52 by yaretel-         ###   ########.fr       */
+/*   Updated: 2023/04/17 09:47:15 by yaretel-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,7 @@ typedef struct	s_cmd
 {
 	t_rdr		*rdr;
 	char		*file; // a string pointing to the command executable, NULL if command is builtin
-	int			(*builtin)(char *args[]); // a pointer to the builtin function, NULL if not a builtin function
+	int			(*builtin)(char *args[], char **envp[]); // a pointer to the builtin function, NULL if not a builtin function
 	char		**args; // the arguments to pass to the command
 }				t_cmd;
 
@@ -161,14 +161,14 @@ void			print_arrcmd(t_cmd **arr);
 void			print_rdr(t_rdr *rdr);
 
 //builtins
-int	ft_echo(char **args);
-int	ft_cd(char **args);
-int	ft_pwd(char **args);
-int ft_export(char **args);
+int	ft_echo(char **args, char ***envp);
+int	ft_cd(char **args, char ***envp);
+int	ft_pwd(char **args, char ***envp);
+int ft_export(char **args, char ***envp);
 int	ft_export_real(char **args, char ***envp);
-int ft_unset(char **args);
+int ft_unset(char **args, char ***envp);
 int ft_unset_real(char **args, char ***envp);
-int ft_env(char **args);
-int ft_exit(char **args);
+int ft_env(char **args, char ***envp);
+int ft_exit(char **args, char ***envp);
 
 #endif

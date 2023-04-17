@@ -6,20 +6,21 @@
 /*   By: kkaczoro <kkaczoro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/07 16:26:26 by kkaczoro          #+#    #+#             */
-/*   Updated: 2023/04/14 16:52:33 by kkaczoro         ###   ########.fr       */
+/*   Updated: 2023/04/17 09:57:00 by yaretel-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
 char	*ft_getcwd(void);
-int		ft_export_var(char *arg, char ***envp_pnt);
-int		ft_unset_var(char *arg, char ***envp_pnt);
+int		ft_export_var(char **arg, char ***envp_pnt);
+int		ft_unset_var(char **arg, char ***envp_pnt);
 
-int	ft_cd(char **args)//working, have to update PWD and OLDPWD
+int	ft_cd(char **args, char ***envp)//working, have to update PWD and OLDPWD
 {
 	char	*cwd_next;
 	
+	(void)envp;
 	if (!args || !*args)
 		return (1);
 	cwd_next = args[1];
@@ -29,17 +30,18 @@ int	ft_cd(char **args)//working, have to update PWD and OLDPWD
 		cwd_next = getenv("OLDPWD");
 	if (chdir(cwd_next))
 		return (1);//return error code
-	if (ft_strlen(args[1]) == 1 && *args[1] == '-' && ft_pwd(NULL))
+	if (ft_strlen(args[1]) == 1 && *args[1] == '-' && ft_pwd(NULL, NULL))
 		return (1);
 	//HERE UPDATE OLDPWD AND PWD
 	return (0);
 }
 
-int	ft_pwd(char **args)
+int	ft_pwd(char **args, char ***envp)
 {
 	char	*pwd;
 
 	(void)args;
+	(void)envp;
 	pwd = ft_getcwd();
 	if (!pwd)
 		return (1);
@@ -70,8 +72,9 @@ char	*ft_getcwd(void)//merge back with pwd?
 	return (cwd);
 }
 
-int ft_export(char **args)
+int ft_export(char **args, char ***envp)
 {
+	(void)envp;
 	(void)args;
 	return (0);
 }
@@ -99,19 +102,21 @@ int	ft_export_real(char **args, char ***envp)
 	i = 1;
 	while (args[i])
 	{
-		if (ft_export_var(args[i], envp))
+		if (ft_export_var(&args[i], envp))
 			return (1);
 		i++;
 	}
 	return (0);
 }
 
-int	ft_export_var(char *arg, char ***envp_pnt)//add to check if var already exists in env
+int	ft_export_var(char **ag, char ***envp_pnt)//add to check if var already exists in env
 {
 	char	*sign_equal;
 	char	**envp_new;
 	int		envp_len;
+	char	*arg;
 
+	arg = *ag;
 	sign_equal = ft_memchr(arg, '=', ft_strlen(arg));
 	if (!sign_equal || sign_equal - arg == 0 || var_in_envp(arg, *envp_pnt))
 		return (1);//check correct errno later, possibly make 2 apart cases
@@ -169,8 +174,9 @@ int	ft_export_var(char *arg, char ***envp_pnt)//add to check if var already exis
 	return (0);
 }*/
 
-int ft_unset(char **args)
+int ft_unset(char **args, char ***envp)
 {
+	(void)envp;
 	(void)args;
 	return (0);
 }
@@ -184,19 +190,21 @@ int	ft_unset_real(char **args, char ***envp)
 	i = 1;
 	while (args[i])
 	{
-		if (ft_unset_var(args[i], envp))
+		if (ft_unset_var(&args[i], envp))
 			return (1);
 		i++;
 	}
 	return (0);
 }
 
-int	ft_unset_var(char *arg, char ***envp_pnt)
+int	ft_unset_var(char **ag, char ***envp_pnt)
 {
 	int		i;
 	size_t	len;
 	char	**envp;
+	char	*arg;
 	
+	arg = *ag;
 	i = 0;
 	len = ft_strlen(arg);
 	envp = *envp_pnt;
@@ -213,11 +221,14 @@ int	ft_unset_var(char *arg, char ***envp_pnt)
 	return (0);
 }
 
-int ft_env(char **envp)
+int ft_env(char **args, char ***ep)
 
 {
-	int	i;
+	int		i;
+	char	**envp;
 	
+	(void)args;
+	envp = *ep;
 	if (!envp)
 		return (0);
 	i = 0;
@@ -230,10 +241,11 @@ int ft_env(char **envp)
 	return (0);
 }
 
-int ft_exit(char **args)
+int ft_exit(char **args, char ***envp)
 {
 	int	i;
 
+	(void)envp;
 	if (!args)
 		return (1);
 	if (args[0] && !args[1])

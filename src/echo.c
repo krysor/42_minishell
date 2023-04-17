@@ -6,7 +6,7 @@
 /*   By: kkaczoro <kkaczoro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/12 13:04:26 by kkaczoro          #+#    #+#             */
-/*   Updated: 2023/04/12 13:20:31 by kkaczoro         ###   ########.fr       */
+/*   Updated: 2023/04/17 09:57:25 by yaretel-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,11 +16,12 @@ static int	get_i_option_e(char **args);
 static int	is_option(char c);
 static int	ft_abs(int i);
 
-int	ft_echo(char **args)
+int	ft_echo(char **args, char ***envp)
 {
 	int	i;
 	int	option_e;
 	
+	(void)envp;
 	if (!args || !*args)
 		return (1);
 	option_e = 0;
