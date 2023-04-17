@@ -35,7 +35,7 @@ t_rdr	*rdr_new(char *type, char *file)
 t_rdr	*lst_rdr_last(t_rdr *lst_rdr)
 {
 	t_rdr	*temp;
-	
+
 	if (!lst_rdr)
 		return (NULL);
 	temp = lst_rdr;

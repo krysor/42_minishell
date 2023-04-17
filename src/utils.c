@@ -96,3 +96,31 @@ size_t	strdlen(const char *s, const char *d)
 		i++;
 	return (i);
 }
+
+char	**arrdup(char **arr)
+{
+	int		i;
+	char	**dup;
+
+	if (!arr)
+		return (NULL);
+	i = 0;
+	while (arr[i])
+		i++;
+	dup = malloc(sizeof(char *) * (i + 1));
+	if (!dup)
+		return (NULL);
+	i = 0;
+	while (arr[i])
+	{
+		dup[i] = ft_strdup(arr[i]);
+		if (!dup[i])
+		{
+			free_arr(dup);
+			return (NULL);
+		}
+		i++;
+	}
+	dup[i] = NULL;
+	return (dup);
+}

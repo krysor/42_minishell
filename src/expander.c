@@ -21,12 +21,13 @@ t_token	*expander(t_token *lst)
 	first = lst;
 	while (lst)
 	{
-		//printf("hey\n");
 		tokcod = create_tokcod(lst->token);
+		//printf("tokcod before outerquotes: %s\n", tokcod);
 		mark_outer_quotes(lst->token, tokcod, -1);
+		//printf("tokcod after outerquotes: %s\n", tokcod);
 		expand_toknode(&lst, prev, tokcod);
 		free(tokcod);
-		prev = lst;
+		prev = lst;//possibly this on first call causing error?!!!!
 		lst = lst->next;
 	}
 	return (first);

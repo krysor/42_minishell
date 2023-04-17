@@ -27,12 +27,15 @@ SRCS =			create_tokcod\
 				executor\
 				parser\
 				utils_parser\
+				utils_parser_update_cmd\
 				utils_free\
 				utils_print\
 				utils_main\
 				rdr\
 				getpath\
 				builtins\
+				builtins_export\
+				builtins_unset\
 				echo\
 				expander
 SRC_MAIN = 		main
