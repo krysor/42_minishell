@@ -6,7 +6,7 @@
 /*   By: kkaczoro <kkaczoro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/21 11:00:44 by yaretel-          #+#    #+#             */
-/*   Updated: 2023/04/17 10:11:57 by yaretel-         ###   ########.fr       */
+/*   Updated: 2023/04/18 09:00:02 by yaretel-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ char	*ft_getenv(char *ep[], const char *name)
 		i++;
 	if (!ep[i])
 		return (NULL);
-	d = ft_strchr(ep[i], '=');//look for the '=' in the string
+	d = ft_strrchr(ep[i], '=');//look for the last '=' in the string
 	if (d && *d)
 		return (d + 1);//return the first character of the value part of the string
 	return (NULL);
