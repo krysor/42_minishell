@@ -94,30 +94,3 @@ static int	delete_existing_arg(char *arg, char ***envp_pnt)
 	return (0);
 }
 
-/*
-int	ft_export_var(char *arg, char ***envp_pnt)//if already exists, delete old one and add new oen
-{
-	char	*sign_equal;
-	char	**envp_new;
-	int		envp_len;
-
-	sign_equal = ft_memchr(arg, '=', ft_strlen(arg));
-	if (!sign_equal || sign_equal - arg == 0)
-		return (1);
-
-	// if (get_i_var(arg, *envp_pnt) != -1)//deze moet aangepast worden want arg is niet gelijk aan arg bij unset
-	// 	ft_unset_var(arg, envp_pnt);
-		
-	envp_len = 0;
-	while ((*envp_pnt)[envp_len])
-		envp_len++;
-	envp_new = malloc(sizeof(char *) * (envp_len + 2));
-	if (!envp_new)
-		return (1);
-	if (envp_cpy(envp_new, *envp_pnt, arg))
-		return (1);
-	free(*envp_pnt);
-	*envp_pnt = envp_new;
-	return (0);
-}*/
-

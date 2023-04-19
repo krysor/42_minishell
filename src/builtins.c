@@ -43,7 +43,10 @@ int	ft_cd(char **args, char ***envp)
 	}
 	if (env_pwd_update(wd, envp))
 		return (1);
-	//HERE UPDATE OLDPWD AND PWD
+	}
+	free(var_equal);
+	ft_export_var(var_equal_val, envp);
+	free(var_equal_val);
 	return (0);
 }
 
