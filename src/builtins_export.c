@@ -1,32 +1,23 @@
 #include "../includes/minishell.h"
 
-static int	var_in_envp(char *var, char **envp);
-static int	ft_export_var(char *arg, char ***envp_pnt);
 static int	envp_cpy(char **envp_new, char **envp_old, char *arg);
+static int	delete_existing_arg(char *arg, char ***envp_pnt);
 
-int ft_export(char **args, char ***envp)
+int	get_i_var(char *var, char **envp)
 {
-	(void)args;
-	(void)envp;
-	return (0);
-}
-
-static int	var_in_envp(char *var, char **envp)
-{
-	size_t	i;
+	int		i;
 	size_t	len;
 
 	i = 0;
-	len = ft_strlen(envp[i]);
-	while (envp[i] && (ft_strncmp(envp[i], var, len)
-			|| len != ft_strlen(envp[i])))
+	len = ft_strlen(var);
+	while (envp[i] && (ft_strncmp(envp[i], var, len) || envp[i][len] != '='))
 		i++;
-	if (envp[i] == NULL)
-		return (0);
-	return (1);
+	if (envp[i])
+		return (i);
+	return (-1);
 }
 
-int	ft_export_real(char **args, char ***envp)
+int	ft_export(char **args, char ***envp)
 {
 	int	i;
 
@@ -45,19 +36,21 @@ int	ft_export_real(char **args, char ***envp)
 /*
 Add error codes
 */
-static int	ft_export_var(char *arg, char ***envp_pnt)
+int	ft_export_var(char *arg, char ***envp_pnt)//if already exists, delete old one and add new oen
 {
-	char	*sign_equal;
+	int		len_envp_old;
 	char	**envp_new;
-	int		envp_len;
 
-	sign_equal = ft_memchr(arg, '=', ft_strlen(arg));
-	if (!sign_equal || sign_equal - arg == 0 || var_in_envp(arg, *envp_pnt))
+	if (!ft_memchr(arg, '=', ft_strlen(arg)))
+		return (0);
+	if (arg[0] == '=')
 		return (1);
-	envp_len = 0;
-	while ((*envp_pnt)[envp_len])
-		envp_len++;
-	envp_new = malloc(sizeof(char *) * (envp_len + 2));
+	if (delete_existing_arg(arg, envp_pnt))
+		return (1);
+	len_envp_old = 0;
+	while ((*envp_pnt)[len_envp_old])
+		len_envp_old++;
+	envp_new = malloc(sizeof(char *) * (len_envp_old + 2));
 	if (!envp_new)
 		return (1);
 	if (envp_cpy(envp_new, *envp_pnt, arg))
@@ -83,3 +76,48 @@ static int	envp_cpy(char **envp_new, char **envp_old, char *arg)
 	envp_new[i + 1] = NULL;
 	return (0);
 }
+
+static int	delete_existing_arg(char *arg, char ***envp_pnt)
+{
+	char	*temp_arg;
+	int		i = 0;
+	
+	temp_arg = ft_strdup(arg);
+	if (!temp_arg)
+		return (1);
+	while (temp_arg[i] != '=')
+		i++;
+	temp_arg[i] = '\0';	
+	if (get_i_var(temp_arg, *envp_pnt) != -1)
+	 	ft_unset_var(temp_arg, envp_pnt);
+	free(temp_arg);
+	return (0);
+}
+
+/*
+int	ft_export_var(char *arg, char ***envp_pnt)//if already exists, delete old one and add new oen
+{
+	char	*sign_equal;
+	char	**envp_new;
+	int		envp_len;
+
+	sign_equal = ft_memchr(arg, '=', ft_strlen(arg));
+	if (!sign_equal || sign_equal - arg == 0)
+		return (1);
+
+	// if (get_i_var(arg, *envp_pnt) != -1)//deze moet aangepast worden want arg is niet gelijk aan arg bij unset
+	// 	ft_unset_var(arg, envp_pnt);
+		
+	envp_len = 0;
+	while ((*envp_pnt)[envp_len])
+		envp_len++;
+	envp_new = malloc(sizeof(char *) * (envp_len + 2));
+	if (!envp_new)
+		return (1);
+	if (envp_cpy(envp_new, *envp_pnt, arg))
+		return (1);
+	free(*envp_pnt);
+	*envp_pnt = envp_new;
+	return (0);
+}*/
+

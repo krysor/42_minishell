@@ -36,7 +36,7 @@ SRCS =			create_tokcod\
 				builtins\
 				builtins_export\
 				builtins_unset\
-				echo\
+				builtins_echo\
 				expander
 SRC_MAIN = 		main
 OBJS =			$(addprefix obj/, $(addsuffix .o, $(SRCS)))
