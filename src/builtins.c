@@ -6,7 +6,7 @@
 /*   By: kkaczoro <kkaczoro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/07 16:26:26 by kkaczoro          #+#    #+#             */
-/*   Updated: 2023/04/19 11:47:13 by kkaczoro         ###   ########.fr       */
+/*   Updated: 2023/04/19 13:50:20 by kkaczoro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ int	ft_cd(char **args, char ***envp)
 	if (!cwd_next || (ft_strlen(args[1]) == 1 && *args[1] == '~'))
 		cwd_next = ft_getenv(*envp, "HOME");
 	else if (ft_strlen(args[1]) == 1 && *args[1] == '-')
-		cwd_next = getenv("OLDPWD");
+		cwd_next = ft_getenv(*envp, "OLDPWD");
 	if (chdir(cwd_next) || (ft_strlen(args[1]) == 1
 		&& *args[1] == '-' && ft_pwd(NULL, NULL)))
 	{
@@ -43,10 +43,7 @@ int	ft_cd(char **args, char ***envp)
 	}
 	if (env_pwd_update(wd, envp))
 		return (1);
-	}
-	free(var_equal);
-	ft_export_var(var_equal_val, envp);
-	free(var_equal_val);
+	free(wd);
 	return (0);
 }
 
@@ -132,95 +129,6 @@ int	var_in_envp(char *var, char **envp)
 	if (envp[i] == NULL)
 		return (0);
 	return (1);
-}
-
-int	ft_export_var(char **ag, char ***envp_pnt)//add to check if var already exists in env
-{
-	char	*sign_equal;
-	char	**envp_new;
-	int		envp_len;
-	char	*arg;
-
-	arg = *ag;
-	sign_equal = ft_memchr(arg, '=', ft_strlen(arg));
-	if (!sign_equal || sign_equal - arg == 0 || var_in_envp(arg, *envp_pnt))
-		return (1);//check correct errno later, possibly make 2 apart cases
-	envp_len = 0;
-	while ((*envp_pnt)[envp_len])
-		envp_len++;
-	envp_new = malloc(sizeof(char *) * (envp_len + 2));
-	if (!envp_new)
-		return (1); //check correct errno later
-	envp_len = -1;
-	while ((*envp_pnt)[++envp_len])
-		envp_new[envp_len] = (*envp_pnt)[envp_len];
-	envp_new[envp_len] = ft_strdup(arg);
-	if (!envp_new[envp_len])
-	{
-		free_arr(envp_new);
-		return (1); //check correct erno later
-	}
-	envp_new[envp_len + 1] = NULL;
-	free(*envp_pnt);
-	*envp_pnt = envp_new;
-	return (0);
-}
-
-/*
-int	ft_export_var(char *arg, char ***envp_pnt)//add to check if var already exists in env
-{
-	char	*sign_equal;
-	char	**envp_new;
-	int		envp_len;
-
-	if (var_in_envp(arg, *envp_pnt))
-		return (1);//check correct errno later, possibly make 2 apart cases
-	sign_equal = ft_memchr(arg, '=', ft_strlen(arg));
-	if (!sign_equal || sign_equal - arg == 0)
-		return (1); //check correct errno later, possibly make 2 apart cases
-	envp_len = 0;
-	while ((*envp_pnt)[envp_len])
-		envp_len++;
-	envp_new = malloc(sizeof(char *) * (envp_len + 2));
-	if (!envp_new)
-		return (1); //check correct errno later
-	envp_len = -1;
-	while ((*envp_pnt)[++envp_len])
-		envp_new[envp_len] = (*envp_pnt)[envp_len];
-	envp_new[envp_len] = ft_strdup(arg);
-	if (!envp_new[envp_len])
-	{
-		free_arr(envp_new);
-		return (1); //check correct erno later
-	}
-	envp_new[envp_len + 1] = NULL;
-	free(*envp_pnt);
-	*envp_pnt = envp_new;
-	return (0);
-}*/
-
-int	ft_unset_var(char **ag, char ***envp_pnt)
-{
-	int		i;
-	size_t	len;
-	char	**envp;
-	char	*arg;
-	
-	arg = *ag;
-	i = 0;
-	len = ft_strlen(arg);
-	envp = *envp_pnt;
-	while (envp[i] && (ft_strncmp(envp[i], arg, len)
-		|| envp[i][len] != '='))
-		i++;
-	while (envp[i + 1])
-	{	
-		envp[i] = envp[i + 1];
-		i++;
-	}
-	free(envp[i]);
-	envp[i] = NULL;
-	return (0);
 }
 
 int ft_env(char **args, char ***ep)
