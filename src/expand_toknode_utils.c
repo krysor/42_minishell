@@ -6,7 +6,7 @@
 /*   By: kkaczoro <kkaczoro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/21 11:00:44 by yaretel-          #+#    #+#             */
-/*   Updated: 2023/04/18 09:00:02 by yaretel-         ###   ########.fr       */
+/*   Updated: 2023/04/19 15:39:47 by kkaczoro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,12 +53,25 @@ void	expand_var(char *dest, char *dollar, unsigned int *i, unsigned int *j, char
 	//temp = dollar[dlen];
 	temp = dollar[dlen + 1];
 	//printf("segf2?\n");
-	dollar[dlen + 1] = '\0';
+	dollar[dlen + 1] = '\0'; 
 	*j += ft_strlcpy(dest, ft_getenv(envp, dollar), SIZE_MAX) + 1;
 	dollar[dlen] = temp;
 	*i += dlen;
 }
 
+char	*ft_getenv(char *ep[], char *name)
+{
+	int	i;
+
+	if (!ep || !ep[0] || !name)
+		return (NULL);
+	i = get_i_var(name, ep);
+	if (i == -1)
+		return (NULL);
+	return (1 + ft_memchr(ep[i], '=', ft_strlen(ep[i])));
+}
+
+/*
 char	*ft_getenv(char *ep[], const char *name)
 {
 	unsigned int	i;
@@ -75,4 +88,4 @@ char	*ft_getenv(char *ep[], const char *name)
 	if (d && *d)
 		return (d + 1);//return the first character of the value part of the string
 	return (NULL);
-}
+}*/

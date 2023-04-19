@@ -6,7 +6,7 @@
 /*   By: kkaczoro <kkaczoro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/08 16:57:36 by yaretel-          #+#    #+#             */
-/*   Updated: 2023/04/18 15:58:15 by kkaczoro         ###   ########.fr       */
+/*   Updated: 2023/04/19 15:38:16 by kkaczoro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,7 +116,7 @@ char			*strsquash(char x, const char *str);
 void			mark_outer_quotes(char *pt, char *tokcod, char marking);
 void			executor(t_cmd **lst, char **ep[]);
 t_token			*expander(t_token *lst, char **envp);
-char			*ft_getenv(char *ep[], const char *name);
+char			*ft_getenv(char *ep[], char *name);
 size_t 			strdlen(const char *s, const char *d);
 int				set_cmd_builtin(t_cmd *cmd);
 char			**arrdup(char **arr);

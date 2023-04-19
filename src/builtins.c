@@ -6,7 +6,7 @@
 /*   By: kkaczoro <kkaczoro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/07 16:26:26 by kkaczoro          #+#    #+#             */
-/*   Updated: 2023/04/19 13:50:20 by kkaczoro         ###   ########.fr       */
+/*   Updated: 2023/04/19 14:55:55 by kkaczoro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,7 +123,7 @@ int	var_in_envp(char *var, char **envp)
 	size_t	len;
 
 	i = 0;
-	len = ft_strlen(envp[i]);
+	len = ft_strlen(var);
 	while (envp[i] && (ft_strncmp(envp[i], var, len) || len != ft_strlen(envp[i])))
 		i++;
 	if (envp[i] == NULL)
