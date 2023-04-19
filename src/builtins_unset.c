@@ -1,48 +1,36 @@
 #include "../includes/minishell.h"
 
-static int	ft_unset_var(char *arg, char ***envp_pnt);
-
 int	ft_unset(char **args, char ***envp)
-{
-	(void)args;
-	(void)envp;
-	return (0);
-}
-
-int	ft_unset_real(char **args, char ***envp)
 {
 	int	i;
 
-	if (!args || !*args || !args[1] || !envp || !*envp)
+	if (!args || !args[0])
 		return (1);
+	if (!args[1] || !envp || !envp[0])
+		return (0);
 	i = 1;
 	while (args[i])
 	{
-		if (ft_unset_var(args[i], envp))
-			return (1);
+		ft_unset_var(args[i], envp);
 		i++;
 	}
 	return (0);
 }
 
-static int	ft_unset_var(char *arg, char ***envp_pnt)
+void	ft_unset_var(char *arg, char ***envp_pnt)
 {
-	int		i;
-	size_t	len;
 	char	**envp;
+	int		i;
 
-	i = 0;
-	len = ft_strlen(arg);
 	envp = *envp_pnt;
-	while (envp[i] && (ft_strncmp(envp[i], arg, len)
-			|| envp[i][len] != '='))
-		i++;
+	i = get_i_var(arg, envp);
+	if (i == -1)
+		return ;
+	free(envp[i]);
 	while (envp[i + 1])
 	{	
 		envp[i] = envp[i + 1];
 		i++;
 	}
-	free(envp[i]);
 	envp[i] = NULL;
-	return (0);
 }

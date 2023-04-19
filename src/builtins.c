@@ -6,32 +6,78 @@
 /*   By: kkaczoro <kkaczoro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/07 16:26:26 by kkaczoro          #+#    #+#             */
-/*   Updated: 2023/04/17 17:26:15 by yaretel-         ###   ########.fr       */
+/*   Updated: 2023/04/19 11:47:13 by kkaczoro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
 char	*ft_getcwd(void);
-int		ft_export_var(char **arg, char ***envp_pnt);
-int		ft_unset_var(char **arg, char ***envp_pnt);
+int		env_pwd_update(char *pwd_old, char ***envp);
+int		var_create(char *var_name, char *var_val, char ***envp);
 
-int	ft_cd(char **args, char ***envp)//working, have to update PWD and OLDPWD
+/*
+TO DO:
+1. error codes
+*/
+int	ft_cd(char **args, char ***envp)
 {
+	char	*wd;
 	char	*cwd_next;
-	
+
 	if (!args || !*args)
+		return (1);
+	wd = ft_getcwd();
+	if (!wd)
 		return (1);
 	cwd_next = args[1];
 	if (!cwd_next || (ft_strlen(args[1]) == 1 && *args[1] == '~'))
 		cwd_next = ft_getenv(*envp, "HOME");
 	else if (ft_strlen(args[1]) == 1 && *args[1] == '-')
-		cwd_next = ft_getenv(*envp, "OLDPWD");
-	if (chdir(cwd_next))
+		cwd_next = getenv("OLDPWD");
+	if (chdir(cwd_next) || (ft_strlen(args[1]) == 1
+		&& *args[1] == '-' && ft_pwd(NULL, NULL)))
+	{
+		free(wd);
 		return (1);//return error code
-	if (ft_strlen(args[1]) == 1 && *args[1] == '-' && ft_pwd(NULL, NULL))
+	}
+	if (env_pwd_update(wd, envp))
 		return (1);
 	//HERE UPDATE OLDPWD AND PWD
+	return (0);
+}
+
+int	env_pwd_update(char *pwd_old, char ***envp)
+{
+	char	*pwd_new;
+	
+	if (var_create("OLDPWD", pwd_old, envp))
+		return (1);
+	pwd_new = ft_getcwd();
+	if (!pwd_new)
+		return (1);
+	if (var_create("PWD", pwd_new, envp))
+		return (1);
+	return (0);
+}
+
+int	var_create(char *var_name, char *var_val, char ***envp)
+{
+	char	*var_equal;
+	char	*var_equal_val;
+	
+	ft_unset_var(var_name, envp);
+	var_equal = ft_strjoin(var_name, "=");
+	var_equal_val = ft_strjoin(var_equal, var_val);
+	if (!var_equal || !var_equal_val)
+	{
+		free(var_equal);
+		free(var_equal_val);
+		return (1);
+	}
+	free(var_equal);
+	ft_export_var(var_equal_val, envp);
+	free(var_equal_val);
 	return (0);
 }
 
@@ -50,7 +96,7 @@ int	ft_pwd(char **args, char ***envp)
 	return (0);
 }
 
-char	*ft_getcwd(void)//merge back with pwd?
+char	*ft_getcwd(void)
 {
 	char	*cwd;
 	char	*buffer;
