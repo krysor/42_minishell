@@ -6,7 +6,7 @@
 /*   By: kkaczoro <kkaczoro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/08 17:38:05 by yaretel-          #+#    #+#             */
-/*   Updated: 2023/03/25 14:36:22 by yaretel-         ###   ########.fr       */
+/*   Updated: 2023/04/23 13:00:49 by yaretel-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,3 +124,10 @@ char	**arrdup(char **arr)
 	dup[i] = NULL;
 	return (dup);
 }
+
+char	*ft_strins(char *str, char *ins, unsigned int pos)
+{
+	char	*new;
+
+	new = (char *)malloc(sizeof(*new) * (ft_strlen(str) + ft_strlen(ins) + 1));
+	ft_memmove(new, str, pos - 1);
