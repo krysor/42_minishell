@@ -6,7 +6,7 @@
 /*   By: kkaczoro <kkaczoro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/08 17:38:05 by yaretel-          #+#    #+#             */
-/*   Updated: 2023/04/23 13:00:49 by yaretel-         ###   ########.fr       */
+/*   Updated: 2023/04/23 20:32:17 by yaretel-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,9 +125,20 @@ char	**arrdup(char **arr)
 	return (dup);
 }
 
-char	*ft_strins(char *str, char *ins, unsigned int pos)
+// inserts string 'ins' at index 'pos' in 'str'
+char	*ft_strins(char *str, unsigned int pos, char *ins)
 {
 	char	*new;
+	size_t	strlen;
+	size_t	inslen;
 
-	new = (char *)malloc(sizeof(*new) * (ft_strlen(str) + ft_strlen(ins) + 1));
-	ft_memmove(new, str, pos - 1);
+	strlen = ft_strlen(str);
+	inslen = ft_strlen(ins);
+	new = (char *)malloc(sizeof(*new) * strlen + inslen + 1);
+	if (!new)
+		return (NULL);
+	ft_strlcpy(new, str, pos + 1);
+	ft_strlcpy(new + pos, ins, inslen + 1);
+	ft_strlcpy(new + pos + inslen, str + pos, strlen);
+	return (new);
+}
