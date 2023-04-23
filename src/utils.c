@@ -6,7 +6,7 @@
 /*   By: kkaczoro <kkaczoro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/08 17:38:05 by yaretel-          #+#    #+#             */
-/*   Updated: 2023/04/23 20:32:17 by yaretel-         ###   ########.fr       */
+/*   Updated: 2023/04/23 20:45:38 by yaretel-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -140,5 +140,21 @@ char	*ft_strins(char *str, unsigned int pos, char *ins)
 	ft_strlcpy(new, str, pos + 1);
 	ft_strlcpy(new + pos, ins, inslen + 1);
 	ft_strlcpy(new + pos + inslen, str + pos, strlen);
+	return (new);
+}
+
+// takes substring at index 'pos' of size 'size' in string 'str' and removes it from the string
+char	*ft_strtake(char *str, unsigned int pos, size_t size)
+{
+	char	*new;
+	size_t	strlen;
+
+	strlen = ft_strlen(str);
+	new = (char *)malloc(sizeof(*new) * strlen - size);
+	if (!new)
+		return (NULL);
+	ft_strlcpy(new, str, pos + 1);
+	if (pos + size < strlen)
+		ft_strlcpy(new + pos, str + pos + size, strlen);
 	return (new);
 }

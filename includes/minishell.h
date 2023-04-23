@@ -6,7 +6,7 @@
 /*   By: kkaczoro <kkaczoro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/08 16:57:36 by yaretel-          #+#    #+#             */
-/*   Updated: 2023/04/23 20:18:17 by yaretel-         ###   ########.fr       */
+/*   Updated: 2023/04/23 20:36:38 by yaretel-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,6 +121,7 @@ size_t 			strdlen(const char *s, const char *d);
 int				set_cmd_builtin(t_cmd *cmd);
 char			**arrdup(char **arr);
 char			*ft_strins(char *str, unsigned int pos, char *ins);
+char			*ft_strtake(char *str, unsigned int pos, size_t size);
 
 //functions for the main and basic shell interface
 void			init_shell(void);
