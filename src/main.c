@@ -6,7 +6,7 @@
 /*   By: kkaczoro <kkaczoro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/13 13:26:04 by kkaczoro          #+#    #+#             */
-/*   Updated: 2023/04/20 13:34:13 by kkaczoro         ###   ########.fr       */
+/*   Updated: 2023/04/24 11:54:58 by kkaczoro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,12 +50,12 @@ int main(int argc, char *argv[], char *envp[])
 		line = get_line(envp);
 		
 		lst_tok = lex_it(line, TRUE, NULL);
-		print_tokenlist(lst_tok);
+		//print_tokenlist(lst_tok);
 		
 		lst_tok = expander(lst_tok, envp_dup);
 
 		arr_cmd = parser(lst_tok, envp_dup);
-		print_arrcmd(arr_cmd);
+		//print_arrcmd(arr_cmd);
 
 		if (arr_cmd && arr_cmd[0] && arr_cmd[1] == NULL
 			&& (arr_cmd[0]->builtin == &ft_exit))
