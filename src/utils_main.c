@@ -6,7 +6,7 @@
 /*   By: kkaczoro <kkaczoro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/30 17:03:35 by kkaczoro          #+#    #+#             */
-/*   Updated: 2023/04/19 14:30:19 by kkaczoro         ###   ########.fr       */
+/*   Updated: 2023/04/20 12:40:22 by kkaczoro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ void	ft_ctrl_c(int i)
 	rl_on_new_line();//Tell the update functions that we have moved onto a new (empty) line, usually after outputting a newline. 
 	rl_replace_line("", 0);//Replace the contents of rl_line_buffer with text. The point and mark are preserved, if possible. If clear_undo is non-zero, the undo list associated with the current line is cleared. 
 	rl_redisplay();//Change what’s displayed on the screen to reflect the current contents of rl_line_buffer. 
-}
+}	
 
 // int		line_is_not_CMD_EXIT(char *line)
 // {
