@@ -6,7 +6,7 @@
 /*   By: kkaczoro <kkaczoro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/25 17:41:31 by yaretel-          #+#    #+#             */
-/*   Updated: 2023/04/21 16:19:16 by kkaczoro         ###   ########.fr       */
+/*   Updated: 2023/04/24 17:23:43 by kkaczoro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,6 +118,8 @@ void	prepare_and_exec(t_cmd *cmd, char *ep[], int next, int i)
 			close(pipefd_uneven[1]);
 			close(pipefd_uneven[0]);
 		}
+		// if (!next)
+		// 	system("lsof -c minishell");
 		if (!next && waitpid(pid, NULL, 0) == -1)
 			yikes("waitpid failed", 0);
 	}
