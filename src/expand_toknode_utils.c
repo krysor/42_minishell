@@ -6,7 +6,7 @@
 /*   By: kkaczoro <kkaczoro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/21 11:00:44 by yaretel-          #+#    #+#             */
-/*   Updated: 2023/04/19 15:39:47 by kkaczoro         ###   ########.fr       */
+/*   Updated: 2023/04/25 12:19:00 by yaretel-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,9 @@ ssize_t	value_len_diff(char *dlr, char **envp)
 	return (value_len - var_len);
 }
 
-void	expand_var(char *dest, char *dollar, unsigned int *i, unsigned int *j, char **envp)
+// TODO rewrite this thing
+/*
+char	*expand_var(char *dest, char *dollar, unsigned int *i, unsigned int *j, char **envp)
 {
 	size_t			dlen;
 	char			*allowed;
@@ -43,12 +45,8 @@ void	expand_var(char *dest, char *dollar, unsigned int *i, unsigned int *j, char
 
 	dollar++;
 	if (!ft_getenv(envp, dollar))
-	{
-		(*i)++;
-		return ;
-	}
+		return (NULL);
 	allowed = "0123456789_ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
-	printf("segf1?\n");
 	dlen = seqstrlen(dollar, allowed);
 	//temp = dollar[dlen];
 	temp = dollar[dlen + 1];
@@ -57,7 +55,9 @@ void	expand_var(char *dest, char *dollar, unsigned int *i, unsigned int *j, char
 	*j += ft_strlcpy(dest, ft_getenv(envp, dollar), SIZE_MAX) + 1;
 	dollar[dlen] = temp;
 	*i += dlen;
+	return (dest);
 }
+*/
 
 char	*ft_getenv(char *ep[], char *name)
 {

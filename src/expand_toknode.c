@@ -6,12 +6,18 @@
 /*   By: yaretel- <yaretel-@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 16:36:53 by yaretel-          #+#    #+#             */
-/*   Updated: 2023/04/17 10:10:38 by yaretel-         ###   ########.fr       */
+/*   Updated: 2023/04/25 12:22:28 by yaretel-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
+char	*expand_token(char **envp, size_t newlen, char *tokcod, char *token)
+{
+	
+
+// TODO rewrite this shit
+/*
 char	*expand_token(char *token, size_t newlen, char *tokcod, char **envp)
 {
 	unsigned int	i;
@@ -26,12 +32,14 @@ char	*expand_token(char *token, size_t newlen, char *tokcod, char **envp)
 	while (token[i])
 	{
 		if (token[i] == '$' && !(tokcod[i] == '\''))
-			expand_var(new + j, token + i, &i, &j, envp);
+			if (!expand_var(new + j, token + i, &j, envp))
+				i++;
 		else
 			new[j++] = token[i++];
 	}
 	return (new);
 }
+*/
 
 // find a quote pair and replaces the quote chars with marking'
 void	mark_outer_quotes(char *pt, char *tokcod, char marking)
