@@ -6,7 +6,7 @@
 /*   By: kkaczoro <kkaczoro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/08 16:57:36 by yaretel-          #+#    #+#             */
-/*   Updated: 2023/04/23 20:36:38 by yaretel-         ###   ########.fr       */
+/*   Updated: 2023/04/25 15:00:59 by yaretel-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,7 +111,7 @@ void			expand_toknode(t_token **node, t_token *prev, char *toknod, char **envp);
 size_t			seqstrlen(char *seq, char *s);
 void			mark_quotes(char *pt, size_t len, char *tokcod);
 ssize_t			value_len_diff(char *dlr, char **envp);
-void			expand_var(char *dest, char *dollar, unsigned int *i, unsigned int *j, char **envp);
+char			*expand_var(char *dest, char *dollar, unsigned int *i, unsigned int *j, char **envp);
 char			*strsquash(char x, const char *str);
 void			mark_outer_quotes(char *pt, char *tokcod, char marking);
 void			executor(t_cmd **lst, char **ep[]);
@@ -175,4 +175,5 @@ void	ft_unset_var(char *arg, char ***envp_pnt);
 int ft_env(char **args, char ***envp);
 int ft_exit(char **args, char ***envp);
 
+char	*find_var(char *str, size_t *size);
 #endif

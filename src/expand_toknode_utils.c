@@ -6,7 +6,7 @@
 /*   By: kkaczoro <kkaczoro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/21 11:00:44 by yaretel-          #+#    #+#             */
-/*   Updated: 2023/04/25 12:19:00 by yaretel-         ###   ########.fr       */
+/*   Updated: 2023/04/25 14:29:43 by yaretel-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,6 @@ ssize_t	value_len_diff(char *dlr, char **envp)
 }
 
 // TODO rewrite this thing
-/*
 char	*expand_var(char *dest, char *dollar, unsigned int *i, unsigned int *j, char **envp)
 {
 	size_t			dlen;
@@ -57,7 +56,6 @@ char	*expand_var(char *dest, char *dollar, unsigned int *i, unsigned int *j, cha
 	*i += dlen;
 	return (dest);
 }
-*/
 
 char	*ft_getenv(char *ep[], char *name)
 {
