@@ -9,6 +9,6 @@ char	*find_var(char *str, size_t *size)
 	while (*str && *str != '$')
 		str++;
 	if (*str == '$')
-		*size = seqstrlen(" \t\n|<>", str);
+		*size = strdlen(str, " \t\n|<>");
 	return (str);
 }
