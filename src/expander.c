@@ -6,7 +6,7 @@
 /*   By: kkaczoro <kkaczoro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/14 11:06:42 by yaretel-          #+#    #+#             */
-/*   Updated: 2023/04/25 11:23:37 by yaretel-         ###   ########.fr       */
+/*   Updated: 2023/04/27 18:49:52 by yaretel-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,8 @@ t_token	*expander(t_token *lst, char **envp)
 	while (lst)
 	{
 		tokcod = create_tokcod(lst->token);
-		mark_outer_quotes(lst->token, tokcod, -1);
+		puts(tokcod);//remove
+		//mark_outer_quotes(lst->token, tokcod, -1);//can go because of restrucutre of expand_toknode
 		expand_toknode(&lst, prev, tokcod, envp);
 		free(tokcod);
 		prev = lst;

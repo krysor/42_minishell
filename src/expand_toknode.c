@@ -6,7 +6,7 @@
 /*   By: yaretel- <yaretel-@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 16:36:53 by yaretel-          #+#    #+#             */
-/*   Updated: 2023/04/25 14:58:27 by yaretel-         ###   ########.fr       */
+/*   Updated: 2023/04/27 18:51:10 by yaretel-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,12 @@ void	remove_quotes(char **pt, char **tokcod)
 	*tokcod = new_tokcod;
 }
 */
+
+void	expand_toknode(t_token **node, t_token *pev, char *tokcod, char **envp)
+{
+	remove_quotes(tokcod, str);
+	expand_token(envp, tokcod, str);
+}
 
 void	expand_toknode(t_token **node, t_token *prev, char *tokcod, char **envp)
 {
