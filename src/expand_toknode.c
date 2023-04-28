@@ -6,32 +6,37 @@
 /*   By: yaretel- <yaretel-@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 16:36:53 by yaretel-          #+#    #+#             */
-/*   Updated: 2023/04/28 14:18:33 by yaretel-         ###   ########.fr       */
+/*   Updated: 2023/04/28 17:46:32 by yaretel-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
 // TODO rewrite this shit
-char	*expand_token(char *token, size_t newlen, char *tokcod, char **envp)
+char	*expand_token(char **envp, char *tokcod, char **token)
 {
 	unsigned int	i;
-	unsigned int	j;
-	char			*new;
+	char			*current_key;
+	char			*current_value;
+	size_t			keylen;
 
-	new = malloc(sizeof(*new) * (newlen + 1));
-	if (!new)
-		yikes("malloc failed\n", 0);
 	i = 0;
-	j = 0;
-	while (token[i])
+	while ((*token)[i])
 	{
-		if (token[i] == '$' && !(tokcod[i] == '\'') && expand_var(new + j, token + i, &i, &j, envp) == NULL)
-				i++;
-		else
-			new[j++] = token[i++];
+		if ((*token)[i] == '$' || tokcod[i] != '\'')
+		{
+			keylen = strdlen(&(*token)[i], " \t\n|<>\"\'") + 1;
+			current_key = malloc(sizeof(*current_key) * keylen + 1);
+			if (!current_key)
+				return (NULL);
+			ft_strlcpy(current_key, &(*token)[i], keylen + 1);
+			current_value = ft_getenv(envp, current_key);
+			free(current_key);
+			ft_strtake(token, i, keylen);
+			ft_strins(*token, i, current_value);
+		}
 	}
-	return (new);
+	return (*token);
 }
 
 // find a quote pair and replaces the quote chars with marking'
@@ -132,42 +137,10 @@ int	remove_quotes(char **tokcod, char **pt)
 	return (0);
 }
 
-/*
 void	expand_toknode(t_token **node, t_token *pev, char *tokcod, char **envp)
 {
-	char	*varcod;
-
-	varcod = create_varcod(tokcod, str);
-	if (!varcod)
-		yikes("varcod failed", 0);
-	remove_quotes(tokcod, varcod, str);
-	expand_token(envp, tokcod, str);
-}
-*/
-
-void	expand_toknode(t_token **node, t_token *prev, char *tokcod, char **envp)
-{
-	char			*expanded;
-	char			*expandedtokcod;
-	int				expandedlen;
-	unsigned int	i;
-
-	if (!is_in_set('$', (*node)->token))
-		return ;
-	expandedlen = ft_strlen((*node)->token);
-	i = 0;
-	while ((*node)->token[i])
-	{
-		if ((*node)->token[i] == '$' && (tokcod[i] != '\''))
-			expandedlen += value_len_diff((*node)->token + i, envp);
-		i++;
-	}
-	expanded = expand_token((*node)->token, expandedlen, tokcod, envp);
-	expandedtokcod = create_tokcod(expanded);
-	free((*node)->token);
-	free((*node));
-	*node = tokcod_to_list(expanded, expandedtokcod, FALSE, (*node)->next);
-	prev->next = *node;
-	free(expandedtokcod);
-	free(expanded);
+	(void)pev;
+	if (remove_quotes(&tokcod, &((*node)->token)))
+		yikes("invalid input for remove quotes", 0);
+	expand_token(envp, tokcod, &((*node)->token));
 }
