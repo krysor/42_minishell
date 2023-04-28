@@ -6,7 +6,7 @@
 /*   By: kkaczoro <kkaczoro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/08 17:38:05 by yaretel-          #+#    #+#             */
-/*   Updated: 2023/04/28 10:12:03 by yaretel-         ###   ########.fr       */
+/*   Updated: 2023/04/28 14:09:15 by yaretel-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -152,7 +152,7 @@ char	*ft_strtake(char **str, unsigned int pos, size_t size)
 	if (!(*str) || size == 0)
 		return (NULL);
 	strlen = ft_strlen((*str));
-	new = (char *)malloc(sizeof(*new) * strlen - size);
+	new = (char *)malloc(sizeof(*new) * (strlen - size + 1));
 	if (!new)
 		return (NULL);
 	ft_strlcpy(new, (*str), pos + 1);

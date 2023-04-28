@@ -6,7 +6,7 @@
 /*   By: yaretel- <yaretel-@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 16:36:53 by yaretel-          #+#    #+#             */
-/*   Updated: 2023/04/28 10:10:49 by yaretel-         ###   ########.fr       */
+/*   Updated: 2023/04/28 14:18:33 by yaretel-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,6 +75,7 @@ void	remove_quotes(char **pt, char **tokcod)
 }
 */
 
+/* (MAYBE UNNECCESARY)
 // you give a token coding (tokcod) and the input string of the prompt (pt) 
 // gives back a variable coding on which you can tell which characters should be expanded
 // a result of "..$.." tells to expand at the character at index 2
@@ -103,22 +104,33 @@ char	*create_varcod(char *tokcod, char *pt)
 	}
 	return (varcod);
 }
+*/
 
-int	remove_quotes(char *tokcod, char *varcod, char *pt)
+int	remove_quotes(char **tokcod, char **pt)
 {
 	unsigned int	i;
+	size_t			distance;
 
-	if (!tokcod || !varcod || !pt)
+	if (!(*tokcod) || !(*pt))
 		return (1);
-	if (ft_strlen(tokcod) != ft_strlen(pt) || ft_strlen(pt) != ft_strlen(varcod))
+	if (ft_strlen((*tokcod)) != ft_strlen((*pt)))
 		return (1);
 	i = 0;
-	while (pt[i])
+	while ((*pt)[i])
 	{
-		if (find_next(is_quote(&pt[i])))
+		if (find_next(is_quote(&(*pt)[i])))
 		{
+			distance = find_next(&(*pt)[i]) - &(*pt)[i];
 			ft_strtake(pt, i, 1);
-}	
+			ft_strtake(pt, i + distance - 1, 1);
+			ft_strtake(tokcod, i, 1);
+			ft_strtake(tokcod, i + distance - 1, 1);
+		}
+		else
+			i++;
+	}
+	return (0);
+}
 
 /*
 void	expand_toknode(t_token **node, t_token *pev, char *tokcod, char **envp)
