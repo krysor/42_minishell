@@ -6,7 +6,7 @@
 /*   By: yaretel- <yaretel-@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 16:36:53 by yaretel-          #+#    #+#             */
-/*   Updated: 2023/04/27 18:51:10 by yaretel-         ###   ########.fr       */
+/*   Updated: 2023/04/28 10:10:49 by yaretel-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,11 +75,63 @@ void	remove_quotes(char **pt, char **tokcod)
 }
 */
 
+// you give a token coding (tokcod) and the input string of the prompt (pt) 
+// gives back a variable coding on which you can tell which characters should be expanded
+// a result of "..$.." tells to expand at the character at index 2
+char	*create_varcod(char *tokcod, char *pt)
+{
+	size_t			len;
+	char			*varcod;
+	unsigned int	i;
+
+	if (!pt || !tokcod)
+		return (NULL);
+	len = ft_strlen(pt);
+	if (len != ft_strlen(tokcod))
+		return (NULL);
+	varcod = malloc(sizeof(*varcod) * (len + 1));
+	i = 0;
+	while (i < len)
+		varcod[i++] = '.';
+	varcod[i] = '\0';
+	i = 0;
+	while (i < len)
+	{
+		if (pt[i] == '$' && tokcod[i] != '\'')
+			varcod[i] = '$';
+		i++;
+	}
+	return (varcod);
+}
+
+int	remove_quotes(char *tokcod, char *varcod, char *pt)
+{
+	unsigned int	i;
+
+	if (!tokcod || !varcod || !pt)
+		return (1);
+	if (ft_strlen(tokcod) != ft_strlen(pt) || ft_strlen(pt) != ft_strlen(varcod))
+		return (1);
+	i = 0;
+	while (pt[i])
+	{
+		if (find_next(is_quote(&pt[i])))
+		{
+			ft_strtake(pt, i, 1);
+}	
+
+/*
 void	expand_toknode(t_token **node, t_token *pev, char *tokcod, char **envp)
 {
-	remove_quotes(tokcod, str);
+	char	*varcod;
+
+	varcod = create_varcod(tokcod, str);
+	if (!varcod)
+		yikes("varcod failed", 0);
+	remove_quotes(tokcod, varcod, str);
 	expand_token(envp, tokcod, str);
 }
+*/
 
 void	expand_toknode(t_token **node, t_token *prev, char *tokcod, char **envp)
 {

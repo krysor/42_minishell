@@ -6,7 +6,7 @@
 /*   By: kkaczoro <kkaczoro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/08 16:57:36 by yaretel-          #+#    #+#             */
-/*   Updated: 2023/04/25 15:00:59 by yaretel-         ###   ########.fr       */
+/*   Updated: 2023/04/28 09:39:25 by yaretel-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -176,4 +176,5 @@ int ft_env(char **args, char ***envp);
 int ft_exit(char **args, char ***envp);
 
 char	*find_var(char *str, size_t *size);
+char	*create_varcod(char *tokcod, char *pt);
 #endif
