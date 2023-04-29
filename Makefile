@@ -6,7 +6,7 @@
 #    By: kkaczoro <kkaczoro@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/03/08 14:17:01 by yaretel-          #+#    #+#              #
-#    Updated: 2023/04/28 13:41:51 by yaretel-         ###   ########.fr        #
+#    Updated: 2023/04/29 16:33:09 by yaretel-         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -59,7 +59,7 @@ obj/%.o: src/%.c $(HEADER)
 $(DEPS):
 	make -C $(dir $@) FLAGS='$(FLAGS)'
 
-lib: fclean debug $(LIB)
+lib: $(LIB)
 
 $(LIB): $(DEPS) $(OBJS)
 	ar -rcs $(LIB) $(OBJS) $(OBJS_DEPS)
