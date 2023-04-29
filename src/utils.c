@@ -6,7 +6,7 @@
 /*   By: kkaczoro <kkaczoro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/08 17:38:05 by yaretel-          #+#    #+#             */
-/*   Updated: 2023/04/29 09:13:15 by yaretel-         ###   ########.fr       */
+/*   Updated: 2023/04/29 15:58:53 by yaretel-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ size_t	seqstrlen(char *seq, char *s)
 	if (!seq || !s)
 		yikes("unexpected NULL pointer\n", 0);
 	i = 0;
-	while (is_in_set(seq[i], s) && seq[i])
+	while (is_in_set(s[i], seq) && s[i])
 		i++;
 	return (i);
 }
@@ -126,24 +126,26 @@ char	**arrdup(char **arr)
 }
 
 // inserts string 'ins' at index 'pos' in 'str'
-char	*ft_strins(char *str, unsigned int pos, char *ins)
+char	*ft_strins(char **str, unsigned int pos, char *ins)
 {
 	char	*new;
 	size_t	strlen;
 	size_t	inslen;
 
-	if (!str)
+	if (!(*str))
 		return (NULL);
 	if (!ins)
-		return (str);
-	strlen = ft_strlen(str);
+		return (*str);
+	strlen = ft_strlen(*str);
 	inslen = ft_strlen(ins);
 	new = (char *)malloc(sizeof(*new) * strlen + inslen + 1);
 	if (!new)
 		return (NULL);
-	ft_strlcpy(new, str, pos + 1);
+	ft_strlcpy(new, *str, pos + 1);
 	ft_strlcpy(new + pos, ins, inslen + 1);
-	ft_strlcpy(new + pos + inslen, str + pos, strlen);
+	ft_strlcpy(new + pos + inslen, *str + pos, strlen + 1);
+	free(*str);
+	*str = new;
 	return (new);
 }
 
