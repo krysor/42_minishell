@@ -6,7 +6,7 @@
 /*   By: kkaczoro <kkaczoro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/08 16:57:36 by yaretel-          #+#    #+#             */
-/*   Updated: 2023/04/29 11:14:21 by yaretel-         ###   ########.fr       */
+/*   Updated: 2023/04/29 17:40:54 by yaretel-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -179,4 +179,5 @@ char	*find_var(char *str, size_t *size);
 char	*create_varcod(char *tokcod, char *pt);
 int		remove_quotes(char **tokcod, char **pt);
 char	*expand_token(char **envp, char *tokcod, char **token);
+char	*tokcodadjust(char **str, unsigned int pos, ssize_t correction);
 #endif

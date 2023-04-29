@@ -6,17 +6,19 @@
 /*   By: yaretel- <yaretel-@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 16:36:53 by yaretel-          #+#    #+#             */
-/*   Updated: 2023/04/29 16:31:19 by yaretel-         ###   ########.fr       */
+/*   Updated: 2023/04/29 17:42:34 by yaretel-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
+// cv == current value
+// ck == current key
 char	*expand_token(char **envp, char *tokcod, char **token)
 {
 	unsigned int	i;
-	char			*current_key;
-	char			*current_value;
+	char			*ck;
+	char			*cv;
 	size_t			keylen;
 
 	i = 0;
@@ -27,16 +29,17 @@ char	*expand_token(char **envp, char *tokcod, char **token)
 		if ((*token)[i] == '$' && tokcod[i] != '\'')
 		{
 			keylen = cstrlen(tokcod[i], &tokcod[i + 1]);
-			if (strdlen(token[i + 1], "$") < keylen)
-				keylen = strdlen(&tokcod[i + 1], "$");
-			current_key = malloc(sizeof(*current_key) * (keylen + 1));
-			if (!current_key)
+			if (strdlen(&(*token)[i + 1], "$") < keylen)
+				keylen = strdlen(&(*token)[i + 1], "$");
+			ck = malloc(sizeof(*ck) * (keylen + 1));
+			if (!ck)
 				return (NULL);
-			ft_strlcpy(current_key, &(*token)[i + 1], keylen + 1);
-			current_value = ft_getenv(envp, current_key);
-			free(current_key);
+			ft_strlcpy(ck, &(*token)[i + 1], keylen + 1);
+			cv = ft_getenv(envp, ck);
 			ft_strtake(token, i, keylen + 1);
-			ft_strins(token, i, current_value);
+			ft_strins(token, i, cv);
+			tokcodadjust(&tokcod, i, ft_strlen(cv) - ft_strlen(ck));
+			free(ck);
 		}
 		i++;
 	}

@@ -6,7 +6,7 @@
 /*   By: kkaczoro <kkaczoro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/08 17:38:05 by yaretel-          #+#    #+#             */
-/*   Updated: 2023/04/29 15:58:53 by yaretel-         ###   ########.fr       */
+/*   Updated: 2023/04/29 17:40:37 by yaretel-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,7 +132,7 @@ char	*ft_strins(char **str, unsigned int pos, char *ins)
 	size_t	strlen;
 	size_t	inslen;
 
-	if (!(*str))
+	if (!str || !(*str))
 		return (NULL);
 	if (!ins)
 		return (*str);
@@ -155,7 +155,7 @@ char	*ft_strtake(char **str, unsigned int pos, size_t size)
 	char	*new;
 	size_t	strlen;
 
-	if (!(*str) || size == 0)
+	if (!str || !(*str) || size == 0)
 		return (NULL);
 	strlen = ft_strlen((*str));
 	new = (char *)malloc(sizeof(*new) * (strlen - size + 1));
@@ -167,4 +167,17 @@ char	*ft_strtake(char **str, unsigned int pos, size_t size)
 	free(*str);
 	*str = new;
 	return (new);
+}
+
+char	*tokcodadjust(char **tokcod, unsigned int pos, ssize_t correction)
+{
+	if (!tokcod || !(*tokcod))
+		return (NULL);
+	if (correction == 0)
+		return (*tokcod);
+	while (correction-- > 0)
+		ft_strins(tokcod, pos, &(char[]){*tokcod[pos], '\0'}[0]);
+	if (correction < 0)
+		ft_strtake(tokcod, pos, correction * -1);
+	return (*tokcod);
 }
