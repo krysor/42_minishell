@@ -6,7 +6,7 @@
 /*   By: kkaczoro <kkaczoro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/08 17:38:05 by yaretel-          #+#    #+#             */
-/*   Updated: 2023/04/28 14:09:15 by yaretel-         ###   ########.fr       */
+/*   Updated: 2023/04/29 09:13:15 by yaretel-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,6 +132,10 @@ char	*ft_strins(char *str, unsigned int pos, char *ins)
 	size_t	strlen;
 	size_t	inslen;
 
+	if (!str)
+		return (NULL);
+	if (!ins)
+		return (str);
 	strlen = ft_strlen(str);
 	inslen = ft_strlen(ins);
 	new = (char *)malloc(sizeof(*new) * strlen + inslen + 1);
