@@ -6,7 +6,7 @@
 /*   By: kkaczoro <kkaczoro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/08 17:38:05 by yaretel-          #+#    #+#             */
-/*   Updated: 2023/04/29 17:40:37 by yaretel-         ###   ########.fr       */
+/*   Updated: 2023/04/30 10:57:00 by yaretel-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -176,7 +176,7 @@ char	*tokcodadjust(char **tokcod, unsigned int pos, ssize_t correction)
 	if (correction == 0)
 		return (*tokcod);
 	while (correction-- > 0)
-		ft_strins(tokcod, pos, &(char[]){*tokcod[pos], '\0'}[0]);
+		ft_strins(tokcod, pos, &(char[]){(*tokcod)[pos], '\0'}[0]);
 	if (correction < 0)
 		ft_strtake(tokcod, pos, correction * -1);
 	return (*tokcod);

@@ -6,7 +6,7 @@
 /*   By: yaretel- <yaretel-@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 16:36:53 by yaretel-          #+#    #+#             */
-/*   Updated: 2023/04/29 17:42:34 by yaretel-         ###   ########.fr       */
+/*   Updated: 2023/04/30 14:04:37 by yaretel-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 // cv == current value
 // ck == current key
-char	*expand_token(char **envp, char *tokcod, char **token)
+char	*expand_token(char **envp, char **tokcod, char **token)
 {
 	unsigned int	i;
 	char			*ck;
@@ -22,13 +22,13 @@ char	*expand_token(char **envp, char *tokcod, char **token)
 	size_t			keylen;
 
 	i = 0;
-	if (ft_strlen(tokcod) != ft_strlen(*token))
+	if (ft_strlen(*tokcod) != ft_strlen(*token))
 		return (NULL);
 	while ((*token)[i])
 	{
-		if ((*token)[i] == '$' && tokcod[i] != '\'')
+		if ((*token)[i] == '$' && (*tokcod)[i] != '\'')
 		{
-			keylen = cstrlen(tokcod[i], &tokcod[i + 1]);
+			keylen = cstrlen((*tokcod)[i], &(*tokcod)[i + 1]);
 			if (strdlen(&(*token)[i + 1], "$") < keylen)
 				keylen = strdlen(&(*token)[i + 1], "$");
 			ck = malloc(sizeof(*ck) * (keylen + 1));
@@ -38,10 +38,12 @@ char	*expand_token(char **envp, char *tokcod, char **token)
 			cv = ft_getenv(envp, ck);
 			ft_strtake(token, i, keylen + 1);
 			ft_strins(token, i, cv);
-			tokcodadjust(&tokcod, i, ft_strlen(cv) - ft_strlen(ck));
+			tokcodadjust(tokcod, i, ft_strlen(cv) - ft_strlen(ck));
 			free(ck);
+			i += ft_strlen(cv);
 		}
-		i++;
+		else
+			i++;
 	}
 	return (*token);
 }
@@ -149,5 +151,5 @@ void	expand_toknode(t_token **node, t_token *pev, char *tokcod, char **envp)
 	(void)pev;
 	if (remove_quotes(&tokcod, &((*node)->token)))
 		yikes("invalid input for remove quotes", 0);
-	expand_token(envp, tokcod, &((*node)->token));
+	expand_token(envp, &tokcod, &((*node)->token));
 }
