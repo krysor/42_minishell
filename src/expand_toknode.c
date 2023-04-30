@@ -6,7 +6,7 @@
 /*   By: yaretel- <yaretel-@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 16:36:53 by yaretel-          #+#    #+#             */
-/*   Updated: 2023/04/30 14:04:37 by yaretel-         ###   ########.fr       */
+/*   Updated: 2023/04/30 21:16:18 by yaretel-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,7 @@ char	*expand_token(char **envp, char **tokcod, char **token)
 }
 
 // find a quote pair and replaces the quote chars with marking'
+/* commented out because unneccessary I think
 void	mark_outer_quotes(char *pt, char *tokcod, char marking)
 {
 	unsigned int	i;
@@ -71,6 +72,7 @@ void	mark_outer_quotes(char *pt, char *tokcod, char marking)
 		i++;
 	}
 }
+*/
 
 //commented out because not necessary anymore
 /*
@@ -125,20 +127,26 @@ int	remove_quotes(char **tokcod, char **pt)
 	unsigned int	i;
 	size_t			distance;
 
-	if (!(*tokcod) || !(*pt))
+	if (!(*tokcod) || !(*pt) || **tokcod == '\0')
 		return (1);
 	if (ft_strlen((*tokcod)) != ft_strlen((*pt)))
 		return (1);
-	i = 0;
-	while ((*pt)[i])
+	i = strdlen(*tokcod, "\'\"");
+	while ((*tokcod)[i])
 	{
-		if (find_next(is_quote(&(*pt)[i])))
+		if (is_in_set((*tokcod)[i], "\'\""))
 		{
-			distance = find_next(&(*pt)[i]) - &(*pt)[i];
+			distance = cstrlen((*tokcod)[i], &(*tokcod)[i]);
+			if (distance < 2)
+			{
+				write(2, "quoted area of smaller than 2 chars found\n", 42);
+				return (1);
+			}
 			ft_strtake(pt, i, 1);
 			ft_strtake(pt, i + distance - 1, 1);
 			ft_strtake(tokcod, i, 1);
 			ft_strtake(tokcod, i + distance - 1, 1);
+			i += distance - 2;
 		}
 		else
 			i++;
