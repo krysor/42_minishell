@@ -6,7 +6,7 @@
 /*   By: yaretel- <yaretel-@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 16:36:53 by yaretel-          #+#    #+#             */
-/*   Updated: 2023/04/30 21:16:18 by yaretel-         ###   ########.fr       */
+/*   Updated: 2023/05/01 09:44:55 by yaretel-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -139,13 +139,13 @@ int	remove_quotes(char **tokcod, char **pt)
 			distance = cstrlen((*tokcod)[i], &(*tokcod)[i]);
 			if (distance < 2)
 			{
-				write(2, "quoted area of smaller than 2 chars found\n", 42);
+				write(2, "error: quoted area of smaller than 2 chars found\n", 70);
 				return (1);
 			}
 			ft_strtake(pt, i, 1);
-			ft_strtake(pt, i + distance - 1, 1);
+			ft_strtake(pt, i + distance - 2, 1);
 			ft_strtake(tokcod, i, 1);
-			ft_strtake(tokcod, i + distance - 1, 1);
+			ft_strtake(tokcod, i + distance - 2, 1);
 			i += distance - 2;
 		}
 		else
