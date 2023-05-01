@@ -6,14 +6,15 @@
 /*   By: kkaczoro <kkaczoro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/20 11:51:12 by kkaczoro          #+#    #+#             */
-/*   Updated: 2023/04/17 16:43:25 by yaretel-         ###   ########.fr       */
+/*   Updated: 2023/04/28 17:27:44 by kkaczoro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
 static int	get_nb_pipes(t_token *lst_tok);
-static int	set_arr(t_cmd **arr, int nb_cmd, t_token **lst_tok_pnt, char **envp);
+static int	set_arr(t_cmd **arr, int nb_cmd,
+				t_token **lst_tok_pnt, char **envp);
 static int	set_cmd(t_cmd *arr, t_token **lst_tok_pnt, char **envp);
 
 // Allocates, sets and returns a pointer to an array of t_cmd structs.
@@ -81,9 +82,9 @@ static int	set_arr(t_cmd **arr, int nb_cmd, t_token **lst_tok_pnt, char **envp)
 	{
 		arr[i] = malloc(sizeof(t_cmd));
 		if (!arr[i])
-			return (1);//not sure if it would segfault
+			return (1);
 		if (set_cmd(arr[i], lst_tok_pnt, envp))
-			return (1);//not sure if it would segfault
+			return (1);
 		i++;
 	}
 	return (0);
@@ -92,14 +93,14 @@ static int	set_arr(t_cmd **arr, int nb_cmd, t_token **lst_tok_pnt, char **envp)
 // Allocates and sets a single t_cmd struct element.
 // Firstly it sets default values to all the variables of the element.
 // Secondly it iterates over a t_token list and saves all it's token values
-//		as fields until it reaches a to be interpreted pipe. This signals beginning of next command.
+//		as fields until it reaches a to be interpreted pipe.
+//		This signals beginning of next command.
 // Returns 1 in case of an error and 0 on success.
 static int	set_cmd(t_cmd *cmd, t_token **lst_tok_pnt, char **envp)
 {
-	//int		i;
 	t_token	*lst_tok;
-	
-	if (!lst_tok_pnt)//not sure if this protection necessary
+
+	if (!lst_tok_pnt)
 		return (1);
 	lst_tok = *lst_tok_pnt;
 	if (token_is_pipe(lst_tok) && lst_tok->next)

@@ -54,7 +54,7 @@ int	update_cmd(t_token **lst_tok_pnt, t_token *lst_tok, t_cmd *cmd, char **envp)
 	*lst_tok_pnt = lst_tok;
 	cmd->args[i] = NULL;
 	if (cmd->args[0] && set_cmd_builtin(cmd))
-		cmd->file = getpath(cmd->args[0], envp);
+		cmd->file = get_path(cmd->args[0], envp);
 	return (0);
 }
 
