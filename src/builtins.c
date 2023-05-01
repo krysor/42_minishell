@@ -6,80 +6,11 @@
 /*   By: kkaczoro <kkaczoro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/07 16:26:26 by kkaczoro          #+#    #+#             */
-/*   Updated: 2023/04/19 14:55:55 by kkaczoro         ###   ########.fr       */
+/*   Updated: 2023/05/01 10:01:48 by kkaczoro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
-
-char	*ft_getcwd(void);
-int		env_pwd_update(char *pwd_old, char ***envp);
-int		var_create(char *var_name, char *var_val, char ***envp);
-
-/*
-TO DO:
-1. error codes
-*/
-int	ft_cd(char **args, char ***envp)
-{
-	char	*wd;
-	char	*cwd_next;
-
-	if (!args || !*args)
-		return (1);
-	wd = ft_getcwd();
-	if (!wd)
-		return (1);
-	cwd_next = args[1];
-	if (!cwd_next || (ft_strlen(args[1]) == 1 && *args[1] == '~'))
-		cwd_next = ft_getenv(*envp, "HOME");
-	else if (ft_strlen(args[1]) == 1 && *args[1] == '-')
-		cwd_next = ft_getenv(*envp, "OLDPWD");
-	if (chdir(cwd_next) || (ft_strlen(args[1]) == 1
-		&& *args[1] == '-' && ft_pwd(NULL, NULL)))
-	{
-		free(wd);
-		return (1);//return error code
-	}
-	if (env_pwd_update(wd, envp))
-		return (1);
-	free(wd);
-	return (0);
-}
-
-int	env_pwd_update(char *pwd_old, char ***envp)
-{
-	char	*pwd_new;
-	
-	if (var_create("OLDPWD", pwd_old, envp))
-		return (1);
-	pwd_new = ft_getcwd();
-	if (!pwd_new)
-		return (1);
-	if (var_create("PWD", pwd_new, envp))
-		return (1);
-	return (0);
-}
-
-int	var_create(char *var_name, char *var_val, char ***envp)
-{
-	char	*var_equal;
-	char	*var_equal_val;
-	
-	ft_unset_var(var_name, envp);
-	var_equal = ft_strjoin(var_name, "=");
-	var_equal_val = ft_strjoin(var_equal, var_val);
-	if (!var_equal || !var_equal_val)
-	{
-		free(var_equal);
-		free(var_equal_val);
-		return (1);
-	}
-	free(var_equal);
-	ft_export_var(var_equal_val, envp);
-	free(var_equal_val);
-	return (0);
-}
 
 int	ft_pwd(char **args, char ***envp)
 {
@@ -124,19 +55,20 @@ int	var_in_envp(char *var, char **envp)
 
 	i = 0;
 	len = ft_strlen(var);
-	while (envp[i] && (ft_strncmp(envp[i], var, len) || len != ft_strlen(envp[i])))
+	while (envp[i]
+		&& (ft_strncmp(envp[i], var, len)
+			|| len != ft_strlen(envp[i])))
 		i++;
 	if (envp[i] == NULL)
-		return (0);
-	return (1);
+		return (FALSE);
+	return (TRUE);
 }
 
-int ft_env(char **args, char ***ep)
-
+int	ft_env(char **args, char ***ep)
 {
 	int		i;
 	char	**envp;
-	
+
 	(void)args;
 	envp = *ep;
 	if (!envp)
@@ -151,7 +83,7 @@ int ft_env(char **args, char ***ep)
 	return (0);
 }
 
-int ft_exit(char **args, char ***envp)
+int	ft_exit(char **args, char ***envp)
 {
 	int	i;
 
@@ -166,6 +98,6 @@ int ft_exit(char **args, char ***envp)
 	while (ft_isdigit(args[1][i]))
 		i++;
 	if (args[1][i] != '\0')
-		exit(1);//return some more specific error code???
+		exit(1);
 	exit(ft_atoi(args[1]));
 }
