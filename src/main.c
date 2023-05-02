@@ -6,7 +6,7 @@
 /*   By: kkaczoro <kkaczoro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/13 13:26:04 by kkaczoro          #+#    #+#             */
-/*   Updated: 2023/05/01 10:28:55 by kkaczoro         ###   ########.fr       */
+/*   Updated: 2023/05/02 09:51:12 by kkaczoro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,7 @@ int	main(int argc, char *argv[], char *envp[])
 	free_intermediates(line, lst_tok, arr_cmd);
 	free_arr(envp_dup);
 	clean_shell();
+	system("leaks minishell");
 	return (0);
 }
 
