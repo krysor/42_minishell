@@ -6,7 +6,7 @@
 #    By: kkaczoro <kkaczoro@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/03/08 14:17:01 by yaretel-          #+#    #+#              #
-#    Updated: 2023/05/01 10:10:40 by kkaczoro         ###   ########.fr        #
+#    Updated: 2023/05/03 19:52:26 by yaretel-         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -38,6 +38,7 @@ SRCS =			create_tokcod\
 				builtins_export\
 				builtins_unset\
 				builtins_echo\
+				expander_utils\
 				builtins_cd\
 				expander
 SRC_MAIN = 		main
@@ -60,13 +61,14 @@ obj/%.o: src/%.c $(HEADER)
 $(DEPS):
 	make -C $(dir $@) FLAGS='$(FLAGS)'
 
-lib: fclean debug $(LIB)
+lib: $(LIB)
 
 $(LIB): $(DEPS) $(OBJS)
 	ar -rcs $(LIB) $(OBJS) $(OBJS_DEPS)
 
 clean:
 	rm -rf $(dir $(OBJS))
+	$(foreach dep, $(DEPS_NAME), $(MAKE) $@ -C deps/$(dep))
 
 fclean: clean
 	rm -rf $(NAME)

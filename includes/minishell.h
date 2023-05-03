@@ -6,7 +6,7 @@
 /*   By: kkaczoro <kkaczoro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/08 16:57:36 by yaretel-          #+#    #+#             */
-/*   Updated: 2023/05/01 10:12:02 by kkaczoro         ###   ########.fr       */
+/*   Updated: 2023/05/03 19:25:26 by yaretel-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,7 +113,7 @@ t_token			*lex_it(char *pt, int interprete, t_token *end);
 t_token			*tokcod_to_list(char *pt, char *tokcod,
 					int interprete, t_token *end);
 void			expand_toknode(t_token **node, t_token *prev,
-					char *toknod, char **envp);
+					char **toknod, char **envp);
 size_t			seqstrlen(char *seq, char *s);
 void			mark_quotes(char *pt, size_t len, char *tokcod);
 ssize_t			value_len_diff(char *dlr, char **envp);
@@ -129,6 +129,8 @@ char			*ft_getenv(char *ep[], char *name);
 size_t			strdlen(const char *s, const char *d);
 int				set_cmd_builtin(t_cmd *cmd);
 char			**arrdup(char **arr);
+char			*ft_strins(char **str, unsigned int pos, char *ins);
+char			*ft_strtake(char **str, unsigned int pos, size_t size);
 
 //functions for the main and basic shell interface
 void			init_shell(void);
@@ -185,4 +187,9 @@ void			ft_unset_var(char *arg, char ***envp_pnt);
 int				ft_env(char **args, char ***envp);
 int				ft_exit(char **args, char ***envp);
 
+char	*find_var(char *str, size_t *size);
+char	*create_varcod(char *tokcod, char *pt);
+int		remove_quotes(char **tokcod, char **pt);
+char	*expand_token(char **envp, char **tokcod, char **token);
+char	*tokcodadjust(char **str, unsigned int pos, ssize_t correction);
 #endif

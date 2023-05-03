@@ -6,34 +6,50 @@
 /*   By: yaretel- <yaretel-@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 16:36:53 by yaretel-          #+#    #+#             */
-/*   Updated: 2023/04/17 10:10:38 by yaretel-         ###   ########.fr       */
+/*   Updated: 2023/05/03 19:23:24 by yaretel-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-// char	*expand_token(char *token, size_t newlen, char *tokcod, char **envp)
-// {
-// 	unsigned int	i;
-// 	unsigned int	j;
-// 	char			*new;
+// cv == current value
+// ck == current key
+char	*expand_token(char **envp, char **tokcod, char **token)
+{
+	unsigned int	i;
+	char			*ck;
+	char			*cv;
+	size_t			keylen;
 
-// 	new = malloc(sizeof(*new) * (newlen + 1));
-// 	if (!new)
-// 		yikes("malloc failed\n", 0);
-// 	i = 0;
-// 	j = 0;
-// 	while (token[i])
-// 	{
-// 		if (token[i] == '$' && !(tokcod[i] == '\''))
-// 			expand_var(new + j, token + i, &i, &j, envp);
-// 		else
-// 			new[j++] = token[i++];
-// 	}
-// 	return (new);
-// }
+	i = 0;
+	if (ft_strlen(*tokcod) != ft_strlen(*token))
+		return (NULL);
+	while ((*token)[i])
+	{
+		if ((*token)[i] == '$' && (*tokcod)[i] != '\'')
+		{
+			keylen = cstrlen((*tokcod)[i], &(*tokcod)[i + 1]);
+			if (strdlen(&(*token)[i + 1], "$\"\' \t\n") < keylen)
+				keylen = strdlen(&(*token)[i + 1], "$\"\' \t\n");
+			ck = malloc(sizeof(*ck) * (keylen + 1));
+			if (!ck)
+				return (NULL);
+			ft_strlcpy(ck, &(*token)[i + 1], keylen + 1);
+			cv = ft_getenv(envp, ck);
+			ft_strtake(token, i, keylen + 1);
+			ft_strins(token, i, cv);
+			tokcodadjust(tokcod, i, ft_strlen(cv) - ft_strlen(ck));
+			free(ck);
+			i += ft_strlen(cv);
+		}
+		else
+			i++;
+	}
+	return (*token);
+}
 
 // find a quote pair and replaces the quote chars with marking'
+/* commented out because unneccessary I think
 void	mark_outer_quotes(char *pt, char *tokcod, char marking)
 {
 	unsigned int	i;
@@ -56,6 +72,7 @@ void	mark_outer_quotes(char *pt, char *tokcod, char marking)
 		i++;
 	}
 }
+*/
 
 //commented out because not necessary anymore
 /*
@@ -74,29 +91,93 @@ void	remove_quotes(char **pt, char **tokcod)
 }
 */
 
-// void	expand_toknode(t_token **node, t_token *prev, char *tokcod, char **envp)
-// {
-// 	char			*expanded;
-// 	char			*expandedtokcod;
-// 	int				expandedlen;
-// 	unsigned int	i;
+/* (MAYBE UNNECCESARY)
+// you give a token coding (tokcod) and the input string of the prompt (pt) 
+// gives back a variable coding on which you can tell which characters should be expanded
+// a result of "..$.." tells to expand at the character at index 2
+char	*create_varcod(char *tokcod, char *pt)
+{
+	size_t			len;
+	char			*varcod;
+	unsigned int	i;
 
-// 	if (!is_in_set('$', (*node)->token))
-// 		return ;
-// 	expandedlen = ft_strlen((*node)->token);
-// 	i = 0;
-// 	while ((*node)->token[i])
-// 	{
-// 		if ((*node)->token[i] == '$' && (tokcod[i] != '\''))
-// 			expandedlen += value_len_diff((*node)->token + i, envp);
-// 		i++;
-// 	}
-// 	expanded = expand_token((*node)->token, expandedlen, tokcod, envp);
-// 	expandedtokcod = create_tokcod(expanded);
-// 	free((*node)->token);
-// 	free((*node));
-// 	*node = tokcod_to_list(expanded, expandedtokcod, FALSE, (*node)->next);
-// 	prev->next = *node;
-// 	free(expandedtokcod);
-// 	free(expanded);
-// }
+	if (!pt || !tokcod)
+		return (NULL);
+	len = ft_strlen(pt);
+	if (len != ft_strlen(tokcod))
+		return (NULL);
+	varcod = malloc(sizeof(*varcod) * (len + 1));
+	i = 0;
+	while (i < len)
+		varcod[i++] = '.';
+	varcod[i] = '\0';
+	i = 0;
+	while (i < len)
+	{
+		if (pt[i] == '$' && tokcod[i] != '\'')
+			varcod[i] = '$';
+		i++;
+	}
+	return (varcod);
+}
+*/
+
+int	remove_quotes(char **tokcod, char **pt)
+{
+	unsigned int	i;
+	size_t			distance;
+
+	if (!(*tokcod) || !(*pt) || **tokcod == '\0')
+		return (1);
+	if (ft_strlen((*tokcod)) != ft_strlen((*pt)))
+		return (1);
+	i = strdlen(*tokcod, "\'\"");
+	while ((*tokcod)[i])
+	{
+		if (is_in_set((*tokcod)[i], "\'\""))
+		{
+			distance = cstrlen((*tokcod)[i], &(*tokcod)[i]);
+			if (distance < 2)
+			{
+				write(2, "error: quoted area of smaller than 2 chars found\n", 70);
+				return (1);
+			}
+			ft_strtake(pt, i, 1);
+			ft_strtake(pt, i + distance - 2, 1);
+			ft_strtake(tokcod, i, 1);
+			ft_strtake(tokcod, i + distance - 2, 1);
+			i += distance - 2;
+		}
+		else
+			i++;
+	}
+	return (0);
+}
+
+void	expand_toknode(t_token **node, t_token *pev, char **tokcod, char **envp)
+{
+	char	*token;
+	t_token	*new;
+	t_token *ptr;
+
+	token = ft_strdup((*node)->token);
+	free((*node)->token);
+	expand_token(envp, tokcod, &token);
+	new = lex_it(token, 1, (*node)->next);//this I need to investigate further, I need to keep track of which nodes got expanded
+	if (!new)
+		return ;
+	if (pev)
+		pev->next = new;
+	ptr = new;
+	ptr->token = token;
+	while (ptr != (*node)->next)
+	{
+		free(*tokcod);
+		*tokcod = create_tokcod(ptr->token);
+		if (remove_quotes(tokcod, &(ptr->token)))
+			yikes("invalid input for remove quotes", 0);
+		ptr = ptr->next;
+	}
+	free(*node);
+	*node = new;
+}
