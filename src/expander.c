@@ -6,7 +6,7 @@
 /*   By: kkaczoro <kkaczoro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/14 11:06:42 by yaretel-          #+#    #+#             */
-/*   Updated: 2023/05/02 18:57:17 by yaretel-         ###   ########.fr       */
+/*   Updated: 2023/05/03 11:12:46 by yaretel-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ t_token	*expander(t_token *lst, char **envp)
 	while (lst)
 	{
 		tokcod = create_tokcod(lst->token);
-		expand_toknode(&lst, prev, tokcod, envp);
+		expand_toknode(&lst, prev, &tokcod, envp);
 		free(tokcod);
 		if (prev == NULL)
 			first = lst;

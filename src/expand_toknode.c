@@ -6,7 +6,7 @@
 /*   By: yaretel- <yaretel-@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 16:36:53 by yaretel-          #+#    #+#             */
-/*   Updated: 2023/05/02 15:34:38 by yaretel-         ###   ########.fr       */
+/*   Updated: 2023/05/03 11:59:05 by yaretel-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,8 @@ char	*expand_token(char **envp, char **tokcod, char **token)
 		if ((*token)[i] == '$' && (*tokcod)[i] != '\'')
 		{
 			keylen = cstrlen((*tokcod)[i], &(*tokcod)[i + 1]);
+			if ((*tokcod)[keylen] == '\"')
+				keylen--;
 			if (strdlen(&(*token)[i + 1], "$") < keylen)
 				keylen = strdlen(&(*token)[i + 1], "$");
 			ck = malloc(sizeof(*ck) * (keylen + 1));
@@ -154,7 +156,7 @@ int	remove_quotes(char **tokcod, char **pt)
 	return (0);
 }
 
-void	expand_toknode(t_token **node, t_token *pev, char *tokcod, char **envp)
+void	expand_toknode(t_token **node, t_token *pev, char **tokcod, char **envp)
 {
 	char	*token;
 	t_token	*new;
@@ -162,7 +164,7 @@ void	expand_toknode(t_token **node, t_token *pev, char *tokcod, char **envp)
 
 	token = ft_strdup((*node)->token);
 	free((*node)->token);
-	expand_token(envp, &tokcod, &token);
+	expand_token(envp, tokcod, &token);
 	new = lex_it(token, 1, (*node)->next);//this I need to investigate further, I need to keep track of which nodes got expanded
 	if (!new)
 		return ;
@@ -173,8 +175,8 @@ void	expand_toknode(t_token **node, t_token *pev, char *tokcod, char **envp)
 	while (ptr != (*node)->next)
 	{
 		free(tokcod);
-		tokcod = create_tokcod(ptr->token);
-		if (remove_quotes(&tokcod, &(ptr->token)))
+		*tokcod = create_tokcod(ptr->token);
+		if (remove_quotes(tokcod, &(ptr->token)))
 			yikes("invalid input for remove quotes", 0);
 		ptr = ptr->next;
 	}

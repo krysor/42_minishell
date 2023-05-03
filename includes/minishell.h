@@ -6,7 +6,7 @@
 /*   By: kkaczoro <kkaczoro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/08 16:57:36 by yaretel-          #+#    #+#             */
-/*   Updated: 2023/05/02 15:24:14 by yaretel-         ###   ########.fr       */
+/*   Updated: 2023/05/03 11:13:48 by yaretel-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,7 +107,7 @@ unsigned int	add_token_node(t_token **start, t_token **head, char *pt, char *tok
 t_token			*tokcod_to_list(char *pt, char *tokcod, int interprete, t_token *end);
 t_token			*lex_it(char *pt, int interprete, t_token *end);
 t_token			*tokcod_to_list(char *pt, char *tokcod, int interprete, t_token *end);
-void			expand_toknode(t_token **node, t_token *prev, char *toknod, char **envp);
+void			expand_toknode(t_token **node, t_token *prev, char **tokcod, char **envp);
 size_t			seqstrlen(char *seq, char *s);
 void			mark_quotes(char *pt, size_t len, char *tokcod);
 ssize_t			value_len_diff(char *dlr, char **envp);
