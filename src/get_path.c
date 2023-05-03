@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   getpath.c                                          :+:      :+:    :+:   */
+/*   get_path.c                                          :+:      :+:    :+:  */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kkaczoro <kkaczoro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -12,10 +12,10 @@
 
 #include "../includes/minishell.h"
 
-static char	*findpath(char **arr, char *s);
-static char	**getallpaths(char **envp);
+static char	*find_path(char **arr, char *s);
+static char	**get_all_paths(char **envp);
 
-char	*getpath(char *cmd, char **envp)
+char	*get_path(char *cmd, char **envp)
 {
 	char	*s;
 	char	**arr;
@@ -24,13 +24,13 @@ char	*getpath(char *cmd, char **envp)
 	s = ft_strjoin("/", cmd);
 	if (!s)
 		return (NULL);
-	arr = getallpaths(envp);
+	arr = get_all_paths(envp);
 	if (!arr)
 	{
 		free(s);
 		return (NULL);
 	}
-	path = findpath(arr, s);
+	path = find_path(arr, s);
 	free(s);
 	free_arr(arr);
 	if (!path)
@@ -38,7 +38,7 @@ char	*getpath(char *cmd, char **envp)
 	return (path);
 }
 
-static char	**getallpaths(char **envp)
+static char	**get_all_paths(char **envp)
 {
 	char	*env_path;
 	char	**paths;
@@ -52,7 +52,7 @@ static char	**getallpaths(char **envp)
 	return (paths);
 }
 
-static char	*findpath(char **arr, char *s)
+static char	*find_path(char **arr, char *s)
 {
 	int		i;
 	char	*temp;

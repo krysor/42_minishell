@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   builtins_export.c                                  :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: kkaczoro <kkaczoro@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/05/01 09:56:03 by kkaczoro          #+#    #+#             */
+/*   Updated: 2023/05/01 09:56:05 by kkaczoro         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../includes/minishell.h"
 
 static int	envp_cpy(char **envp_new, char **envp_old, char *arg);
@@ -33,10 +45,7 @@ int	ft_export(char **args, char ***envp)
 	return (0);
 }
 
-/*
-Add error codes
-*/
-int	ft_export_var(char *arg, char ***envp_pnt)//if already exists, delete old one and add new oen
+int	ft_export_var(char *arg, char ***envp_pnt)
 {
 	int		len_envp_old;
 	char	**envp_new;
@@ -80,17 +89,17 @@ static int	envp_cpy(char **envp_new, char **envp_old, char *arg)
 static int	delete_existing_arg(char *arg, char ***envp_pnt)
 {
 	char	*temp_arg;
-	int		i = 0;
-	
+	int		i;
+
+	i = 0;
 	temp_arg = ft_strdup(arg);
 	if (!temp_arg)
 		return (1);
 	while (temp_arg[i] != '=')
 		i++;
-	temp_arg[i] = '\0';	
+	temp_arg[i] = '\0';
 	if (get_i_var(temp_arg, *envp_pnt) != -1)
-	 	ft_unset_var(temp_arg, envp_pnt);
+		ft_unset_var(temp_arg, envp_pnt);
 	free(temp_arg);
 	return (0);
 }
-
