@@ -6,7 +6,7 @@
 /*   By: yaretel- <yaretel-@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 16:36:53 by yaretel-          #+#    #+#             */
-/*   Updated: 2023/05/03 11:59:05 by yaretel-         ###   ########.fr       */
+/*   Updated: 2023/05/03 17:58:08 by yaretel-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,10 +29,8 @@ char	*expand_token(char **envp, char **tokcod, char **token)
 		if ((*token)[i] == '$' && (*tokcod)[i] != '\'')
 		{
 			keylen = cstrlen((*tokcod)[i], &(*tokcod)[i + 1]);
-			if ((*tokcod)[keylen] == '\"')
-				keylen--;
-			if (strdlen(&(*token)[i + 1], "$") < keylen)
-				keylen = strdlen(&(*token)[i + 1], "$");
+			if (strdlen(&(*token)[i + 1], "$\"\' \t\n") < keylen)
+				keylen = strdlen(&(*token)[i + 1], "$\"\' \t\n");
 			ck = malloc(sizeof(*ck) * (keylen + 1));
 			if (!ck)
 				return (NULL);
@@ -174,7 +172,7 @@ void	expand_toknode(t_token **node, t_token *pev, char **tokcod, char **envp)
 	ptr->token = token;
 	while (ptr != (*node)->next)
 	{
-		free(tokcod);
+		free(*tokcod);
 		*tokcod = create_tokcod(ptr->token);
 		if (remove_quotes(tokcod, &(ptr->token)))
 			yikes("invalid input for remove quotes", 0);
