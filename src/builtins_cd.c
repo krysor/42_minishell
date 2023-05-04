@@ -6,7 +6,7 @@
 /*   By: kkaczoro <kkaczoro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/01 10:00:35 by kkaczoro          #+#    #+#             */
-/*   Updated: 2023/05/01 10:02:36 by kkaczoro         ###   ########.fr       */
+/*   Updated: 2023/05/03 17:28:03 by kkaczoro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,7 @@ static int	var_update(char *var_name, char *var_val, char ***envp)
 		return (1);
 	}
 	free(var_equal);
-	ft_export_var(var_equal_val, envp);
+	ft_export_var(&var_equal_val, envp);
 	free(var_equal_val);
 	return (0);
 }

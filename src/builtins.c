@@ -73,6 +73,8 @@ int	ft_env(char **args, char ***ep)
 	envp = *ep;
 	if (!envp)
 		return (0);
+	if (get_i_var("PATH", envp) == -1)
+		return (1);
 	i = 0;
 	while (envp[i])
 	{
