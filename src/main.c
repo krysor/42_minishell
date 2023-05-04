@@ -6,7 +6,7 @@
 /*   By: kkaczoro <kkaczoro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/13 13:26:04 by kkaczoro          #+#    #+#             */
-/*   Updated: 2023/05/04 11:03:16 by kkaczoro         ###   ########.fr       */
+/*   Updated: 2023/05/04 11:18:10 by yaretel-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ void	main_loop(char *line, t_token *lst_tok,
 	{
 		free_intermediates(line, lst_tok, arr_cmd);
 		line = get_line(envp_dup);
-		lst_tok = lex_it(line, TRUE, NULL);
+		lst_tok = expander(lex_it(line, TRUE, NULL), envp_dup);
 		arr_cmd = parser(lst_tok, envp_dup);
 		if (arr_cmd && arr_cmd[0] && arr_cmd[1] == NULL
 			&& (arr_cmd[0]->builtin == &ft_exit))
