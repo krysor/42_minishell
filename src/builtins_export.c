@@ -6,28 +6,15 @@
 /*   By: kkaczoro <kkaczoro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/01 09:56:03 by kkaczoro          #+#    #+#             */
-/*   Updated: 2023/05/01 09:56:05 by kkaczoro         ###   ########.fr       */
+/*   Updated: 2023/05/03 17:27:47 by kkaczoro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-static int	envp_cpy(char **envp_new, char **envp_old, char *arg);
-static int	delete_existing_arg(char *arg, char ***envp_pnt);
-
-int	get_i_var(char *var, char **envp)
-{
-	int		i;
-	size_t	len;
-
-	i = 0;
-	len = ft_strlen(var);
-	while (envp[i] && (ft_strncmp(envp[i], var, len) || envp[i][len] != '='))
-		i++;
-	if (envp[i])
-		return (i);
-	return (-1);
-}
+static int	handle_plus(char **arg_pnt, int i_equal, char **envp);
+static int	envp_cpy(char ***envp_old_pnt, char *arg);
+static int	ft_unset_arg(char *arg, char ***envp_pnt);
 
 int	ft_export(char **args, char ***envp)
 {
@@ -38,68 +25,111 @@ int	ft_export(char **args, char ***envp)
 	i = 1;
 	while (args[i])
 	{
-		if (ft_export_var(args[i], envp))
+		if (ft_export_var(&args[i], envp))
 			return (1);
 		i++;
 	}
 	return (0);
 }
 
-int	ft_export_var(char *arg, char ***envp_pnt)
+int	ft_export_var(char **arg_pnt, char ***envp_pnt)
+{
+	char	*arg;
+	char	*arg_equal;
+	int		i_equal;
+
+	if (arg_pnt == NULL)
+		return (1);
+	arg = *arg_pnt;
+	arg_equal = ft_memchr(arg, '=', ft_strlen(arg));
+	if (arg_equal == NULL)
+		return (2);
+	if (arg[0] == '=' || (arg[0] == '+' && arg[1] == '='))
+		return (3);
+	i_equal = arg_equal - arg;
+	if (arg[i_equal - 1] == '+' && handle_plus(arg_pnt, i_equal - 1, *envp_pnt))
+		return (4);
+
+	i_equal = (char *)ft_memchr(*arg_pnt, '=', ft_strlen(*arg_pnt)) - *arg_pnt;
+	while (--i_equal)
+	{
+		if (!(ft_isalnum((*arg_pnt)[i_equal]) || (*arg_pnt)[i_equal] == '_'))
+			return (5);
+	}
+
+	if (ft_unset_arg(*arg_pnt, envp_pnt))
+		return (6);
+	if (envp_cpy(envp_pnt, *arg_pnt))
+		return (7);
+	return (0);
+}
+
+static int	handle_plus(char **arg_pnt, int i_plus, char **envp)
+{
+	char	*arg;
+	int		i_var_old;
+	char	*arg_temp;
+
+	if (arg_pnt == NULL)
+		return (1);
+	arg = *arg_pnt;
+	arg[i_plus] = '\0';
+	i_var_old = get_i_var(arg, envp);
+	arg[i_plus] = '+';
+	if (i_var_old == -1)
+		ft_memmove(arg + i_plus, arg + i_plus + 1,
+			ft_strlen(arg) - i_plus);
+	else
+	{
+		arg_temp = ft_strjoin(envp[i_var_old], arg + i_plus + 2);
+		if (!arg_temp)
+			return (1);
+		free(arg);
+		*arg_pnt = arg_temp;
+	}
+	return (0);
+}
+
+static int	envp_cpy(char ***envp_old_pnt, char *arg)
 {
 	int		len_envp_old;
 	char	**envp_new;
+	int		i;
 
-	if (!ft_memchr(arg, '=', ft_strlen(arg)))
-		return (0);
-	if (arg[0] == '=')
-		return (1);
-	if (delete_existing_arg(arg, envp_pnt))
-		return (1);
 	len_envp_old = 0;
-	while ((*envp_pnt)[len_envp_old])
+	while ((*envp_old_pnt)[len_envp_old])
 		len_envp_old++;
 	envp_new = malloc(sizeof(char *) * (len_envp_old + 2));
-	if (!envp_new)
+	if (envp_new == NULL)
 		return (1);
-	if (envp_cpy(envp_new, *envp_pnt, arg))
-		return (1);
-	free(*envp_pnt);
-	*envp_pnt = envp_new;
-	return (0);
-}
-
-static int	envp_cpy(char **envp_new, char **envp_old, char *arg)
-{
-	int	i;
-
 	i = -1;
-	while (envp_old[++i])
-		envp_new[i] = envp_old[i];
+	while ((*envp_old_pnt)[++i])
+		envp_new[i] = (*envp_old_pnt)[i];
 	envp_new[i] = ft_strdup(arg);
-	if (!envp_new[i])
+	if (envp_new[i] == NULL)
 	{
-		free_arr(envp_new);
+		free(envp_new);
 		return (1);
 	}
 	envp_new[i + 1] = NULL;
+	free(*envp_old_pnt);
+	*envp_old_pnt = envp_new;
 	return (0);
 }
 
-static int	delete_existing_arg(char *arg, char ***envp_pnt)
+static int	ft_unset_arg(char *arg, char ***envp_pnt)
 {
-	char	*temp_arg;
+	char	*var;
 	int		i;
 
 	i = 0;
-	temp_arg = ft_strdup(arg);
-	if (!temp_arg)
+	var = ft_strdup(arg);
+	if (var == NULL)
 		return (1);
-	while (temp_arg[i] != '=')
+	while (var[i] != '=')
 		i++;
-	temp_arg[i] = '\0';
-	if (get_i_var(temp_arg, *envp_pnt) != -1)
-		ft_unset_var(temp_arg, envp_pnt);
-	free(temp_arg);
+	var[i] = '\0';
+	ft_unset_var(var, envp_pnt);
+	free(var);
 	return (0);
 }
