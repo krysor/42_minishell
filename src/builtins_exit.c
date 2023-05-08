@@ -6,7 +6,7 @@
 /*   By: kkaczoro <kkaczoro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/07 15:31:57 by kkaczoro          #+#    #+#             */
-/*   Updated: 2023/05/07 17:19:23 by kkaczoro         ###   ########.fr       */
+/*   Updated: 2023/05/08 11:31:47 by kkaczoro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ int	get_exit_code(char **args)
 	}
 	else
 		exit_code = ft_atolong(args[1]) % 256;
-	printf("exit_code: %d\n", exit_code);
+	//printf("exit_code: %d\n", exit_code);
 	return (exit_code);
 }
 
