@@ -6,7 +6,7 @@
 /*   By: kkaczoro <kkaczoro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/01 09:56:03 by kkaczoro          #+#    #+#             */
-/*   Updated: 2023/05/03 17:27:47 by kkaczoro         ###   ########.fr       */
+/*   Updated: 2023/05/08 09:34:37 by yaretel-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,7 @@ static int	handle_plus(char **arg_pnt, int i_plus, char **envp)
 		arg_temp = ft_strjoin(envp[i_var_old], arg + i_plus + 2);
 		if (!arg_temp)
 			return (1);
-		free(arg);
+		dmy_free(arg);
 		*arg_pnt = arg_temp;
 	}
 	return (0);
@@ -99,7 +99,7 @@ static int	envp_cpy(char ***envp_old_pnt, char *arg)
 	len_envp_old = 0;
 	while ((*envp_old_pnt)[len_envp_old])
 		len_envp_old++;
-	envp_new = malloc(sizeof(char *) * (len_envp_old + 2));
+	envp_new = dmy_malloc(sizeof(char *) * (len_envp_old + 2));
 	if (envp_new == NULL)
 		return (1);
 	i = -1;
@@ -108,11 +108,11 @@ static int	envp_cpy(char ***envp_old_pnt, char *arg)
 	envp_new[i] = ft_strdup(arg);
 	if (envp_new[i] == NULL)
 	{
-		free(envp_new);
+		dmy_free(envp_new);
 		return (1);
 	}
 	envp_new[i + 1] = NULL;
-	free(*envp_old_pnt);
+	dmy_free(*envp_old_pnt);
 	*envp_old_pnt = envp_new;
 	return (0);
 }
@@ -130,6 +130,6 @@ static int	ft_unset_arg(char *arg, char ***envp_pnt)
 		i++;
 	var[i] = '\0';
 	ft_unset_var(var, envp_pnt);
-	free(var);
+	dmy_free(var);
 	return (0);
 }

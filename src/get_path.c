@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_path.c                                          :+:      :+:    :+:  */
+/*   get_path.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kkaczoro <kkaczoro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/06 15:36:10 by kkaczoro          #+#    #+#             */
-/*   Updated: 2023/04/17 10:13:24 by yaretel-         ###   ########.fr       */
+/*   Updated: 2023/05/08 09:35:01 by yaretel-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,11 +27,11 @@ char	*get_path(char *cmd, char **envp)
 	arr = get_all_paths(envp);
 	if (!arr)
 	{
-		free(s);
+		dmy_free(s);
 		return (NULL);
 	}
 	path = find_path(arr, s);
-	free(s);
+	dmy_free(s);
 	free_arr(arr);
 	if (!path)
 		return (ft_strdup(cmd));
@@ -63,7 +63,7 @@ static char	*find_path(char **arr, char *s)
 		temp = ft_strjoin(arr[i], s);
 		if (!temp)
 			return (NULL);
-		free(arr[i]);
+		dmy_free(arr[i]);
 		arr[i++] = temp;
 	}
 	i = 0;

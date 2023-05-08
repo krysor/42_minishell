@@ -1,24 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   lex_it.c                                           :+:      :+:    :+:   */
+/*   dynmem.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kkaczoro <kkaczoro@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yaretel- <yaretel-@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/03/19 16:14:48 by yaretel-          #+#    #+#             */
-/*   Updated: 2023/05/08 09:35:06 by yaretel-         ###   ########.fr       */
+/*   Created: 2023/05/07 17:22:11 by yaretel-          #+#    #+#             */
+/*   Updated: 2023/05/07 17:38:01 by yaretel-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/minishell.h"
+#include "../includes/dmy.h"
 
-t_token	*lex_it(char *pt, int interprete, t_token *end)
+void	*dmy_malloc(size_t size)
 {
-	char	*tokcod;
-	t_token	*new;
+	return (dmy_switch(MALLOC, size, NULL));
+}
 
-	tokcod = create_tokcod(pt);
-	new = tokcod_to_list(pt, tokcod, interprete, end);
-	dmy_free(tokcod);
-	return (new);
+void	dmy_free(void *ptr)
+{
+	dmy_switch(FREEONE, 0, ptr);
+}
+
+void	dmy_freeall(void)
+{
+	dmy_switch(FREEALL, 0, NULL);
 }

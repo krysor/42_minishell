@@ -6,7 +6,7 @@
 /*   By: kkaczoro <kkaczoro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/21 11:00:44 by yaretel-          #+#    #+#             */
-/*   Updated: 2023/05/03 19:24:05 by yaretel-         ###   ########.fr       */
+/*   Updated: 2023/05/08 09:34:56 by yaretel-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,13 +25,13 @@ ssize_t	value_len_diff(char *dlr, char **envp)
 		return (0);
 	while (dlr[var_len] && !is_mchar(&dlr[var_len]) && !is_quote(&dlr[var_len]))
 		var_len++;
-	var = malloc(sizeof(char) * ((var_len + 1) - 1));
+	var = dmy_malloc(sizeof(char) * ((var_len + 1) - 1));
 	if (!var)
 		yikes("malloc failed\n", 0);
 	ft_memcpy(var, dlr + 1, var_len - 1);
 	var[var_len - 1] = '\0';
 	value_len = ft_strlen(ft_getenv(envp, var));
-	free(var);
+	dmy_free(var);
 	return (value_len - var_len);
 }
 

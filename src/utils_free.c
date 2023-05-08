@@ -6,7 +6,7 @@
 /*   By: kkaczoro <kkaczoro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/30 16:50:29 by kkaczoro          #+#    #+#             */
-/*   Updated: 2023/03/31 17:21:06 by kkaczoro         ###   ########.fr       */
+/*   Updated: 2023/05/08 09:35:32 by yaretel-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,8 @@ void	free_lst_tok(t_token *lst)
 	while (lst)
 	{
 		temp = lst->next;
-		free(lst->token);
-		free(lst);
+		dmy_free(lst->token);
+		dmy_free(lst);
 		lst = temp;
 	}
 }
@@ -39,11 +39,11 @@ void	free_arr_argv(t_cmd **arr_argv)
 	{
 		temp = arr_argv[i++];
 		free_lst_rdr(temp->rdr);
-		free(temp->file);
+		dmy_free(temp->file);
 		free_arr(temp->args);
-		free(temp);
+		dmy_free(temp);
 	}
-	free(arr_argv);
+	dmy_free(arr_argv);
 }
 
 static void	free_lst_rdr(t_rdr *rdr)
@@ -55,9 +55,9 @@ static void	free_lst_rdr(t_rdr *rdr)
 	while (rdr)
 	{
 		temp = rdr->next;
-		free(rdr->type);
-		free(rdr->file);
-		free(rdr);
+		dmy_free(rdr->type);
+		dmy_free(rdr->file);
+		dmy_free(rdr);
 		rdr = temp;
 	}
 }
@@ -70,13 +70,13 @@ void	free_arr(char **arr)
 		return ;
 	i = 0;
 	while (arr[i])
-		free(arr[i++]);
-	free(arr);
+		dmy_free(arr[i++]);
+	dmy_free(arr);
 }
 
 void	free_intermediates(char *line, t_token *lst_tok, t_cmd **arr_cmd)
 {
-	free(line);
+	dmy_free(line);
 	free_lst_tok(lst_tok);
 	free_arr_argv(arr_cmd);
 }

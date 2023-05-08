@@ -6,7 +6,7 @@
 /*   By: kkaczoro <kkaczoro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/30 17:28:30 by kkaczoro          #+#    #+#             */
-/*   Updated: 2023/04/06 12:27:31 by kkaczoro         ###   ########.fr       */
+/*   Updated: 2023/05/08 09:35:13 by yaretel-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,16 +16,16 @@ t_rdr	*rdr_new(char *type, char *file)
 {
 	t_rdr	*rdr;
 
-	rdr = malloc(sizeof(t_rdr));
+	rdr = dmy_malloc(sizeof(t_rdr));
 	if (!rdr)
 		return (NULL);
 	rdr->type = ft_strdup(type);
 	rdr->file = ft_strdup(file);
 	if (!rdr->type || !rdr->file)
 	{
-		free(rdr->type);
-		free(rdr->file);
-		free(rdr);
+		dmy_free(rdr->type);
+		dmy_free(rdr->file);
+		dmy_free(rdr);
 		return (NULL);
 	}
 	rdr->next = NULL;

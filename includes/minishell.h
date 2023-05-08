@@ -6,7 +6,7 @@
 /*   By: kkaczoro <kkaczoro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/08 16:57:36 by yaretel-          #+#    #+#             */
-/*   Updated: 2023/05/04 10:59:44 by kkaczoro         ###   ########.fr       */
+/*   Updated: 2023/05/08 09:49:22 by yaretel-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 # include <stdint.h>
 # include <fcntl.h>
 # include "../deps/ft/libft.h"
+# include "../deps/dmy/includes/dmy.h"
 
 //this guy to open a file
 # include <fcntl.h>

@@ -6,7 +6,7 @@
 /*   By: kkaczoro <kkaczoro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/14 13:30:55 by yaretel-          #+#    #+#             */
-/*   Updated: 2023/04/28 17:26:55 by kkaczoro         ###   ########.fr       */
+/*   Updated: 2023/05/08 09:30:58 by yaretel-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,7 @@ char	*create_tokcod(char *pt)
 	if (!pt)
 		yikes("Error: no input in pt during parsing", 0);
 	len = ft_strlen(pt);
-	tokcod = malloc(sizeof(*tokcod) * (len + 1));
+	tokcod = dmy_malloc(sizeof(*tokcod) * (len + 1));
 	if (tokcod == NULL)
 		yikes("Error: malloc failed", 0);
 	i = 0;

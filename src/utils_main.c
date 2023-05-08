@@ -6,7 +6,7 @@
 /*   By: kkaczoro <kkaczoro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/30 17:03:35 by kkaczoro          #+#    #+#             */
-/*   Updated: 2023/05/03 17:25:59 by kkaczoro         ###   ########.fr       */
+/*   Updated: 2023/05/08 09:37:43 by yaretel-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,4 +77,5 @@ void	clean_shell(void)
 	ft_putstr_fd(CMD_EXIT, 1);
 	ft_putchar_fd('\n', 1);
 	rl_clear_history();
+	dmy_freeall();
 }

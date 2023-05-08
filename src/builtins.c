@@ -6,7 +6,7 @@
 /*   By: kkaczoro <kkaczoro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/07 16:26:26 by kkaczoro          #+#    #+#             */
-/*   Updated: 2023/05/01 10:01:48 by kkaczoro         ###   ########.fr       */
+/*   Updated: 2023/05/08 09:34:21 by yaretel-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ int	ft_pwd(char **args, char ***envp)
 		return (1);
 	ft_putstr_fd(pwd, STDOUT_FILENO);
 	ft_putchar_fd('\n', STDOUT_FILENO);
-	free(pwd);
+	dmy_free(pwd);
 	return (0);
 }
 
@@ -38,8 +38,8 @@ char	*ft_getcwd(void)
 	i = 0;
 	while (!cwd)
 	{
-		free(buffer);
-		buffer = malloc(sizeof(char) * (BUFFER_SIZE_PWD + i));
+		dmy_free(buffer);
+		buffer = dmy_malloc(sizeof(char) * (BUFFER_SIZE_PWD + i));
 		if (!buffer)
 			return (NULL);
 		cwd = getcwd(buffer, BUFFER_SIZE_PWD);

@@ -6,7 +6,7 @@
 /*   By: yaretel- <yaretel-@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/08 16:57:45 by yaretel-          #+#    #+#             */
-/*   Updated: 2023/03/20 10:02:49 by yaretel-         ###   ########.fr       */
+/*   Updated: 2023/05/08 09:31:14 by yaretel-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ char	*create_wrdcod(char *pt)
 	if (!pt)
 		yikes("Error: no input in pt during parsing", 0);
 	len = ft_strlen(pt);
-	wrdcod = malloc(sizeof(*wrdcod) * (len + 1));
+	wrdcod = dmy_malloc(sizeof(*wrdcod) * (len + 1));
 	if (wrdcod == NULL)
 		yikes("Error: malloc failed", 0);
 	i = 0;
