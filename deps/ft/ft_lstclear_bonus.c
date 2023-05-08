@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_lstclear_bonus.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yaretel- <yaretel-@student.s19.be>         +#+  +:+       +#+        */
+/*   By: kkaczoro <kkaczoro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/13 16:36:46 by yaretel-          #+#    #+#             */
-/*   Updated: 2022/10/27 16:05:38 by yaretel-         ###   ########.fr       */
+/*   Updated: 2023/05/08 11:18:16 by kkaczoro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ void	ft_lstclear(t_list **lst, void (*del)(void *))
 		next = (*lst)->next;
 		if (del)
 			del((*lst)->content);
-		free(*lst);
+		dmy_free(*lst);
 		*lst = next;
 	}
 }

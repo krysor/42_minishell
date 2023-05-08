@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_split.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yaretel- <yaretel-@student.s19.be>         +#+  +:+       +#+        */
+/*   By: kkaczoro <kkaczoro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/13 16:38:47 by yaretel-          #+#    #+#             */
-/*   Updated: 2022/10/27 16:51:57 by yaretel-         ###   ########.fr       */
+/*   Updated: 2023/05/08 11:19:14 by kkaczoro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,9 +17,9 @@ static void	*ft_yikes(char **res, int j)
 	while (j > 0)
 	{
 		j--;
-		free(res[j]);
+		dmy_free(res[j]);
 	}
-	free(res);
+	dmy_free(res);
 	return (NULL);
 }
 

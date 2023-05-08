@@ -6,7 +6,7 @@
 /*   By: kkaczoro <kkaczoro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/30 17:28:30 by kkaczoro          #+#    #+#             */
-/*   Updated: 2023/04/17 15:57:02 by yaretel-         ###   ########.fr       */
+/*   Updated: 2023/05/08 10:56:12 by kkaczoro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ int	set_cmd_default(t_cmd *arr, t_token *token)
 	arr->builtin = NULL;
 	arr->rdr = NULL;
 	nb_tokens_before_pipe = get_nb_tokens_before_pipe(token);
-	arr->args = malloc(sizeof(char *) * (nb_tokens_before_pipe + 1));
+	arr->args = dmy_malloc(sizeof(char *) * (nb_tokens_before_pipe + 1));
 	if (!arr->args)
 		return (1);
 	arr->args[nb_tokens_before_pipe] = NULL;

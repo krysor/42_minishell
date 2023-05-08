@@ -6,25 +6,11 @@
 /*   By: kkaczoro <kkaczoro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/01 09:56:15 by kkaczoro          #+#    #+#             */
-/*   Updated: 2023/05/03 16:25:53 by kkaczoro         ###   ########.fr       */
+/*   Updated: 2023/05/08 10:57:54 by kkaczoro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
-
-int	get_i_var(char *var, char **envp)
-{
-	int		i;
-	size_t	len;
-
-	i = 0;
-	len = ft_strlen(var);
-	while (envp[i] && (ft_strncmp(envp[i], var, len) || envp[i][len] != '='))
-		i++;
-	if (envp[i])
-		return (i);
-	return (-1);
-}
 
 int	ft_unset(char **args, char ***envp)
 {
@@ -52,7 +38,7 @@ void	ft_unset_var(char *arg, char ***envp_pnt)
 	i = get_i_var(arg, envp);
 	if (i == -1)
 		return ;
-	free(envp[i]);
+	dmy_free(envp[i]);
 	while (envp[i + 1])
 	{	
 		envp[i] = envp[i + 1];
