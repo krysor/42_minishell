@@ -6,7 +6,7 @@
 /*   By: kkaczoro <kkaczoro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/01 10:04:06 by kkaczoro          #+#    #+#             */
-/*   Updated: 2023/05/01 10:21:23 by kkaczoro         ###   ########.fr       */
+/*   Updated: 2023/05/08 09:51:04 by yaretel-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,9 +19,8 @@ void	prepare_and_exec(t_cmd *cmd, char *ep[], int next, int *fd_read_prev)
 {
 	int		pipefd[2];
 	pid_t	pid;
+	int		exit_code;
 
-	(void)cmd;
-	(void)ep;
 	if (next && (pipe(pipefd)))
 		yikes("pipe failed", 0);
 	pid = fork();
@@ -31,9 +30,16 @@ void	prepare_and_exec(t_cmd *cmd, char *ep[], int next, int *fd_read_prev)
 	{
 		child(fd_read_prev, pipefd, next);
 		if (cmd->builtin)
-			exit(cmd->builtin(cmd->args, &ep));
+		{
+			exit_code = cmd->builtin(cmd->args, &ep);
+			dmy_freeall();
+			exit(exit_code);
+		}
 		if (execve(cmd->file, cmd->args, ep) == -1)
+		{
+			dmy_freeall();
 			exit(-1);
+		}
 	}
 	else
 		parent(pid, next, pipefd, fd_read_prev);

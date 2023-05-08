@@ -6,7 +6,7 @@
 /*   By: kkaczoro <kkaczoro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/20 11:51:12 by kkaczoro          #+#    #+#             */
-/*   Updated: 2023/04/28 17:27:44 by kkaczoro         ###   ########.fr       */
+/*   Updated: 2023/05/08 09:32:10 by yaretel-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ t_cmd	**parser(t_token *lst_tok, char **envp)
 	if (!lst_tok)
 		return (NULL);
 	nb_cmd = get_nb_pipes(lst_tok) + 1;
-	arr = malloc(sizeof(t_cmd *) * (nb_cmd + 1));
+	arr = dmy_malloc(sizeof(t_cmd *) * (nb_cmd + 1));
 	if (!arr)
 		return (NULL);
 	arr[nb_cmd] = NULL;
@@ -80,7 +80,7 @@ static int	set_arr(t_cmd **arr, int nb_cmd, t_token **lst_tok_pnt, char **envp)
 	i = 0;
 	while (i < nb_cmd)
 	{
-		arr[i] = malloc(sizeof(t_cmd));
+		arr[i] = dmy_malloc(sizeof(t_cmd));
 		if (!arr[i])
 			return (1);
 		if (set_cmd(arr[i], lst_tok_pnt, envp))

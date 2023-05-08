@@ -6,7 +6,7 @@
 /*   By: kkaczoro <kkaczoro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/01 10:00:35 by kkaczoro          #+#    #+#             */
-/*   Updated: 2023/05/03 17:28:03 by kkaczoro         ###   ########.fr       */
+/*   Updated: 2023/05/08 09:34:30 by yaretel-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,12 +37,12 @@ int	ft_cd(char **args, char ***envp)
 	if (chdir(cwd_next) || (ft_strlen(args[1]) == 1
 			&& *args[1] == '-' && ft_pwd(NULL, NULL)))
 	{
-		free(pwd_old);
+		dmy_free(pwd_old);
 		return (1);
 	}
 	if (env_pwd_update(pwd_old, envp))
 		return (1);
-	free(pwd_old);
+	dmy_free(pwd_old);
 	return (0);
 }
 //return error codes
@@ -64,7 +64,7 @@ static int	env_pwd_update(char *pwd_old, char ***envp)
 		return (1);
 	if (get_i_var("PWD", *envp) != -1 && var_update("PWD", pwd_new, envp))
 		return (1);
-	free(pwd_new);
+	dmy_free(pwd_new);
 	return (0);
 }
 
@@ -78,12 +78,12 @@ static int	var_update(char *var_name, char *var_val, char ***envp)
 	var_equal_val = ft_strjoin(var_equal, var_val);
 	if (!var_equal || !var_equal_val)
 	{
-		free(var_equal);
-		free(var_equal_val);
+		dmy_free(var_equal);
+		dmy_free(var_equal_val);
 		return (1);
 	}
-	free(var_equal);
+	dmy_free(var_equal);
 	ft_export_var(&var_equal_val, envp);
-	free(var_equal_val);
+	dmy_free(var_equal_val);
 	return (0);
 }

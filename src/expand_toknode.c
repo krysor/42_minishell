@@ -6,7 +6,7 @@
 /*   By: yaretel- <yaretel-@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 16:36:53 by yaretel-          #+#    #+#             */
-/*   Updated: 2023/05/03 19:23:24 by yaretel-         ###   ########.fr       */
+/*   Updated: 2023/05/08 09:34:52 by yaretel-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ char	*expand_token(char **envp, char **tokcod, char **token)
 			keylen = cstrlen((*tokcod)[i], &(*tokcod)[i + 1]);
 			if (strdlen(&(*token)[i + 1], "$\"\' \t\n") < keylen)
 				keylen = strdlen(&(*token)[i + 1], "$\"\' \t\n");
-			ck = malloc(sizeof(*ck) * (keylen + 1));
+			ck = dmy_malloc(sizeof(*ck) * (keylen + 1));
 			if (!ck)
 				return (NULL);
 			ft_strlcpy(ck, &(*token)[i + 1], keylen + 1);
@@ -39,7 +39,7 @@ char	*expand_token(char **envp, char **tokcod, char **token)
 			ft_strtake(token, i, keylen + 1);
 			ft_strins(token, i, cv);
 			tokcodadjust(tokcod, i, ft_strlen(cv) - ft_strlen(ck));
-			free(ck);
+			dmy_free(ck);
 			i += ft_strlen(cv);
 		}
 		else
@@ -161,7 +161,7 @@ void	expand_toknode(t_token **node, t_token *pev, char **tokcod, char **envp)
 	t_token *ptr;
 
 	token = ft_strdup((*node)->token);
-	free((*node)->token);
+	dmy_free((*node)->token);
 	expand_token(envp, tokcod, &token);
 	new = lex_it(token, 1, (*node)->next);//this I need to investigate further, I need to keep track of which nodes got expanded
 	if (!new)
@@ -172,12 +172,12 @@ void	expand_toknode(t_token **node, t_token *pev, char **tokcod, char **envp)
 	ptr->token = token;
 	while (ptr != (*node)->next)
 	{
-		free(*tokcod);
+		dmy_free(*tokcod);
 		*tokcod = create_tokcod(ptr->token);
 		if (remove_quotes(tokcod, &(ptr->token)))
 			yikes("invalid input for remove quotes", 0);
 		ptr = ptr->next;
 	}
-	free(*node);
+	dmy_free(*node);
 	*node = new;
 }

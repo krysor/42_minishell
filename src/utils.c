@@ -6,7 +6,7 @@
 /*   By: kkaczoro <kkaczoro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/08 17:38:05 by yaretel-          #+#    #+#             */
-/*   Updated: 2023/04/30 10:57:00 by yaretel-         ###   ########.fr       */
+/*   Updated: 2023/05/08 09:35:23 by yaretel-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ char	*strsquash(char x, const char *str)
 	while (str[i])
 		if (str[i++] == x)
 			count++;
-	new = malloc(sizeof(*new) * (i - count + 1));
+	new = dmy_malloc(sizeof(*new) * (i - count + 1));
 	if (!new)
 		yikes("malloc failed", 0);
 	i = 0;
@@ -107,7 +107,7 @@ char	**arrdup(char **arr)
 	i = 0;
 	while (arr[i])
 		i++;
-	dup = malloc(sizeof(char *) * (i + 1));
+	dup = dmy_malloc(sizeof(char *) * (i + 1));
 	if (!dup)
 		return (NULL);
 	i = 0;
@@ -138,13 +138,13 @@ char	*ft_strins(char **str, unsigned int pos, char *ins)
 		return (*str);
 	strlen = ft_strlen(*str);
 	inslen = ft_strlen(ins);
-	new = (char *)malloc(sizeof(*new) * strlen + inslen + 1);
+	new = (char *)dmy_malloc(sizeof(*new) * strlen + inslen + 1);
 	if (!new)
 		return (NULL);
 	ft_strlcpy(new, *str, pos + 1);
 	ft_strlcpy(new + pos, ins, inslen + 1);
 	ft_strlcpy(new + pos + inslen, *str + pos, strlen + 1);
-	free(*str);
+	dmy_free(*str);
 	*str = new;
 	return (new);
 }
@@ -158,13 +158,13 @@ char	*ft_strtake(char **str, unsigned int pos, size_t size)
 	if (!str || !(*str) || size == 0)
 		return (NULL);
 	strlen = ft_strlen((*str));
-	new = (char *)malloc(sizeof(*new) * (strlen - size + 1));
+	new = (char *)dmy_malloc(sizeof(*new) * (strlen - size + 1));
 	if (!new)
 		return (NULL);
 	ft_strlcpy(new, (*str), pos + 1);
 	if (pos + size < strlen)
 		ft_strlcpy(new + pos, (*str) + pos + size, strlen);
-	free(*str);
+	dmy_free(*str);
 	*str = new;
 	return (new);
 }

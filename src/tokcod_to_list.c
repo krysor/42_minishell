@@ -6,7 +6,7 @@
 /*   By: yaretel- <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/14 13:37:19 by yaretel-          #+#    #+#             */
-/*   Updated: 2023/03/23 09:10:13 by yaretel-         ###   ########.fr       */
+/*   Updated: 2023/05/08 09:32:21 by yaretel-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ t_token	*newtoken(char *token)
 
 	if (!token)
 		yikes("malloc error\n", 1, token);
-	new = malloc(sizeof(*new));
+	new = dmy_malloc(sizeof(*new));
 	if (!new)
 		yikes("malloc error\n", 1, token);
 	new->token = token;

@@ -6,7 +6,7 @@
 #    By: kkaczoro <kkaczoro@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/03/08 14:17:01 by yaretel-          #+#    #+#              #
-#    Updated: 2023/05/04 10:59:23 by kkaczoro         ###   ########.fr        #
+#    Updated: 2023/05/08 09:21:18 by yaretel-         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,7 +14,8 @@ PROJECT =		minishell
 NAME =			$(PROJECT)
 HEADER =		includes/$(PROJECT).h
 LIB =			lib$(PROJECT).a
-DEPS_NAME =		ft
+DEPS_NAME =		ft\
+				dmy
 DEPS =			$(foreach dep, $(DEPS_NAME), deps/$(dep)/lib$(dep).a)
 SRCS =			create_tokcod\
 				utils\
@@ -44,7 +45,7 @@ SRCS =			create_tokcod\
 SRC_MAIN = 		main
 OBJS =			$(addprefix obj/, $(addsuffix .o, $(SRCS)))
 OBJS_MAIN =		$(addprefix obj/, $(addsuffix .o, $(SRC_MAIN)))
-OBJS_DEPS :=		$(foreach dep, $(DEPS_NAME), $(addprefix deps/$(dep)/, $(shell $(MAKE) --no-print-directory -C deps/$(dep) print_obj_names)))
+OBJS_DEPS :=	$(foreach dep, $(DEPS_NAME), $(addprefix deps/$(dep)/, $(shell $(MAKE) --no-print-directory -C deps/$(dep) print_obj_names)))
 CFLAGS =		#-fsanitize=address
 FTFLAGS = 		-Wall -Wextra -Werror
 FLAGS =			$(CFLAGS) $(FTFLAGS)
@@ -68,7 +69,7 @@ $(LIB): $(DEPS) $(OBJS)
 
 clean:
 	rm -rf $(dir $(OBJS))
-	$(foreach dep, $(DEPS_NAME), $(MAKE) $@ -C deps/$(dep))
+	$(foreach dep, $(DEPS_NAME), $(MAKE) $@ -C deps/$(dep);)
 
 fclean: clean
 	rm -rf $(NAME)
