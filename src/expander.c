@@ -15,7 +15,7 @@
 t_token	*expander(t_token *lst, char **envp)
 {
 	char	*tokcod;
-	t_token *prev;
+	t_token	*prev;
 	t_token	*first;
 
 	prev = NULL;

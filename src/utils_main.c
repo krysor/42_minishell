@@ -6,18 +6,59 @@
 /*   By: kkaczoro <kkaczoro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/30 17:03:35 by kkaczoro          #+#    #+#             */
-/*   Updated: 2023/05/08 09:37:43 by yaretel-         ###   ########.fr       */
+/*   Updated: 2023/05/08 10:58:54 by kkaczoro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-void	init_shell(void)
+static char	*get_updated_shlvl(char **envp[]);
+
+int	init_shell(char **envp[])
 {
+	char	*shlvl;
+
 	ft_putstr_fd(MSG_HELLO, 1);
 	signal(SIGINT, &ft_ctrl_c);
 	signal(SIGQUIT, SIG_IGN);
+	shlvl = get_updated_shlvl(envp);
+	if (shlvl == NULL || ft_export_var(&shlvl, envp))
+	{
+		dmy_free(shlvl);
+		free_arr(*envp);
+		return (1);
+	}
+	dmy_free(shlvl);
+	return (0);
 }
+
+static char	*get_updated_shlvl(char **envp[])
+{
+	char	*s;
+	char	*shlvl;
+	int		lvl;
+
+	s = ft_getenv(*envp, "SHLVL");
+	if (s == NULL)
+		shlvl = ft_strdup("SHLVL=1");
+	else
+	{
+		lvl = ft_atoi(s);
+		if (lvl <= 0)
+			shlvl = ft_strdup("SHLVL=1");
+		else
+		{
+			lvl++;
+			if (lvl - 1 > lvl)
+				return (NULL);
+			s = ft_itoa(lvl);
+			shlvl = ft_strjoin("SHLVL=", s);
+			dmy_free(s);
+		}
+	}
+	return (shlvl);
+}
+
 //ADD THIS IN INPUTRC file
 //echo-control-characters (On)
 //	When set to On, on operating systems that indicate they support it,
@@ -32,15 +73,7 @@ void	ft_ctrl_c(int i)
 	rl_on_new_line();
 	rl_replace_line("", 0);
 	rl_redisplay();
-}	
-
-// int		line_is_not_CMD_EXIT(char *line)
-// {
-// 	if (ft_strlen(CMD_EXIT) != ft_strlen(line) ||
-// 			ft_strncmp(CMD_EXIT, line, ft_strlen(CMD_EXIT)))
-// 		return (1);
-// 	return (0);
-// }
+}
 
 //some freeing required between prompt and line
 //if (!prompt)
@@ -52,7 +85,7 @@ char	*get_line(char **envp)
 
 	prompt = get_prompt(envp);
 	line = readline(prompt);
-	free(prompt);
+	dmy_free(prompt);
 	if (!line)
 		line = ft_strdup(CMD_EXIT);
 	else
@@ -70,12 +103,4 @@ char	*get_prompt(char **envp)
 	if (!username || !prompt)
 		return (NULL);
 	return (prompt);
-}
-
-void	clean_shell(void)
-{
-	ft_putstr_fd(CMD_EXIT, 1);
-	ft_putchar_fd('\n', 1);
-	rl_clear_history();
-	dmy_freeall();
 }

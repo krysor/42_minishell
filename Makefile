@@ -6,7 +6,7 @@
 #    By: kkaczoro <kkaczoro@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/03/08 14:17:01 by yaretel-          #+#    #+#              #
-#    Updated: 2023/05/08 09:21:18 by yaretel-         ###   ########.fr        #
+#    Updated: 2023/05/08 10:52:40 by kkaczoro         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -36,11 +36,13 @@ SRCS =			create_tokcod\
 				rdr\
 				get_path\
 				builtins\
-				builtins_export\
+				builtins_export_utils\
 				builtins_unset\
 				builtins_echo\
 				expander_utils\
 				builtins_cd\
+				builtins_exit\
+				builtins_utils\
 				expander
 SRC_MAIN = 		main
 OBJS =			$(addprefix obj/, $(addsuffix .o, $(SRCS)))

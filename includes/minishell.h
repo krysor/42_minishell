@@ -6,7 +6,7 @@
 /*   By: kkaczoro <kkaczoro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/08 16:57:36 by yaretel-          #+#    #+#             */
-/*   Updated: 2023/05/08 09:49:22 by yaretel-         ###   ########.fr       */
+/*   Updated: 2023/05/08 10:52:27 by kkaczoro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@
 # include <dirent.h>
 
 //Macro's for readline and main loop
-# define CMD_EXIT 	"exit"
+# define CMD_EXIT 	"exit\n"
 # define MSG_HELLO 	"Bonjournooo je suis un pika pika pikachuuuu en dis is SPARTA!!!!\n\
 					jk diz iz notre MINIseaSHELL\n"
 
@@ -57,7 +57,11 @@
 # define ENV		"env"
 # define EXIT		"exit"
 
-# define BUFFER_SIZE_PWD	100
+# define BUFFER_SIZE_PWD		100
+# define BUFFER_SIZE_PWD_MAX	1000
+
+# define STR_LONG_MAX	"9223372036854775807"
+# define STR_LONG_MIN	"9223372036854775808"
 
 //This struct is used to make a linked list of
 //	all the words and tokens during the lexer stage
@@ -134,12 +138,12 @@ char			*ft_strins(char **str, unsigned int pos, char *ins);
 char			*ft_strtake(char **str, unsigned int pos, size_t size);
 
 //functions for the main and basic shell interface
-void			init_shell(void);
+int				update_shellvl(char **envp[]);
+int				init_shell(char **envp[]);
 void			ft_ctrl_c(int i);
 int				line_is_not_CMD_EXIT(char *line);
 char			*get_line(char **envp);
 char			*get_prompt(char **envp);
-void			clean_shell(void);
 
 //readline functions for the prompt
 void			rl_clear_history(void);
@@ -187,10 +191,14 @@ int				ft_unset(char **args, char ***envp);
 void			ft_unset_var(char *arg, char ***envp_pnt);
 int				ft_env(char **args, char ***envp);
 int				ft_exit(char **args, char ***envp);
+int				get_exit_code(char **args);
+long int		ft_atolong(const char *nptr);
+int				ft_isspace(char chr);
+int				ft_nbdigit(char *s);
 
-char	*find_var(char *str, size_t *size);
-char	*create_varcod(char *tokcod, char *pt);
-int		remove_quotes(char **tokcod, char **pt);
-char	*expand_token(char **envp, char **tokcod, char **token);
-char	*tokcodadjust(char **str, unsigned int pos, ssize_t correction);
+char			*find_var(char *str, size_t *size);
+char			*create_varcod(char *tokcod, char *pt);
+int				remove_quotes(char **tokcod, char **pt);
+char			*expand_token(char **envp, char **tokcod, char **token);
+char			*tokcodadjust(char **str, unsigned int pos, ssize_t correction);
 #endif

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expand_toknode.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yaretel- <yaretel-@student.s19.be>         +#+  +:+       +#+        */
+/*   By: kkaczoro <kkaczoro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 16:36:53 by yaretel-          #+#    #+#             */
-/*   Updated: 2023/05/08 09:34:52 by yaretel-         ###   ########.fr       */
+/*   Updated: 2023/05/08 10:58:55 by kkaczoro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,8 +84,8 @@ void	remove_quotes(char **pt, char **tokcod)
 	mark_outer_quotes(*pt, *tokcod, '\24');
 	new_pt = strsquash('\24', *pt);
 	new_tokcod = strsquash('\24', *tokcod);
-	free(*pt);
-	free(*tokcod);
+	dmy_free(*pt);
+	dmy_free(*tokcod);
 	*pt = new_pt;
 	*tokcod = new_tokcod;
 }
@@ -106,7 +106,7 @@ char	*create_varcod(char *tokcod, char *pt)
 	len = ft_strlen(pt);
 	if (len != ft_strlen(tokcod))
 		return (NULL);
-	varcod = malloc(sizeof(*varcod) * (len + 1));
+	varcod = dmy_malloc(sizeof(*varcod) * (len + 1));
 	i = 0;
 	while (i < len)
 		varcod[i++] = '.';
