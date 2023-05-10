@@ -6,7 +6,7 @@
 /*   By: kkaczoro <kkaczoro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/30 17:03:35 by kkaczoro          #+#    #+#             */
-/*   Updated: 2023/05/08 10:58:54 by kkaczoro         ###   ########.fr       */
+/*   Updated: 2023/05/09 13:56:26 by kkaczoro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@ int	init_shell(char **envp[])
 {
 	char	*shlvl;
 
+	g_exit_code = 0;
 	ft_putstr_fd(MSG_HELLO, 1);
 	signal(SIGINT, &ft_ctrl_c);
 	signal(SIGQUIT, SIG_IGN);

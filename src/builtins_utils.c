@@ -1,4 +1,4 @@
-/* ************************************************************************** */
+	/* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   builtins_utils.c                                   :+:      :+:    :+:   */
@@ -64,7 +64,7 @@ long int	ft_atolong(const char *nptr)
 		sign = -1;
 	if (*str == '-' || *str == '+')
 		str++;
-	if (ft_strncmp(str + 1, STR_LONG_MIN, 19) == 0)
+	if (ft_strncmp(str, STR_LONG_MIN, 19) == 0)
 		return (LONG_MIN);
 	while (ft_isdigit(*str))
 		nb = nb * 10 + *str++ - '0';

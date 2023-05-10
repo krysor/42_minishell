@@ -6,7 +6,7 @@
 /*   By: kkaczoro <kkaczoro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 16:36:53 by yaretel-          #+#    #+#             */
-/*   Updated: 2023/05/08 10:58:55 by kkaczoro         ###   ########.fr       */
+/*   Updated: 2023/05/09 14:17:09 by kkaczoro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,11 +36,14 @@ char	*expand_token(char **envp, char **tokcod, char **token)
 				return (NULL);
 			ft_strlcpy(ck, &(*token)[i + 1], keylen + 1);
 			cv = ft_getenv(envp, ck);
+			if ((*token)[i + 1] == '?' && (*token)[i + 2] == '\0')
+				cv = ft_itoa(g_exit_code);
 			ft_strtake(token, i, keylen + 1);
 			ft_strins(token, i, cv);
 			tokcodadjust(tokcod, i, ft_strlen(cv) - ft_strlen(ck));
 			dmy_free(ck);
 			i += ft_strlen(cv);
+			dmy_free(cv);
 		}
 		else
 			i++;

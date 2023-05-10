@@ -28,8 +28,8 @@ SRCS =			create_tokcod\
 				executor\
 				executor_utils\
 				parser\
-				utils_parser\
-				utils_parser_update_cmd\
+				parser_utils\
+				parser_utils_update_cmd\
 				utils_free\
 				utils_print\
 				utils_main\

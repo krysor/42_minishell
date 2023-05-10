@@ -19,14 +19,16 @@ int	set_cmd_default(t_cmd *arr, t_token *token)
 {
 	int	nb_tokens_before_pipe;
 
+	arr->rdr = NULL;
 	arr->file = NULL;
 	arr->builtin = NULL;
-	arr->rdr = NULL;
 	nb_tokens_before_pipe = get_nb_tokens_before_pipe(token);
 	arr->args = dmy_malloc(sizeof(char *) * (nb_tokens_before_pipe + 1));
-	if (!arr->args)
+	if (arr->args == NULL)
 		return (1);
 	arr->args[nb_tokens_before_pipe] = NULL;
+	arr->fd_in = -1;
+	arr->fd_out = -1;
 	return (0);
 }
 
