@@ -6,7 +6,7 @@
 /*   By: kkaczoro <kkaczoro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/01 10:00:35 by kkaczoro          #+#    #+#             */
-/*   Updated: 2023/05/08 10:57:19 by kkaczoro         ###   ########.fr       */
+/*   Updated: 2023/05/09 16:23:19 by kkaczoro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,7 @@ static int	path_is_dir(char *path)
 
 static int	env_pwd_update(char *pwd_old, char ***envp)
 {
-	static int	not_first_cd_after_pwd_unset;
+	static int	not_first_cd_after_pwd_unset = FALSE;
 	char		*pwd_new;
 	char		*pwd_old_right;
 

@@ -6,7 +6,7 @@
 /*   By: kkaczoro <kkaczoro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/08 16:57:36 by yaretel-          #+#    #+#             */
-/*   Updated: 2023/05/08 10:52:27 by kkaczoro         ###   ########.fr       */
+/*   Updated: 2023/05/09 16:41:09 by kkaczoro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,8 +60,10 @@
 # define BUFFER_SIZE_PWD		100
 # define BUFFER_SIZE_PWD_MAX	1000
 
-# define STR_LONG_MAX	"9223372036854775807"
 # define STR_LONG_MIN	"9223372036854775808"
+# define STR_LONG_MAX	"9223372036854775807"
+
+extern int	g_exit_code;
 
 //This struct is used to make a linked list of
 //	all the words and tokens during the lexer stage
@@ -92,7 +94,18 @@ typedef struct s_cmd
 	char		*file;
 	int			(*builtin)(char *args[], char **envp[]);
 	char		**args;
+	int			fd_in;
+	int			fd_out;
 }				t_cmd;
+
+/*
+typedef struct s_cmd
+{
+	t_rdr		*rdr;
+	char		*file;
+	int			(*builtin)(char *args[], char **envp[]);
+	char		**args;
+}				t_cmd;*/
 
 // These are all the functions in Minishell
 char			*is_mchar(char *c);
@@ -127,7 +140,7 @@ ssize_t			value_len_diff(char *dlr, char **envp);
 char			*strsquash(char x, const char *str);
 void			mark_outer_quotes(char *pt, char *tokcod, char marking);
 void			executor(t_cmd **lst, char **ep[]);
-void			prepare_and_exec(t_cmd *cmd, char *ep[],
+pid_t			prepare_and_exec(t_cmd *cmd, char *ep[],
 					int next, int *fd_read_prev);
 t_token			*expander(t_token *lst, char **envp);
 char			*ft_getenv(char *ep[], char *name);
@@ -161,6 +174,7 @@ int				update_cmd(t_token **lst_tok_pnt, t_token *lst_tok,
 int				token_is_operator(t_token *lst_tok);
 int				handle_operator(t_token **lst_tok_pnt, t_cmd *arr);
 char			*get_path(char *cmd, char **envp);
+int				get_nb_cmd(t_cmd **lst);
 
 //redirection struct functions
 t_rdr			*lst_rdr_last(t_rdr *lst_rdr);

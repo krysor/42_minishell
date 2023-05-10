@@ -6,7 +6,7 @@
 /*   By: kkaczoro <kkaczoro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/30 16:50:29 by kkaczoro          #+#    #+#             */
-/*   Updated: 2023/05/08 09:35:32 by yaretel-         ###   ########.fr       */
+/*   Updated: 2023/05/09 10:58:43 by kkaczoro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ void	free_arr_argv(t_cmd **arr_argv)
 	int		i;
 	t_cmd	*temp;
 
-	if (!arr_argv)
+	if (arr_argv == NULL)
 		return ;
 	i = 0;
 	while (arr_argv[i])
@@ -76,7 +76,7 @@ void	free_arr(char **arr)
 
 void	free_intermediates(char *line, t_token *lst_tok, t_cmd **arr_cmd)
 {
-	dmy_free(line);
+	free(line);//dmy_free(line);
 	free_lst_tok(lst_tok);
 	free_arr_argv(arr_cmd);
 }
