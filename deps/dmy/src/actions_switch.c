@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   actions_switch.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yaretel- <yaretel-@student.s19.be>         +#+  +:+       +#+        */
+/*   By: kkaczoro <kkaczoro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/07 17:21:49 by yaretel-          #+#    #+#             */
-/*   Updated: 2023/05/08 09:56:47 by yaretel-         ###   ########.fr       */
+/*   Updated: 2023/05/11 12:59:45 by kkaczoro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,10 @@ void	*dmy_action_malloc(t_dmy **lst, size_t size)
 
 	new = malloc(size);
 	if (new == NULL)
-		return (NULL);
+	{
+		perror(NULL);
+		return (NULL);	
+	}
 	if (dmy_lst_add(lst, new) == NULL)
 	{
 		free(new);

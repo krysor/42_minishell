@@ -6,7 +6,7 @@
 #    By: kkaczoro <kkaczoro@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/03/08 14:17:01 by yaretel-          #+#    #+#              #
-#    Updated: 2023/05/08 10:52:40 by kkaczoro         ###   ########.fr        #
+#    Updated: 2023/05/10 17:32:00 by kkaczoro         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -26,13 +26,13 @@ SRCS =			create_tokcod\
 				expand_toknode_utils\
 				lex_it\
 				executor\
+				executor_rdr\
 				executor_utils\
 				parser\
 				parser_utils\
 				parser_utils_update_cmd\
 				utils_free\
 				utils_print\
-				utils_main\
 				rdr\
 				get_path\
 				builtins\
@@ -43,12 +43,14 @@ SRCS =			create_tokcod\
 				builtins_cd\
 				builtins_exit\
 				builtins_utils\
-				expander
+				expander\
+				main_utils\
+				get_next_line
 SRC_MAIN = 		main
 OBJS =			$(addprefix obj/, $(addsuffix .o, $(SRCS)))
 OBJS_MAIN =		$(addprefix obj/, $(addsuffix .o, $(SRC_MAIN)))
 OBJS_DEPS :=	$(foreach dep, $(DEPS_NAME), $(addprefix deps/$(dep)/, $(shell $(MAKE) --no-print-directory -C deps/$(dep) print_obj_names)))
-CFLAGS =		#-fsanitize=address
+CFLAGS =		-fsanitize=address
 FTFLAGS = 		-Wall -Wextra -Werror
 FLAGS =			$(CFLAGS) $(FTFLAGS)
 

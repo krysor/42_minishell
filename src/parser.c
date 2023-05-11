@@ -6,16 +6,17 @@
 /*   By: kkaczoro <kkaczoro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/20 11:51:12 by kkaczoro          #+#    #+#             */
-/*   Updated: 2023/05/08 09:32:10 by yaretel-         ###   ########.fr       */
+/*   Updated: 2023/05/10 15:12:32 by kkaczoro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-static int	get_nb_pipes(t_token *lst_tok);
 static int	set_arr(t_cmd **arr, int nb_cmd,
 				t_token **lst_tok_pnt, char **envp);
 static int	set_cmd(t_cmd *arr, t_token **lst_tok_pnt, char **envp);
+static int	set_cmd_default(t_cmd *arr, t_token *token);
+static int	update_cmd(t_token **lst_tok_pnt, t_token *lst_tok, t_cmd *cmd, char **envp);
 
 // Allocates, sets and returns a pointer to an array of t_cmd structs.
 // Size is equal to 1 + the number of commands found in the t_token list.
@@ -40,35 +41,6 @@ t_cmd	**parser(t_token *lst_tok, char **envp)
 		return (NULL);
 	}
 	return (arr);
-}
-
-// Returns the number of pipe metacharacters found in the t_token list.
-static int	get_nb_pipes(t_token *lst_tok)
-{
-	int		i;
-	t_token	*temp;
-
-	i = 0;
-	temp = lst_tok;
-	while (temp)
-	{
-		if (token_is_pipe(temp))
-			i++;
-		temp = temp->next;
-	}
-	return (i);
-}
-
-// Returns 1 in case a given t_token is a to be interpreted pipe.
-// Otherwise returns 0.
-int	token_is_pipe(t_token *token)
-{
-	if (token
-		&& token->interprete == TRUE
-		&& token->token[0] == '|'
-		&& token->token[1] == '\0')
-		return (1);
-	return (0);
 }
 
 // Allocates and sets the elements of a t_cmd struct array.
@@ -109,5 +81,52 @@ static int	set_cmd(t_cmd *cmd, t_token **lst_tok_pnt, char **envp)
 		return (1);
 	if (update_cmd(lst_tok_pnt, lst_tok, cmd, envp))
 		return (1);
+	return (0);
+}
+
+// Sets default values for all the fields of a a t_cmd struct.
+static int	set_cmd_default(t_cmd *arr, t_token *token)
+{
+	int	nb_tokens_before_pipe;
+
+	arr->rdr = NULL;
+	arr->file = NULL;
+	arr->builtin = NULL;
+	nb_tokens_before_pipe = get_nb_tokens_before_pipe(token);
+	arr->args = dmy_malloc(sizeof(char *) * (nb_tokens_before_pipe + 1));
+	if (arr->args == NULL)
+		return (1);
+	arr->args[nb_tokens_before_pipe] = NULL;
+	arr->fd_in = -2;
+	arr->fd_out = -2;
+	return (0);
+}
+
+static int	update_cmd(t_token **lst_tok_pnt, t_token *lst_tok,
+						t_cmd *cmd, char **envp)
+{
+	int	i;
+
+	i = 0;
+	while (lst_tok && !token_is_pipe(lst_tok))
+	{
+		if (token_is_operator(lst_tok) == TRUE)
+		{
+			if (handle_operator(&lst_tok, cmd))
+				return (1);
+		}
+		else
+		{
+			cmd->args[i] = ft_strdup(lst_tok->token);
+			if (!cmd->args[i])
+				return (1);
+			i++;
+		}
+		lst_tok = lst_tok->next;
+	}
+	*lst_tok_pnt = lst_tok;
+	cmd->args[i] = NULL;
+	if (cmd->args[0] && set_cmd_builtin(cmd))
+		cmd->file = get_path(cmd->args[0], envp);
 	return (0);
 }

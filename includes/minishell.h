@@ -6,7 +6,7 @@
 /*   By: kkaczoro <kkaczoro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/08 16:57:36 by yaretel-          #+#    #+#             */
-/*   Updated: 2023/05/09 16:41:09 by kkaczoro         ###   ########.fr       */
+/*   Updated: 2023/05/11 10:49:16 by kkaczoro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,10 @@
 # define MSG_HELLO 	"Bonjournooo je suis un pika pika pikachuuuu en dis is SPARTA!!!!\n\
 					jk diz iz notre MINIseaSHELL\n"
 
+//macro's for pipe
+# define READ		0
+# define WRITE		1
+
 //macro's for node->interprete
 # define TRUE		1
 # define FALSE		0
@@ -62,6 +66,9 @@
 
 # define STR_LONG_MIN	"9223372036854775808"
 # define STR_LONG_MAX	"9223372036854775807"
+
+//for gnl
+# define BUFFER_SIZE	1000
 
 extern int	g_exit_code;
 
@@ -139,9 +146,14 @@ ssize_t			value_len_diff(char *dlr, char **envp);
 // 					unsigned int *j, char **envp);
 char			*strsquash(char x, const char *str);
 void			mark_outer_quotes(char *pt, char *tokcod, char marking);
+
 void			executor(t_cmd **lst, char **ep[]);
 pid_t			prepare_and_exec(t_cmd *cmd, char *ep[],
 					int next, int *fd_read_prev);
+
+void			process_redirections(t_cmd *cmd);
+char			*get_next_line(int fd);
+					
 t_token			*expander(t_token *lst, char **envp);
 char			*ft_getenv(char *ep[], char *name);
 size_t			strdlen(const char *s, const char *d);
@@ -167,12 +179,12 @@ int				rl_on_new_line(void);
 t_cmd			**parser(t_token *lst_tok, char **envp);
 
 //parser and utils_parser functions
-int				token_is_pipe(t_token *token);
-int				set_cmd_default(t_cmd *arr, t_token *token);
-int				update_cmd(t_token **lst_tok_pnt, t_token *lst_tok,
-					t_cmd *cmd, char **envp);
-int				token_is_operator(t_token *lst_tok);
-int				handle_operator(t_token **lst_tok_pnt, t_cmd *arr);
+int		get_nb_pipes(t_token *lst_tok);
+int	token_is_pipe(t_token *token);
+int	get_nb_tokens_before_pipe(t_token *lst_tok);
+int	token_is_operator(t_token *lst_tok);
+int	handle_operator(t_token **lst_tok_pnt, t_cmd *arr);
+
 char			*get_path(char *cmd, char **envp);
 int				get_nb_cmd(t_cmd **lst);
 

@@ -6,7 +6,7 @@
 /*   By: kkaczoro <kkaczoro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/07 15:31:57 by kkaczoro          #+#    #+#             */
-/*   Updated: 2023/05/09 13:19:21 by kkaczoro         ###   ########.fr       */
+/*   Updated: 2023/05/10 15:18:40 by kkaczoro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ int	get_exit_code(char **args)
 {
 	int	exit_code;
 
-	ft_putstr_fd(CMD_EXIT, 1);
+	ft_putstr_fd(CMD_EXIT, STDOUT_FILENO);
 	if (args[1] != NULL && args[2] != NULL)
 	{
 		ft_putstr_fd("minishell: exit: too many arguments\n", 1);
@@ -40,9 +40,9 @@ int	get_exit_code(char **args)
 		exit_code = 0;
 	else if (arg_is_correct(args[1]) == FALSE)
 	{
-		ft_putstr_fd("exit: ", 1);
-		ft_putstr_fd(args[1], 1);
-		ft_putstr_fd(": numeric argument required\n", 1);
+		ft_putstr_fd("exit: ", STDOUT_FILENO);
+		ft_putstr_fd(args[1], STDOUT_FILENO);
+		ft_putstr_fd(": numeric argument required\n", STDOUT_FILENO);
 		exit_code = 255;
 	}
 	else

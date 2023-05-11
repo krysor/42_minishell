@@ -6,13 +6,13 @@
 /*   By: kkaczoro <kkaczoro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/01 10:04:06 by kkaczoro          #+#    #+#             */
-/*   Updated: 2023/05/09 17:34:17 by kkaczoro         ###   ########.fr       */
+/*   Updated: 2023/05/11 13:56:56 by kkaczoro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-static void	child(int *fd_read_prev, int *pipefd, int next);
+static void	child(int *fd_read_prev, int *pipefd, int next, t_cmd *cmd);
 static void	parent(int next, int *pipefd, int *fd_read_prev);
 
 pid_t	prepare_and_exec(t_cmd *cmd, char *ep[], int next, int *fd_read_prev)
@@ -27,7 +27,7 @@ pid_t	prepare_and_exec(t_cmd *cmd, char *ep[], int next, int *fd_read_prev)
 		yikes("fork() failed", 0);
 	if (pid == 0)
 	{
-		child(fd_read_prev, pipefd, next);
+		child(fd_read_prev, pipefd, next, cmd);
 		if (cmd->builtin)
 			g_exit_code = cmd->builtin(cmd->args, &ep);
 		else if (execve(cmd->file, cmd->args, ep) == -1)
@@ -40,34 +40,175 @@ pid_t	prepare_and_exec(t_cmd *cmd, char *ep[], int next, int *fd_read_prev)
 	return (pid);
 }
 
-static void	child(int *fd_read_prev, int *pipefd, int next)
+static void	child(int *fd_read_prev, int *pipefd, int next, t_cmd *cmd)
 {
+	if (cmd->fd_in >= 0 && dup2(cmd->fd_in, STDIN_FILENO) == -1)
+		yikes("dup2() failed", 0);
+	if (cmd->fd_in != -1)
+		close(cmd->fd_in);
+	
 	if (*fd_read_prev != -1)
 	{
-		if (dup2(*fd_read_prev, STDIN_FILENO) == -1)
+		if (cmd->fd_in < 0 && dup2(*fd_read_prev, STDIN_FILENO) == -1)
 			yikes("dup2() failed", 0);
+		// else if (cmd->fd_in >= 0 && dup2(cmd->fd_in, STDIN_FILENO) == -1)
+		// 	yikes("dup2() failed", 0);
 		if (close(*fd_read_prev))
 			yikes("close fd_read_prev child failed", 0);
+		// if (cmd->fd_in != -1)
+		// 	close(cmd->fd_in);
 	}
+	
+	if (cmd->fd_out >= 0 && dup2(cmd->fd_out, STDOUT_FILENO) == -1)
+		yikes("dup2() failed", 0);
+	if (cmd->fd_out != -1)
+		close(cmd->fd_out);
+
 	if (next)
 	{
-		if (close(pipefd[0]))
+		if (close(pipefd[READ]))
 			yikes("close(pipefd[0]) child failed", 0);
-		if (dup2(pipefd[1], STDOUT_FILENO) == -1)
+		//if (cmd->fd_out == -1 && dup2(pipefd[1], STDOUT_FILENO) == -1)
+		if (cmd->fd_out < 0 && dup2(pipefd[WRITE], STDOUT_FILENO) == -1)
 			yikes("dup2() failed", 0);
-		if (close(pipefd[1]))
+		// else if (cmd->fd_out >= 0 && dup2(cmd->fd_out, STDOUT_FILENO) == -1)
+		// 	yikes("dup2() failed", 0);
+			
+		if (close(pipefd[WRITE]))
 			yikes("close(pipefd[1]) child failed", 0);
+		// if (cmd->fd_out != -1)
+		//  	close(cmd->fd_out);
 	}
 }
 
 static void	parent(int next, int *pipefd, int *fd_read_prev)
 {
-	if (next && close(pipefd[1]))
+	if (next && close(pipefd[WRITE]))
 		yikes("close(pipefd[1]) parent failed", 0);
 	if (*fd_read_prev != -1 && close(*fd_read_prev))
 		yikes("close(fd_read_prev) parent failed", 0);
-	*fd_read_prev = pipefd[0];
+	*fd_read_prev = pipefd[READ];
 }
+
+/*
+pid_t	prepare_and_exec(t_cmd *cmd, char *ep[], int next, int *fd_read_prev)
+{
+	int		pipefd[2];
+	pid_t	pid;
+
+	if (next && (pipe(pipefd)))
+		yikes("pipe failed", 0);
+	pid = fork();
+	if (pid == -1)
+		yikes("fork() failed", 0);
+	if (pid == 0)
+	{
+		child(fd_read_prev, pipefd, next, cmd);
+		if (cmd->builtin)
+			g_exit_code = cmd->builtin(cmd->args, &ep);
+		else if (execve(cmd->file, cmd->args, ep) == -1)
+			g_exit_code = -1;
+		dmy_freeall();
+		exit(g_exit_code);
+	}
+	else
+		parent(next, pipefd, fd_read_prev);
+	return (pid);
+}
+
+static void	child(int *fd_read_prev, int *pipefd, int next, t_cmd *cmd)
+{
+	(void)cmd;
+	if (*fd_read_prev != -1)
+	{
+		if (cmd->fd_in < 0 && dup2(*fd_read_prev, STDIN_FILENO) == -1)
+			yikes("dup2() failed", 0);
+		else if (cmd->fd_in >= 0 && dup2(cmd->fd_in, STDIN_FILENO) == -1)
+			yikes("dup2() failed", 0);
+		if (close(*fd_read_prev))
+			yikes("close fd_read_prev child failed", 0);
+		
+		if (cmd->fd_in != -1)
+			close(cmd->fd_in);
+	}
+	if (next)
+	{
+		if (close(pipefd[READ]))
+			yikes("close(pipefd[0]) child failed", 0);
+		//if (cmd->fd_out == -1 && dup2(pipefd[1], STDOUT_FILENO) == -1)
+		if (cmd->fd_out < 0 && dup2(pipefd[WRITE], STDOUT_FILENO) == -1)
+			yikes("dup2() failed", 0);
+		else if (cmd->fd_out >= 0 && dup2(cmd->fd_out, STDOUT_FILENO) == -1)
+			yikes("dup2() failed", 0);
+			
+		if (close(pipefd[WRITE]))
+			yikes("close(pipefd[1]) child failed", 0);
+		if (cmd->fd_out != -1)
+		 	close(cmd->fd_out);
+	}
+}*/
+
+/*
+pid_t	prepare_and_exec(t_cmd *cmd, char *ep[], int next, int *fd_read_prev)
+{
+	int		pipefd[2];
+	pid_t	pid;
+
+	if (next && (pipe(pipefd)))
+		yikes("pipe failed", 0);
+	pid = fork();
+	if (pid == -1)
+		yikes("fork() failed", 0);
+	if (pid == 0)
+	{
+		child(fd_read_prev, pipefd, next, cmd);
+		if (cmd->builtin)
+			g_exit_code = cmd->builtin(cmd->args, &ep);
+		else if (execve(cmd->file, cmd->args, ep) == -1)
+			g_exit_code = -1;
+		dmy_freeall();
+		exit(g_exit_code);
+	}
+	else
+		parent(next, pipefd, fd_read_prev);
+	return (pid);
+}
+
+static void	child(int *fd_read_prev, int *pipefd, int next, t_cmd *cmd)
+{
+	(void)cmd;
+	if (*fd_read_prev != -1)
+	{
+		//if (cmd->fd_in == -1 && dup2(*fd_read_prev, STDIN_FILENO) == -1)
+		if (dup2(*fd_read_prev, STDIN_FILENO) == -1)
+			yikes("dup2() failed", 0);
+		if (close(*fd_read_prev))
+			yikes("close fd_read_prev child failed", 0);
+		// if (cmd->fd_in != -1)
+		// 	close(cmd->fd_in);
+	}
+	if (next)
+	{
+		if (close(pipefd[READ]))
+			yikes("close(pipefd[0]) child failed", 0);
+		//if (cmd->fd_out == -1 && dup2(pipefd[1], STDOUT_FILENO) == -1)
+		if (dup2(pipefd[WRITE], STDOUT_FILENO) == -1)
+			yikes("dup2() failed", 0);
+		if (close(pipefd[WRITE]))
+			yikes("close(pipefd[1]) child failed", 0);
+		// if (cmd->fd_out != -1)
+		// 	close(cmd->fd_out);
+	}
+}
+
+static void	parent(int next, int *pipefd, int *fd_read_prev)
+{
+	if (next && close(pipefd[WRITE]))
+		yikes("close(pipefd[1]) parent failed", 0);
+	if (*fd_read_prev != -1 && close(*fd_read_prev))
+		yikes("close(fd_read_prev) parent failed", 0);
+	*fd_read_prev = pipefd[READ];
+}*/
 
 int	get_nb_cmd(t_cmd **lst)
 {	
