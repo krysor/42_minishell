@@ -1,66 +1,47 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils_parser.c                                     :+:      :+:    :+:   */
+/*   parser_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kkaczoro <kkaczoro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/30 17:28:30 by kkaczoro          #+#    #+#             */
-/*   Updated: 2023/05/08 10:56:12 by kkaczoro         ###   ########.fr       */
+/*   Updated: 2023/05/10 15:12:52 by kkaczoro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-static int	get_nb_tokens_before_pipe(t_token *lst_tok);
-
-// Sets default values for all the fields of a a t_cmd struct.
-int	set_cmd_default(t_cmd *arr, t_token *token)
+// Returns the number of pipe metacharacters found in the t_token list.
+int	get_nb_pipes(t_token *lst_tok)
 {
-	int	nb_tokens_before_pipe;
-
-	arr->rdr = NULL;
-	arr->file = NULL;
-	arr->builtin = NULL;
-	nb_tokens_before_pipe = get_nb_tokens_before_pipe(token);
-	arr->args = dmy_malloc(sizeof(char *) * (nb_tokens_before_pipe + 1));
-	if (arr->args == NULL)
-		return (1);
-	arr->args[nb_tokens_before_pipe] = NULL;
-	arr->fd_in = -1;
-	arr->fd_out = -1;
-	return (0);
-}
-
-int	update_cmd(t_token **lst_tok_pnt, t_token *lst_tok, t_cmd *cmd, char **envp)
-{
-	int	i;
+	int		i;
+	t_token	*temp;
 
 	i = 0;
-	while (lst_tok && !token_is_pipe(lst_tok))
+	temp = lst_tok;
+	while (temp)
 	{
-		if (token_is_operator(lst_tok))
-		{
-			if (handle_operator(&lst_tok, cmd))
-				return (1);
-		}
-		else
-		{
-			cmd->args[i] = ft_strdup(lst_tok->token);
-			if (!cmd->args[i])
-				return (1);
+		if (token_is_pipe(temp))
 			i++;
-		}
-		lst_tok = lst_tok->next;
+		temp = temp->next;
 	}
-	*lst_tok_pnt = lst_tok;
-	cmd->args[i] = NULL;
-	if (cmd->args[0] && set_cmd_builtin(cmd))
-		cmd->file = get_path(cmd->args[0], envp);
+	return (i);
+}
+
+// Returns 1 in case a given t_token is a to be interpreted pipe.
+// Otherwise returns 0.
+int	token_is_pipe(t_token *token)
+{
+	if (token
+		&& token->interprete == TRUE
+		&& token->token[0] == '|'
+		&& token->token[1] == '\0')
+		return (1);
 	return (0);
 }
 
-static int	get_nb_tokens_before_pipe(t_token *lst_tok)
+int	get_nb_tokens_before_pipe(t_token *lst_tok)
 {
 	int		nb;
 	t_token	*temp;
@@ -81,15 +62,15 @@ int	token_is_operator(t_token *lst_tok)
 	char	*token;
 
 	token = lst_tok->token;
-	if (!is_operator(token) || !lst_tok->interprete)
-		return (0);
+	if (is_operator(token) == NULL || lst_tok->interprete == FALSE)
+		return (FALSE);
 	len = ft_strlen(token);
 	if (len == 1)
-		return (1);
+		return (TRUE);
 	else if (len == 2
 		&& (token[1] == '<' || token[1] == '>'))
-		return (1);
-	return (0);
+		return (TRUE);
+	return (FALSE);
 }
 
 //decalre a pnt to a pnt one scope outside the loop

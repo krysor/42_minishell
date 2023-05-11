@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   dmy.h                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yaretel- <yaretel-@student.s19.be>         +#+  +:+       +#+        */
+/*   By: kkaczoro <kkaczoro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/07 21:32:40 by yaretel-          #+#    #+#             */
-/*   Updated: 2023/05/08 10:01:16 by yaretel-         ###   ########.fr       */
+/*   Updated: 2023/05/11 15:15:37 by kkaczoro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@
 # define FREEALL 2
 # include <stdlib.h>
 # include <unistd.h>
+# include <stdio.h>
 
 // set the next macro to 1 if you want a message every time you
 // double free, otherwise set to 0
