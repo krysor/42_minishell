@@ -6,7 +6,7 @@
 /*   By: kkaczoro <kkaczoro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/30 17:28:30 by kkaczoro          #+#    #+#             */
-/*   Updated: 2023/05/10 15:12:52 by kkaczoro         ###   ########.fr       */
+/*   Updated: 2023/05/11 16:52:13 by kkaczoro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,8 +33,11 @@ int	get_nb_pipes(t_token *lst_tok)
 // Otherwise returns 0.
 int	token_is_pipe(t_token *token)
 {
-	if (token
+	//printf("token:\n");
+	
+	if (token != NULL
 		&& token->interprete == TRUE
+		&& token->token != NULL
 		&& token->token[0] == '|'
 		&& token->token[1] == '\0')
 		return (1);

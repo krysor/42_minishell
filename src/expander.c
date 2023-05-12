@@ -19,6 +19,7 @@ t_token	*expander(t_token *lst, char **envp)
 	t_token	*first;
 
 	prev = NULL;
+	first = NULL;
 	while (lst)
 	{
 		tokcod = create_tokcod(lst->token);
