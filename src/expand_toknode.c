@@ -6,7 +6,7 @@
 /*   By: kkaczoro <kkaczoro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 16:36:53 by yaretel-          #+#    #+#             */
-/*   Updated: 2023/05/09 14:17:09 by kkaczoro         ###   ########.fr       */
+/*   Updated: 2023/05/13 17:59:33 by kkaczoro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,80 +51,45 @@ char	*expand_token(char **envp, char **tokcod, char **token)
 	return (*token);
 }
 
-// find a quote pair and replaces the quote chars with marking'
-/* commented out because unneccessary I think
-void	mark_outer_quotes(char *pt, char *tokcod, char marking)
+static void	ft_strtake_combo(char **pt, unsigned int i,
+				size_t distance, char **tokcod)
+{
+	ft_strtake(pt, i, 1);
+	ft_strtake(pt, i + distance - 2, 1);
+	ft_strtake(tokcod, i, 1);
+	ft_strtake(tokcod, i + distance - 2, 1);
+}
+
+int	remove_quotes(char **tokcod, char **pt)
 {
 	unsigned int	i;
-	char			*next;
+	size_t			distance;
 
-	i = 0;
-	while (pt[i])
+	if (!(*tokcod) || !(*pt) || **tokcod == '\0')
+		return (1);
+	if (ft_strlen((*tokcod)) != ft_strlen((*pt)))
+		return (1);
+	i = strdlen(*tokcod, "\'\"");
+	while ((*tokcod)[i])
 	{
-		if (!(pt[i] == marking))
+		if (is_in_set((*tokcod)[i], "\'\""))
 		{
-			next = find_next(is_quote(pt + i));
-			if (is_quote(pt + i) && next)
+			distance = cstrlen((*tokcod)[i], &(*tokcod)[i]);
+			if (distance < 2)
 			{
-				pt[i] = marking;
-				*next = marking;
-				(tokcod)[i] = marking;
-				tokcod[next - &pt[i]] = marking;
+				write(2, ERR_MSG_RM_QUOTES, 70);
+				return (1);
 			}
+			ft_strtake_combo(pt, i, distance, tokcod);
+			i += distance - 2;
 		}
-		i++;
+		else
+			i++;
 	}
+	return (0);
 }
-*/
 
-//commented out because not necessary anymore
 /*
-void	remove_quotes(char **pt, char **tokcod)
-{
-	char			*new_pt;
-	char			*new_tokcod;
-
-	mark_outer_quotes(*pt, *tokcod, '\24');
-	new_pt = strsquash('\24', *pt);
-	new_tokcod = strsquash('\24', *tokcod);
-	dmy_free(*pt);
-	dmy_free(*tokcod);
-	*pt = new_pt;
-	*tokcod = new_tokcod;
-}
-*/
-
-/* (MAYBE UNNECCESARY)
-// you give a token coding (tokcod) and the input string of the prompt (pt) 
-// gives back a variable coding on which you can tell which characters should be expanded
-// a result of "..$.." tells to expand at the character at index 2
-char	*create_varcod(char *tokcod, char *pt)
-{
-	size_t			len;
-	char			*varcod;
-	unsigned int	i;
-
-	if (!pt || !tokcod)
-		return (NULL);
-	len = ft_strlen(pt);
-	if (len != ft_strlen(tokcod))
-		return (NULL);
-	varcod = dmy_malloc(sizeof(*varcod) * (len + 1));
-	i = 0;
-	while (i < len)
-		varcod[i++] = '.';
-	varcod[i] = '\0';
-	i = 0;
-	while (i < len)
-	{
-		if (pt[i] == '$' && tokcod[i] != '\'')
-			varcod[i] = '$';
-		i++;
-	}
-	return (varcod);
-}
-*/
-
 int	remove_quotes(char **tokcod, char **pt)
 {
 	unsigned int	i;
@@ -155,18 +120,18 @@ int	remove_quotes(char **tokcod, char **pt)
 			i++;
 	}
 	return (0);
-}
+}*/
 
 void	expand_toknode(t_token **node, t_token *pev, char **tokcod, char **envp)
 {
 	char	*token;
 	t_token	*new;
-	t_token *ptr;
+	t_token	*ptr;
 
 	token = ft_strdup((*node)->token);
 	dmy_free((*node)->token);
 	expand_token(envp, tokcod, &token);
-	new = lex_it(token, 1, (*node)->next);//this I need to investigate further, I need to keep track of which nodes got expanded
+	new = lex_it(token, 1, (*node)->next);
 	if (!new)
 		return ;
 	if (pev)

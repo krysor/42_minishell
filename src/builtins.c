@@ -6,7 +6,7 @@
 /*   By: kkaczoro <kkaczoro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/07 16:26:26 by kkaczoro          #+#    #+#             */
-/*   Updated: 2023/05/08 10:52:04 by kkaczoro         ###   ########.fr       */
+/*   Updated: 2023/05/12 18:34:16 by kkaczoro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,19 +33,25 @@ int	ft_env(char **args, char ***ep)
 	int		i;
 	char	**envp;
 
-	envp = *ep;
-	if (!envp)
-		return (0);
-	if (get_i_var("PATH", envp) == -1)
+	if (ep == NULL || *ep == NULL)
 		return (1);
-	if (args[1] != NULL)
+	envp = *ep;
+	if (get_i_var("PATH", envp) == -1)
+	{
+		ft_putstr_fd("env: No such file or directory\n", STDOUT_FILENO);
 		return (127);
-	i = 0;
-	while (envp[i])
+	}
+	if (args[1] != NULL)
+	{
+		ft_putstr_fd(args[1], STDOUT_FILENO);
+		ft_putstr_fd(": No such file or directory\n", STDOUT_FILENO);
+		return (127);
+	}
+	i = -1;
+	while (envp[++i])
 	{
 		ft_putstr_fd(envp[i], 1);
 		ft_putchar_fd('\n', 1);
-		i++;
 	}
 	return (0);
 }

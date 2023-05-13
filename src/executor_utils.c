@@ -6,7 +6,7 @@
 /*   By: kkaczoro <kkaczoro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/01 10:04:06 by kkaczoro          #+#    #+#             */
-/*   Updated: 2023/05/11 16:35:03 by kkaczoro         ###   ########.fr       */
+/*   Updated: 2023/05/13 17:19:23 by kkaczoro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,40 +47,27 @@ static void	child(int *fd_read_prev, int *pipefd, int next, t_cmd *cmd)
 {
 	if (cmd->fd_in >= 0 && dup2(cmd->fd_in, STDIN_FILENO) == -1)
 		yikes("dup2() failed", 0);
-	if (cmd->fd_in != -1)
+	if (cmd->fd_in >= 0)
 		close(cmd->fd_in);
-	
 	if (*fd_read_prev != -1)
 	{
 		if (cmd->fd_in < 0 && dup2(*fd_read_prev, STDIN_FILENO) == -1)
 			yikes("dup2() failed", 0);
-		// else if (cmd->fd_in >= 0 && dup2(cmd->fd_in, STDIN_FILENO) == -1)
-		// 	yikes("dup2() failed", 0);
 		if (close(*fd_read_prev))
 			yikes("close fd_read_prev child failed", 0);
-		// if (cmd->fd_in != -1)
-		// 	close(cmd->fd_in);
 	}
-	
 	if (cmd->fd_out >= 0 && dup2(cmd->fd_out, STDOUT_FILENO) == -1)
 		yikes("dup2() failed", 0);
-	if (cmd->fd_out != -1)
+	if (cmd->fd_out >= 0)
 		close(cmd->fd_out);
-
 	if (next)
 	{
 		if (close(pipefd[READ]))
 			yikes("close(pipefd[0]) child failed", 0);
-		//if (cmd->fd_out == -1 && dup2(pipefd[1], STDOUT_FILENO) == -1)
 		if (cmd->fd_out < 0 && dup2(pipefd[WRITE], STDOUT_FILENO) == -1)
 			yikes("dup2() failed", 0);
-		// else if (cmd->fd_out >= 0 && dup2(cmd->fd_out, STDOUT_FILENO) == -1)
-		// 	yikes("dup2() failed", 0);
-			
 		if (close(pipefd[WRITE]))
 			yikes("close(pipefd[1]) child failed", 0);
-		// if (cmd->fd_out != -1)
-		//  	close(cmd->fd_out);
 	}
 }
 
@@ -95,7 +82,7 @@ static void	parent(int next, int *pipefd, int *fd_read_prev)
 
 int	get_nb_cmd(t_cmd **lst)
 {	
-	int nb_cmd;
+	int	nb_cmd;
 
 	if (lst == NULL || *lst == NULL)
 		return (0);

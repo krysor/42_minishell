@@ -6,13 +6,13 @@
 /*   By: kkaczoro <kkaczoro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/12 13:04:26 by kkaczoro          #+#    #+#             */
-/*   Updated: 2023/05/02 12:24:03 by kkaczoro         ###   ########.fr       */
+/*   Updated: 2023/05/13 16:33:50 by kkaczoro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-static int	get_i_option_n(char **args);
+static int	get_i_not_option(char **args);
 static char	arg_to_option(char *arg);
 
 int	ft_echo(char **args, char ***envp)
@@ -24,7 +24,7 @@ int	ft_echo(char **args, char ***envp)
 	if (!args || !*args)
 		return (1);
 	option_n = FALSE;
-	i = get_i_option_n(args);
+	i = get_i_not_option(args);
 	if (i > 0)
 		option_n = TRUE;
 	if (i < 0)
@@ -46,7 +46,7 @@ int	ft_echo(char **args, char ***envp)
 //
 //The absolute value of the returned integer is equal to the first
 //element of the array 'args' that should get printed: args[abs(int)].
-static int	get_i_option_n(char **args)
+static int	get_i_not_option(char **args)
 {
 	int	option_n;
 	int	i;

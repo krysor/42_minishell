@@ -6,7 +6,7 @@
 /*   By: kkaczoro <kkaczoro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/30 17:03:35 by kkaczoro          #+#    #+#             */
-/*   Updated: 2023/05/12 11:22:58 by kkaczoro         ###   ########.fr       */
+/*   Updated: 2023/05/12 18:07:35 by kkaczoro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,7 @@ char	*get_line(char **envp)
 	prompt = get_prompt(envp);
 	line = readline(prompt);
 	dmy_free(prompt);
-	if (!line)
+	if (line == NULL)
 		line = ft_strdup(CMD_EXIT);
 	else
 		add_history(line);
@@ -100,7 +100,7 @@ char	*get_prompt(char **envp)
 	char	*prompt;
 
 	username = ft_getenv(envp, "USER");
-	prompt = ft_strjoin(username, "$ ");
+	prompt = ft_strjoin("BIGmec-sHELL", "$ ");
 	if (!username || !prompt)
 		return (NULL);
 	return (prompt);
