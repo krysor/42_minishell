@@ -16,7 +16,8 @@ static int	set_arr(t_cmd **arr, int nb_cmd,
 				t_token **lst_tok_pnt, char **envp);
 static int	set_cmd(t_cmd *arr, t_token **lst_tok_pnt, char **envp);
 static int	set_cmd_default(t_cmd *arr, t_token *token);
-static int	update_cmd(t_token **lst_tok_pnt, t_token *lst_tok, t_cmd *cmd, char **envp);
+static int	update_cmd(t_token **lst_tok_pnt,
+				t_token *lst_tok, t_cmd *cmd, char **envp);
 
 // Allocates, sets and returns a pointer to an array of t_cmd structs.
 // Size is equal to 1 + the number of commands found in the t_token list.

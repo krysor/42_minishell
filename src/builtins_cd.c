@@ -6,7 +6,7 @@
 /*   By: kkaczoro <kkaczoro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/01 10:00:35 by kkaczoro          #+#    #+#             */
-/*   Updated: 2023/05/09 16:23:19 by kkaczoro         ###   ########.fr       */
+/*   Updated: 2023/05/13 16:49:13 by kkaczoro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@ static int	path_is_dir(char *path);
 static int	env_pwd_update(char *pwd_old, char ***envp);
 static int	var_update(char *var_name, char *var_val, char ***envp);
 
+//error message after first if?
 int	ft_cd(char **args, char ***envp)
 {
 	char	*pwd_old;
@@ -24,7 +25,7 @@ int	ft_cd(char **args, char ***envp)
 
 	pwd_old = ft_getcwd();
 	if (pwd_old == NULL)
-		return (1);
+		return (0);
 	cwd_next = args[1];
 	if (cwd_next == NULL || (ft_strlen(args[1]) == 1 && *args[1] == '~'))
 		cwd_next = ft_getenv(*envp, "HOME");
@@ -34,12 +35,12 @@ int	ft_cd(char **args, char ***envp)
 		|| (ft_strlen(args[1]) == 1 && *args[1] == '-' && ft_pwd(NULL, NULL)))
 	{
 		dmy_free(pwd_old);
-		return (2);
+		return (1);
 	}
 	if (env_pwd_update(pwd_old, envp))
 	{
 		dmy_free(pwd_old);
-		return (3);
+		return (2);
 	}
 	dmy_free(pwd_old);
 	return (0);

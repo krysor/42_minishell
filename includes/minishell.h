@@ -153,7 +153,7 @@ pid_t			prepare_and_exec(t_cmd *cmd, char *ep[],
 
 void			process_redirections(t_cmd *cmd);
 char			*get_next_line(int fd);
-					
+
 t_token			*expander(t_token *lst, char **envp);
 char			*ft_getenv(char *ep[], char *name);
 size_t			strdlen(const char *s, const char *d);
@@ -179,11 +179,11 @@ int				rl_on_new_line(void);
 t_cmd			**parser(t_token *lst_tok, char **envp);
 
 //parser and utils_parser functions
-int		get_nb_pipes(t_token *lst_tok);
-int	token_is_pipe(t_token *token);
-int	get_nb_tokens_before_pipe(t_token *lst_tok);
-int	token_is_operator(t_token *lst_tok);
-int	handle_operator(t_token **lst_tok_pnt, t_cmd *arr);
+int				get_nb_pipes(t_token *lst_tok);
+int				token_is_pipe(t_token *token);
+int				get_nb_tokens_before_pipe(t_token *lst_tok);
+int				token_is_operator(t_token *lst_tok);
+int				handle_operator(t_token **lst_tok_pnt, t_cmd *arr);
 
 char			*get_path(char *cmd, char **envp);
 int				get_nb_cmd(t_cmd **lst);

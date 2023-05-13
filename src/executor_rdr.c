@@ -24,7 +24,7 @@ void	process_redirections(t_cmd *cmd)
 	while (rdr)
 	{
 		handle_rdr(cmd, rdr->type, rdr->file);
-		rdr = rdr->next;	
+		rdr = rdr->next;
 	}
 }
 
@@ -67,7 +67,7 @@ static int	here_doc(char *delimiter, int len_delimiter)
 	if (pipe(pipefd) == -1)
 	{
 		perror(NULL);
-		return (-1);	
+		return (-1);
 	}
 	next_line = get_next_line(0);
 	len_next_line = ft_strlen(next_line);
@@ -77,7 +77,7 @@ static int	here_doc(char *delimiter, int len_delimiter)
 		if (write(pipefd[WRITE], next_line, len_next_line) == -1)
 			perror(NULL);
 		free(next_line);
-		next_line = get_next_line(0);	
+		next_line = get_next_line(0);
 		len_next_line = ft_strlen(next_line);
 	}
 	if (next_line)
@@ -85,7 +85,6 @@ static int	here_doc(char *delimiter, int len_delimiter)
 	close(pipefd[WRITE]);
 	return (pipefd[READ]);
 }
-
 
 /*
 static void	handle_rdr(t_cmd *cmd, char *type, char *file)

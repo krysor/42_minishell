@@ -33,8 +33,6 @@ int	get_nb_pipes(t_token *lst_tok)
 // Otherwise returns 0.
 int	token_is_pipe(t_token *token)
 {
-	//printf("token:\n");
-	
 	if (token != NULL
 		&& token->interprete == TRUE
 		&& token->token != NULL

@@ -20,7 +20,7 @@ void	*dmy_action_malloc(t_dmy **lst, size_t size)
 	if (new == NULL)
 	{
 		perror(NULL);
-		return (NULL);	
+		return (NULL);
 	}
 	if (dmy_lst_add(lst, new) == NULL)
 	{

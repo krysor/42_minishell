@@ -76,7 +76,7 @@ void	free_arr(char **arr)
 
 void	free_intermediates(char *line, t_token *lst_tok, t_cmd **arr_cmd)
 {
-	free(line);//dmy_free(line);
+	free(line);
 	free_lst_tok(lst_tok);
 	free_arr_argv(arr_cmd);
 }
