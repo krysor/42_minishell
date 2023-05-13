@@ -6,7 +6,7 @@
 /*   By: kkaczoro <kkaczoro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/08 16:57:36 by yaretel-          #+#    #+#             */
-/*   Updated: 2023/05/11 10:49:16 by kkaczoro         ###   ########.fr       */
+/*   Updated: 2023/05/13 17:59:25 by kkaczoro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,8 @@
 
 //for gnl
 # define BUFFER_SIZE	1000
+
+# define ERR_MSG_RM_QUOTES	"error: quoted area of smaller than 2 chars found\n"
 
 extern int	g_exit_code;
 
