@@ -6,7 +6,7 @@
 /*   By: kkaczoro <kkaczoro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/13 13:26:04 by kkaczoro          #+#    #+#             */
-/*   Updated: 2023/05/15 11:06:02 by kkaczoro         ###   ########.fr       */
+/*   Updated: 2023/05/15 11:32:03 by kkaczoro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,6 @@ int	main(int argc, char *argv[], char *envp[])
 	if (init_shell(&envp_dup))
 		return (2);
 	main_loop(line, lst_tok, arr_cmd, envp_dup);
-	dmy_freeall();
 	rl_clear_history();
 	return (g_exit_code);
 }
