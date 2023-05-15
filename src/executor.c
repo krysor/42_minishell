@@ -6,13 +6,14 @@
 /*   By: kkaczoro <kkaczoro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/25 17:41:31 by yaretel-          #+#    #+#             */
-/*   Updated: 2023/05/13 17:17:34 by kkaczoro         ###   ########.fr       */
+/*   Updated: 2023/05/15 09:52:39 by kkaczoro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-static void	handle_lone_builtin(t_cmd **lst, char ***ep, pid_t *pids);
+static int	builtin_is_alone_and_non_rdr(t_cmd **lst);
+static void	handle_alone_builtin(t_cmd **lst, char ***ep, pid_t *pids);
 static void	handle_exit_codes(pid_t	*pids);
 
 void	executor(t_cmd **lst, char ***ep)
@@ -25,10 +26,11 @@ void	executor(t_cmd **lst, char ***ep)
 	pids = dmy_malloc(sizeof(pid_t) * (get_nb_cmd(lst) + 1));
 	if (pids == NULL || lst == NULL || *lst == NULL)
 		return ;
-	if (lst[1] == NULL && lst[0]->builtin != NULL)
-		handle_lone_builtin(lst, ep, pids);
-	if (lst[1] == NULL && lst[0]->builtin != NULL)
+	if (builtin_is_alone_and_non_rdr(lst))
+	{
+		handle_alone_builtin(lst, ep, pids);
 		return ;
+	}
 	fd_read_prev = -1;
 	i = -1;
 	while (lst[++i])
@@ -41,44 +43,29 @@ void	executor(t_cmd **lst, char ***ep)
 	}
 	pids[i] = 0;
 	handle_exit_codes(pids);
-	dmy_free(pids);
 }
 
-static void	handle_lone_builtin(t_cmd **lst, char ***ep, pid_t *pids)
+static int	builtin_is_alone_and_non_rdr(t_cmd **lst)
 {
+	if (lst[1] == NULL && lst[0]->builtin != NULL
+		&& (lst[0]->builtin == &ft_cd
+			|| lst[0]->builtin == &ft_export
+			|| lst[0]->builtin == &ft_unset
+			|| lst[0]->builtin == &ft_exit))
+		return (TRUE);
+	return (FALSE);
+}
+
+static void	handle_alone_builtin(t_cmd **lst, char ***ep, pid_t *pids)
+{
+	process_redirections(lst[0]);
+	if (lst[0]->fd_in >= 0)
+		close(lst[0]->fd_in);
+	if (lst[0]->fd_out >= 0)
+		close(lst[0]->fd_out);
 	g_exit_code = lst[0]->builtin(lst[0]->args, ep);
 	dmy_free(pids);
 }
-
-/*
-void	executor(t_cmd **lst, char ***ep)
-{
-	int		i;
-	int		next;
-	int		fd_read_prev;
-	pid_t	*pids;
-
-	pids = dmy_malloc(sizeof(pid_t) * (get_nb_cmd(lst) + 1));
-	if (pids == NULL || lst == NULL || *lst == NULL)
-		return ;
-	i = 0;
-	if (lst[1] == NULL && lst[0]->builtin != NULL)
-		g_exit_code = lst[0]->builtin(lst[0]->args, ep);
-	else
-		i = -1;
-	fd_read_prev = -1;
-	while (lst[++i])
-	{
-		next = TRUE;
-		if (lst[i + 1] == FALSE)
-			next = FALSE;
-		process_redirections(lst[i]);
-		pids[i] = prepare_and_exec(lst[i], *ep, next, &fd_read_prev);
-	}
-	pids[i] = 0;	
-	handle_exit_codes(pids);
-	dmy_free(pids);
-}*/
 
 static void	handle_exit_codes(pid_t	*pids)
 {
@@ -92,4 +79,5 @@ static void	handle_exit_codes(pid_t	*pids)
 	}
 	if (g_exit_code >= 255)
 		g_exit_code %= 255;
+	dmy_free(pids);
 }

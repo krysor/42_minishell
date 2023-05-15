@@ -6,7 +6,7 @@
 /*   By: kkaczoro <kkaczoro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/01 10:04:06 by kkaczoro          #+#    #+#             */
-/*   Updated: 2023/05/13 17:19:23 by kkaczoro         ###   ########.fr       */
+/*   Updated: 2023/05/15 09:18:07 by kkaczoro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,13 +27,13 @@ pid_t	prepare_and_exec(t_cmd *cmd, char *ep[], int next, int *fd_read_prev)
 		yikes("fork() failed", 0);
 	if (pid == 0)
 	{
-		printf("path: %s\n", cmd->file);
 		child(fd_read_prev, pipefd, next, cmd);
 		if (cmd->builtin)
 			g_exit_code = cmd->builtin(cmd->args, &ep);
 		else if (execve(cmd->file, cmd->args, ep) == -1)
 		{
-			perror(cmd->file);
+			if (cmd->file != NULL)
+				perror(cmd->file);
 			g_exit_code = -1;
 		}
 		dmy_freeall();
