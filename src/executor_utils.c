@@ -27,6 +27,7 @@ pid_t	prepare_and_exec(t_cmd *cmd, char *ep[], int next, int *fd_read_prev)
 		yikes("fork() failed", 0);
 	if (pid == 0)
 	{
+		printf("path: %s\n", cmd->file);
 		child(fd_read_prev, pipefd, next, cmd);
 		if (cmd->builtin)
 			g_exit_code = cmd->builtin(cmd->args, &ep);
