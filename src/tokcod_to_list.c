@@ -6,7 +6,7 @@
 /*   By: yaretel- <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/14 13:37:19 by yaretel-          #+#    #+#             */
-/*   Updated: 2023/05/08 09:32:21 by yaretel-         ###   ########.fr       */
+/*   Updated: 2023/05/15 09:26:12 by yaretel-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,7 @@ size_t	get_tokenlen(char *tokcod)
 	return (i);
 }
 
+// adds a new token to the end of the list pointed to by the second argument
 unsigned int	addtoknode(t_token **strt, t_token **hd, char *pt, char *tokcod)
 {
 	size_t	tokenlen;
@@ -70,8 +71,12 @@ t_token	*tokcod_to_list(char *pt, char *tokcod, int interprete, t_token *end)
 	t_token			*start;
 	t_token			*head;
 
+	if (!pt || !tokcod)
+		return (NULL);
 	i = 0;
 	start = NULL;
+	if (!pt[i] || !tokcod[i])
+		addtoknode(&start, &head, pt, tokcod);
 	while (pt[i] && tokcod[i])
 	{
 		while (tokcod[i] == '.')

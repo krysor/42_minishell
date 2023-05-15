@@ -6,7 +6,7 @@
 /*   By: kkaczoro <kkaczoro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 16:36:53 by yaretel-          #+#    #+#             */
-/*   Updated: 2023/05/13 17:59:33 by kkaczoro         ###   ########.fr       */
+/*   Updated: 2023/05/15 09:33:24 by yaretel-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ int	remove_quotes(char **tokcod, char **pt)
 	unsigned int	i;
 	size_t			distance;
 
-	if (!(*tokcod) || !(*pt) || **tokcod == '\0')
+	if (!(*tokcod) || !(*pt))
 		return (1);
 	if (ft_strlen((*tokcod)) != ft_strlen((*pt)))
 		return (1);
