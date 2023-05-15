@@ -6,7 +6,7 @@
 /*   By: yaretel- <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/14 13:37:19 by yaretel-          #+#    #+#             */
-/*   Updated: 2023/05/15 09:26:12 by yaretel-         ###   ########.fr       */
+/*   Updated: 2023/05/15 11:24:14 by yaretel-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,11 @@ t_token	*tokcod_to_list(char *pt, char *tokcod, int interprete, t_token *end)
 	i = 0;
 	start = NULL;
 	if (!pt[i] || !tokcod[i])
+	{
 		addtoknode(&start, &head, pt, tokcod);
+		head->interprete = interprete;
+		head->next = end;
+	}
 	while (pt[i] && tokcod[i])
 	{
 		while (tokcod[i] == '.')
