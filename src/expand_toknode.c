@@ -6,7 +6,7 @@
 /*   By: kkaczoro <kkaczoro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 16:36:53 by yaretel-          #+#    #+#             */
-/*   Updated: 2023/05/15 10:46:22 by yaretel-         ###   ########.fr       */
+/*   Updated: 2023/05/15 11:03:53 by yaretel-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,8 @@ char	*expand_token(char **envp, char **tokcod, char **token)
 		return (NULL);
 	while ((*token)[i])
 	{
-		if ((*token)[i] == '$' && (*tokcod)[i] != '\'')
+		if ((*token)[i] == '$' && (*tokcod)[i] != '\'' &&
+			!is_mchar(&(*token)[i + 1]) && (*token)[i + 1] != '\0')
 		{
 			if (attempt_expansion(envp, tokcod, token, &i) == 1)
 				return (NULL);
