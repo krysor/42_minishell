@@ -6,20 +6,42 @@
 /*   By: kkaczoro <kkaczoro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 16:36:53 by yaretel-          #+#    #+#             */
-/*   Updated: 2023/05/15 09:33:24 by yaretel-         ###   ########.fr       */
+/*   Updated: 2023/05/15 10:46:22 by yaretel-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
+
+int	attempt_expansion(char **envp, char **tokcod, char **token, unsigned int *i)
+{
+	char			*ck;
+	char			*cv;
+	size_t			keylen;
+
+	keylen = cstrlen((*tokcod)[*i], &(*tokcod)[*i + 1]);
+	if (strdlen(&(*token)[*i + 1], "$\"\' \t\n") < keylen)
+		keylen = strdlen(&(*token)[*i + 1], "$\"\' \t\n");
+	ck = dmy_malloc(sizeof(*ck) * (keylen + 1));
+	if (!ck)
+		return (1);
+	ft_strlcpy(ck, &(*token)[*i + 1], keylen + 1);
+	cv = ft_getenv(envp, ck);
+	if ((*token)[*i + 1] == '?' && (*token)[*i + 2] == '\0')
+		cv = ft_itoa(g_exit_code);
+	ft_strtake(token, *i, keylen + 1);
+	ft_strins(token, *i, cv);
+	tokcodadjust(tokcod, *i, ft_strlen(cv) - ft_strlen(ck));
+	dmy_free(ck);
+	*i += ft_strlen(cv);
+	dmy_free(cv);
+	return (0);
+}
 
 // cv == current value
 // ck == current key
 char	*expand_token(char **envp, char **tokcod, char **token)
 {
 	unsigned int	i;
-	char			*ck;
-	char			*cv;
-	size_t			keylen;
 
 	i = 0;
 	if (ft_strlen(*tokcod) != ft_strlen(*token))
@@ -28,22 +50,8 @@ char	*expand_token(char **envp, char **tokcod, char **token)
 	{
 		if ((*token)[i] == '$' && (*tokcod)[i] != '\'')
 		{
-			keylen = cstrlen((*tokcod)[i], &(*tokcod)[i + 1]);
-			if (strdlen(&(*token)[i + 1], "$\"\' \t\n") < keylen)
-				keylen = strdlen(&(*token)[i + 1], "$\"\' \t\n");
-			ck = dmy_malloc(sizeof(*ck) * (keylen + 1));
-			if (!ck)
+			if (attempt_expansion(envp, tokcod, token, &i) == 1)
 				return (NULL);
-			ft_strlcpy(ck, &(*token)[i + 1], keylen + 1);
-			cv = ft_getenv(envp, ck);
-			if ((*token)[i + 1] == '?' && (*token)[i + 2] == '\0')
-				cv = ft_itoa(g_exit_code);
-			ft_strtake(token, i, keylen + 1);
-			ft_strins(token, i, cv);
-			tokcodadjust(tokcod, i, ft_strlen(cv) - ft_strlen(ck));
-			dmy_free(ck);
-			i += ft_strlen(cv);
-			dmy_free(cv);
 		}
 		else
 			i++;
@@ -88,39 +96,6 @@ int	remove_quotes(char **tokcod, char **pt)
 	}
 	return (0);
 }
-
-/*
-int	remove_quotes(char **tokcod, char **pt)
-{
-	unsigned int	i;
-	size_t			distance;
-
-	if (!(*tokcod) || !(*pt) || **tokcod == '\0')
-		return (1);
-	if (ft_strlen((*tokcod)) != ft_strlen((*pt)))
-		return (1);
-	i = strdlen(*tokcod, "\'\"");
-	while ((*tokcod)[i])
-	{
-		if (is_in_set((*tokcod)[i], "\'\""))
-		{
-			distance = cstrlen((*tokcod)[i], &(*tokcod)[i]);
-			if (distance < 2)
-			{
-				write(2, "error: quoted area of smaller than 2 chars found\n", 70);
-				return (1);
-			}
-			ft_strtake(pt, i, 1);
-			ft_strtake(pt, i + distance - 2, 1);
-			ft_strtake(tokcod, i, 1);
-			ft_strtake(tokcod, i + distance - 2, 1);
-			i += distance - 2;
-		}
-		else
-			i++;
-	}
-	return (0);
-}*/
 
 void	expand_toknode(t_token **node, t_token *pev, char **tokcod, char **envp)
 {
