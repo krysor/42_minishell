@@ -6,7 +6,7 @@
 /*   By: kkaczoro <kkaczoro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/25 17:41:31 by yaretel-          #+#    #+#             */
-/*   Updated: 2023/05/15 09:52:39 by kkaczoro         ###   ########.fr       */
+/*   Updated: 2023/05/15 11:00:15 by kkaczoro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,6 @@ void	executor(t_cmd **lst, char ***ep)
 		next = TRUE;
 		if (lst[i + 1] == NULL)
 			next = FALSE;
-		process_redirections(lst[i]);
 		pids[i] = prepare_and_exec(lst[i], *ep, next, &fd_read_prev);
 	}
 	pids[i] = 0;

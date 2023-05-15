@@ -20,10 +20,7 @@
 # include <stdint.h>
 # include <fcntl.h>
 # include "../deps/ft/libft.h"
-# include "../deps/dmy/includes/dmy.h"
-
-//this guy to open a file
-# include <fcntl.h>
+# include "../deps/dmy/includes/dmy.h" 
 
 //These headers are required for the readline function
 # include <stdio.h>
@@ -61,15 +58,18 @@
 # define ENV		"env"
 # define EXIT		"exit"
 
+//macro's for getcwd
 # define BUFFER_SIZE_PWD		100
 # define BUFFER_SIZE_PWD_MAX	1000
 
+//macro's for exit
 # define STR_LONG_MIN	"9223372036854775808"
 # define STR_LONG_MAX	"9223372036854775807"
 
-//for gnl
+//macro's for get_next_line
 # define BUFFER_SIZE	1000
 
+//macro's for remove quotes
 # define ERR_MSG_RM_QUOTES	"error: quoted area of smaller than 2 chars found\n"
 
 extern int	g_exit_code;
@@ -107,33 +107,18 @@ typedef struct s_cmd
 	int			fd_out;
 }				t_cmd;
 
-/*
-typedef struct s_cmd
-{
-	t_rdr		*rdr;
-	char		*file;
-	int			(*builtin)(char *args[], char **envp[]);
-	char		**args;
-}				t_cmd;*/
-
 // These are all the functions in Minishell
 char			*is_mchar(char *c);
 char			*is_quote(char *c);
 char			*is_operator(char *c);
-//size_t			ft_strlen(const char *str);
 void			mark_sequence(char *s, unsigned int amount, char marking);
 char			*find_next(char *s);
 char			*create_tokcod(char *cmd_line);
 void			yikes(char *msg, unsigned int ac, ...);
 size_t			strdlen(const char *s, const char *c);
 char			*ft_get_env_val(char *envp[], char *env);
-//int				ft_strncmp(const char *s1, const char *s2, size_t n);
-//char			*ft_strdup(const char *s);
-//void			ft_putstr_fd(char *s, int fd);
 size_t			cstrlen(char c, char *s);
 int				is_in_set(char c, const char *set);
-// unsigned int	add_token_node(t_token **start, t_token **head,
-// 					char *pt, char *tokcod, unsigned int i);
 t_token			*tokcod_to_list(char *pt, char *tokcod,
 					int interprete, t_token *end);
 t_token			*lex_it(char *pt, int interprete, t_token *end);
@@ -144,23 +129,24 @@ void			expand_toknode(t_token **node, t_token *prev,
 size_t			seqstrlen(char *seq, char *s);
 void			mark_quotes(char *pt, size_t len, char *tokcod);
 ssize_t			value_len_diff(char *dlr, char **envp);
-// void			expand_var(char *dest, char *dollar, unsigned int *i,
-// 					unsigned int *j, char **envp);
 char			*strsquash(char x, const char *str);
 void			mark_outer_quotes(char *pt, char *tokcod, char marking);
 
+//executor
 void			executor(t_cmd **lst, char **ep[]);
+void			process_redirections(t_cmd *cmd);
 pid_t			prepare_and_exec(t_cmd *cmd, char *ep[],
 					int next, int *fd_read_prev);
 
-void			process_redirections(t_cmd *cmd);
 char			*get_next_line(int fd);
+char			*ft_getenv(char *ep[], char *name);
+char			**arrdup(char **arr);
+char			*get_path(char *cmd, char **envp);
+int				get_nb_cmd(t_cmd **lst);
 
 t_token			*expander(t_token *lst, char **envp);
-char			*ft_getenv(char *ep[], char *name);
 size_t			strdlen(const char *s, const char *d);
 int				set_cmd_builtin(t_cmd *cmd);
-char			**arrdup(char **arr);
 char			*ft_strins(char **str, unsigned int pos, char *ins);
 char			*ft_strtake(char **str, unsigned int pos, size_t size);
 
@@ -178,17 +164,13 @@ void			rl_replace_line(const char *text, int clear_undo);
 void			rl_keep_mark_active(void);
 int				rl_on_new_line(void);
 
-t_cmd			**parser(t_token *lst_tok, char **envp);
-
 //parser and utils_parser functions
+t_cmd			**parser(t_token *lst_tok, char **envp);
 int				get_nb_pipes(t_token *lst_tok);
 int				token_is_pipe(t_token *token);
 int				get_nb_tokens_before_pipe(t_token *lst_tok);
 int				token_is_operator(t_token *lst_tok);
 int				handle_operator(t_token **lst_tok_pnt, t_cmd *arr);
-
-char			*get_path(char *cmd, char **envp);
-int				get_nb_cmd(t_cmd **lst);
 
 //redirection struct functions
 t_rdr			*lst_rdr_last(t_rdr *lst_rdr);
@@ -229,4 +211,5 @@ char			*create_varcod(char *tokcod, char *pt);
 int				remove_quotes(char **tokcod, char **pt);
 char			*expand_token(char **envp, char **tokcod, char **token);
 char			*tokcodadjust(char **str, unsigned int pos, ssize_t correction);
+
 #endif
