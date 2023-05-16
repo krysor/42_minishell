@@ -47,8 +47,6 @@ int	get_exit_code(char **args)
 	}
 	else
 		exit_code = ft_atolong(args[1]) % 256;
-	if (exit_code < 0)
-		exit_code += 256;
 	return (exit_code);
 }
 

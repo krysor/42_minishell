@@ -6,7 +6,7 @@
 /*   By: kkaczoro <kkaczoro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/13 13:26:04 by kkaczoro          #+#    #+#             */
-/*   Updated: 2023/05/15 11:32:03 by kkaczoro         ###   ########.fr       */
+/*   Updated: 2023/05/15 16:12:38 by kkaczoro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ int	g_exit_code;
 static void	main_loop(char *line, t_token *lst_tok,
 				t_cmd **arr_cmd, char **envp_dup);
 static void	ft_ctrl_c_child(int i);
-static void	ft_ctrl_d_child(int i);
+static void	ft_ctrl_slash_child(int i);
 
 int	main(int argc, char *argv[], char *envp[])
 {
@@ -52,7 +52,7 @@ static void	main_loop(char *line, t_token *lst_tok,
 		lst_tok = expander(lst_tok, envp_dup);
 		arr_cmd = parser(lst_tok, envp_dup);
 		signal(SIGINT, &ft_ctrl_c_child);
-		signal(SIGQUIT, &ft_ctrl_d_child);
+		signal(SIGQUIT, &ft_ctrl_slash_child);
 		if (arr_cmd && arr_cmd[0] && arr_cmd[1] == NULL
 			&& (arr_cmd[0]->builtin == &ft_exit))
 		{
@@ -69,16 +69,19 @@ static void	main_loop(char *line, t_token *lst_tok,
 	}
 	free_intermediates(line, lst_tok, arr_cmd);
 	free_arr(envp_dup);
+	dmy_freeall();
 }
 
 static void	ft_ctrl_c_child(int i)
 {
 	(void)i;
 	ft_putchar_fd('\n', STDOUT_FILENO);
+	g_exit_code = 130;//doesnt get changed
 }
 
-static void	ft_ctrl_d_child(int i)
+static void	ft_ctrl_slash_child(int i)
 {
 	(void)i;
 	ft_putstr_fd("Quit: 3\n", STDOUT_FILENO);
+	g_exit_code = 131;//doesnt get changed
 }
