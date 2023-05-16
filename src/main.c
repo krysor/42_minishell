@@ -6,7 +6,7 @@
 /*   By: kkaczoro <kkaczoro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/13 13:26:04 by kkaczoro          #+#    #+#             */
-/*   Updated: 2023/05/15 16:12:38 by kkaczoro         ###   ########.fr       */
+/*   Updated: 2023/05/16 12:25:03 by yaretel-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,8 @@ static void	main_loop(char *line, t_token *lst_tok,
 	{
 		free_intermediates(line, lst_tok, arr_cmd);
 		line = get_line(envp_dup);
+		if (ft_strlen(line) == 0)
+			continue;
 		lst_tok = lex_it(line, TRUE, NULL);
 		lst_tok = expander(lst_tok, envp_dup);
 		arr_cmd = parser(lst_tok, envp_dup);
