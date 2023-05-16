@@ -6,7 +6,7 @@
 /*   By: kkaczoro <kkaczoro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/25 17:41:31 by yaretel-          #+#    #+#             */
-/*   Updated: 2023/05/15 11:00:15 by kkaczoro         ###   ########.fr       */
+/*   Updated: 2023/05/15 16:14:12 by kkaczoro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,33 @@ static void	handle_exit_codes(pid_t	*pids)
 		waitpid(pids[i], &g_exit_code, 0);
 		i++;
 	}
-	if (g_exit_code >= 255)
-		g_exit_code %= 255;
+	if (WIFEXITED(g_exit_code) == TRUE)
+		g_exit_code = WEXITSTATUS(g_exit_code);
+	else if (WIFSIGNALED(g_exit_code) == TRUE)
+	{
+		if (WTERMSIG(g_exit_code) == SIGINT
+			|| WTERMSIG(g_exit_code) == SIGQUIT)
+			g_exit_code += 128;
+	}
 	dmy_free(pids);
 }
+
+/*
+static void	handle_exit_codes(pid_t	*pids)
+{
+	int	i;
+
+	i = 0;
+	while (pids[i])
+	{
+		waitpid(pids[i], &g_exit_code, 0);
+		i++;
+	}
+	if (g_exit_code >= 255)
+		g_exit_code %= 255;
+
+	// if (WIFSIGNALED(g_exit_code) == TRUE
+	// 	&& (g_exit_code == 2 || g_exit_code == 3))
+	// 	g_exit_code += 128;
+	dmy_free(pids);
+}*/
