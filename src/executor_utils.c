@@ -6,7 +6,7 @@
 /*   By: kkaczoro <kkaczoro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/01 10:04:06 by kkaczoro          #+#    #+#             */
-/*   Updated: 2023/05/15 11:05:29 by kkaczoro         ###   ########.fr       */
+/*   Updated: 2023/05/20 18:16:36 by kkaczoro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,10 +33,10 @@ pid_t	prepare_and_exec(t_cmd *cmd, char *ep[], int next, int *fd_read_prev)
 		else if (execve(cmd->file, cmd->args, ep) == -1)
 		{
 			if (cmd->file != NULL)
-				perror(cmd->file);
-			g_exit_code = -1;
+				ft_putstr_fd(cmd->file, STDERR_FILENO);
+			ft_putstr_fd(": command not found\n", STDERR_FILENO);
+			g_exit_code = 127;
 		}
-		dmy_freeall();
 		exit(g_exit_code);
 	}
 	else
@@ -46,7 +46,6 @@ pid_t	prepare_and_exec(t_cmd *cmd, char *ep[], int next, int *fd_read_prev)
 
 static void	child(int *fd_read_prev, int *pipefd, int next, t_cmd *cmd)
 {
-	process_redirections(cmd);
 	if (cmd->fd_in >= 0 && dup2(cmd->fd_in, STDIN_FILENO) == -1)
 		yikes("dup2() failed", 0);
 	if (cmd->fd_in >= 0)
