@@ -6,7 +6,7 @@
 /*   By: kkaczoro <kkaczoro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/08 16:57:36 by yaretel-          #+#    #+#             */
-/*   Updated: 2023/05/13 17:59:25 by kkaczoro         ###   ########.fr       */
+/*   Updated: 2023/05/20 17:28:41 by kkaczoro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,9 @@
 //macro's for remove quotes
 # define ERR_MSG_RM_QUOTES	"error: quoted area of smaller than 2 chars found\n"
 
+//macro's for empty string
+# define EMPTY_STR		"V3r1-uN1qU3-sTr"
+
 extern int	g_exit_code;
 
 //This struct is used to make a linked list of
@@ -134,7 +137,9 @@ void			mark_outer_quotes(char *pt, char *tokcod, char marking);
 
 //executor
 void			executor(t_cmd **lst, char **ep[]);
+void			handle_redirections(t_cmd **lst);
 void			process_redirections(t_cmd *cmd);
+void			close_open_fds(t_cmd **lst);
 pid_t			prepare_and_exec(t_cmd *cmd, char *ep[],
 					int next, int *fd_read_prev);
 
@@ -154,8 +159,12 @@ char			*ft_strtake(char **str, unsigned int pos, size_t size);
 int				update_shellvl(char **envp[]);
 int				init_shell(char **envp[]);
 void			ft_ctrl_c(int i);
+void			ft_ctrl_c_main_prompt(int i);
+void			ft_ctrl_c_child(int i);
+void			ft_ctrl_c_exit(int i);
+void			ft_ctrl_slash_child(int i);
 int				line_is_not_CMD_EXIT(char *line);
-char			*get_line(char **envp);
+char			*get_line(void);
 char			*get_prompt(char **envp);
 
 //readline functions for the prompt
@@ -181,8 +190,8 @@ t_rdr			*rdr_new(char *type, char *file);
 void			free_lst_tok(t_token *lst);
 void			free_arr_argv(t_cmd **arr_argv);
 void			free_arr(char **arr);
-void			free_intermediates(char *line, t_token *lst_tok,
-					t_cmd **arr_cmd);
+void			free_intermediates(char **line_pnt,
+					t_token **lst_tok_pnt, t_cmd ***arr_cmd_pnt);
 
 //for printing intermediate results; delete before final pushing
 void			print_tokenlist(t_token *tokenlist_og);

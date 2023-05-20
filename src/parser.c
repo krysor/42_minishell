@@ -6,7 +6,7 @@
 /*   By: kkaczoro <kkaczoro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/20 11:51:12 by kkaczoro          #+#    #+#             */
-/*   Updated: 2023/05/10 15:12:32 by kkaczoro         ###   ########.fr       */
+/*   Updated: 2023/05/20 18:05:41 by kkaczoro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,11 +28,17 @@ t_cmd	**parser(t_token *lst_tok, char **envp)
 	t_token	**lst_tok_pnt;
 	t_cmd	**arr;
 
-	if (!lst_tok)
+	if (lst_tok == NULL)
 		return (NULL);
 	nb_cmd = get_nb_pipes(lst_tok) + 1;
+	if (nb_cmd < 0)
+	{
+		ft_putstr_fd("syntax error near unexpected token `|'\n", STDOUT_FILENO);
+		g_exit_code = 258;
+		return (NULL);
+	}
 	arr = dmy_malloc(sizeof(t_cmd *) * (nb_cmd + 1));
-	if (!arr)
+	if (arr == NULL)
 		return (NULL);
 	arr[nb_cmd] = NULL;
 	lst_tok_pnt = &lst_tok;
@@ -52,9 +58,12 @@ static int	set_arr(t_cmd **arr, int nb_cmd, t_token **lst_tok_pnt, char **envp)
 
 	i = 0;
 	while (i < nb_cmd)
+		arr[i++] = NULL;
+	i = 0;
+	while (i < nb_cmd)
 	{
 		arr[i] = dmy_malloc(sizeof(t_cmd));
-		if (!arr[i])
+		if (arr[i] == NULL)
 			return (1);
 		if (set_cmd(arr[i], lst_tok_pnt, envp))
 			return (1);
@@ -73,7 +82,7 @@ static int	set_cmd(t_cmd *cmd, t_token **lst_tok_pnt, char **envp)
 {
 	t_token	*lst_tok;
 
-	if (!lst_tok_pnt)
+	if (lst_tok_pnt == NULL)
 		return (1);
 	lst_tok = *lst_tok_pnt;
 	if (token_is_pipe(lst_tok) && lst_tok->next)
@@ -85,6 +94,28 @@ static int	set_cmd(t_cmd *cmd, t_token **lst_tok_pnt, char **envp)
 	return (0);
 }
 
+// Sets default values for all the fields of a a t_cmd struct.
+static int	set_cmd_default(t_cmd *arr, t_token *token)
+{
+	int	nb_tokens_before_pipe;
+	int	i;
+
+	arr->rdr = NULL;
+	arr->file = NULL;
+	arr->builtin = NULL;
+	nb_tokens_before_pipe = get_nb_tokens_before_pipe(token);
+	arr->args = dmy_malloc(sizeof(char *) * (nb_tokens_before_pipe + 1));
+	if (arr->args == NULL)
+		return (1);
+	i = 0;
+	while (i <= nb_tokens_before_pipe)
+		arr->args[i++] = NULL;
+	arr->fd_in = -2;
+	arr->fd_out = -2;
+	return (0);
+}
+
+/*
 // Sets default values for all the fields of a a t_cmd struct.
 static int	set_cmd_default(t_cmd *arr, t_token *token)
 {
@@ -101,7 +132,7 @@ static int	set_cmd_default(t_cmd *arr, t_token *token)
 	arr->fd_in = -2;
 	arr->fd_out = -2;
 	return (0);
-}
+}*/
 
 static int	update_cmd(t_token **lst_tok_pnt, t_token *lst_tok,
 						t_cmd *cmd, char **envp)
@@ -109,7 +140,7 @@ static int	update_cmd(t_token **lst_tok_pnt, t_token *lst_tok,
 	int	i;
 
 	i = 0;
-	while (lst_tok && !token_is_pipe(lst_tok))
+	while (lst_tok && token_is_pipe(lst_tok) == FALSE)
 	{
 		if (token_is_operator(lst_tok) == TRUE)
 		{
@@ -119,15 +150,15 @@ static int	update_cmd(t_token **lst_tok_pnt, t_token *lst_tok,
 		else
 		{
 			cmd->args[i] = ft_strdup(lst_tok->token);
-			if (!cmd->args[i])
+			if (cmd->args[i] == NULL)
 				return (1);
 			i++;
 		}
-		lst_tok = lst_tok->next;
+		if (lst_tok != NULL)
+			lst_tok = lst_tok->next;
 	}
 	*lst_tok_pnt = lst_tok;
-	cmd->args[i] = NULL;
-	if (cmd->args[0] && set_cmd_builtin(cmd))
+	if (cmd->args[0] != NULL && set_cmd_builtin(cmd))
 		cmd->file = get_path(cmd->args[0], envp);
 	return (0);
 }

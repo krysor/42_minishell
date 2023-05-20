@@ -6,7 +6,7 @@
 /*   By: kkaczoro <kkaczoro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/30 17:03:35 by kkaczoro          #+#    #+#             */
-/*   Updated: 2023/05/15 15:44:57 by kkaczoro         ###   ########.fr       */
+/*   Updated: 2023/05/20 18:34:22 by kkaczoro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,9 +19,7 @@ int	init_shell(char **envp[])
 	char	*shlvl;
 
 	g_exit_code = 0;
-	ft_putstr_fd(MSG_HELLO, 1);
-	signal(SIGINT, &ft_ctrl_c);
-	signal(SIGQUIT, SIG_IGN);
+	ft_putstr_fd(MSG_HELLO, STDOUT_FILENO);
 	shlvl = get_updated_shlvl(envp);
 	if (shlvl == NULL || ft_export_var(&shlvl, envp))
 	{
@@ -60,49 +58,35 @@ static char	*get_updated_shlvl(char **envp[])
 	return (shlvl);
 }
 
-//ADD THIS IN INPUTRC file
-//echo-control-characters (On)
-//	When set to On, on operating systems that indicate they support it,
-//		readline echoes a character corresponding
-//	to a signal generated from the keyboard.
-
-//bash seems to print ^C on debian but not on macos
-void	ft_ctrl_c(int i)
+/*
+void	write_readline_to_pipe(int pipefd[2])
 {
-	(void)i;
-	ft_putchar_fd('\n', 1);
-	rl_on_new_line();
-	rl_replace_line("", 0);
-	rl_redisplay();
-	g_exit_code = 1;
-}
+	char	*line_read;
+	char	*line_trim;
+	int		len_line_trim;
 
-//some freeing required between prompt and line
-//if (!prompt)
-//	; //SOME KIND OF FREEING REQUIRED HERE
-char	*get_line(char **envp)
-{
-	char	*prompt;
-	char	*line;
-
-	prompt = get_prompt(envp);
-	line = readline(prompt);
-	dmy_free(prompt);
-	if (line == NULL)
-		line = ft_strdup(CMD_EXIT);
-	else
-		add_history(line);
-	return (line);
-}
-
-char	*get_prompt(char **envp)
-{
-	char	*username;
-	char	*prompt;
-
-	username = ft_getenv(envp, "USER");
-	prompt = ft_strjoin("BIGmec-sHELL", "$ ");
-	if (!username || !prompt)
-		return (NULL);
-	return (prompt);
-}
+	close(pipefd[READ]);
+	signal(SIGINT, &ft_ctrl_c);
+	line_read = readline("BIGmec-sHELL$ ");
+	signal(SIGINT, &ft_ctrl_c_exit);
+	write(pipefd[WRITE], line_read, ft_strlen(line_read));
+	if (line_read != NULL && line_read[0] == '\0')
+		write(pipefd[WRITE], EMPTY_STR, ft_strlen(EMPTY_STR));
+	line_trim = ft_strtrim(line_read, "\f\n\r\t\v ");
+	len_line_trim = ft_strlen(line_trim);
+	free(line_read);
+	while (line_trim != NULL && len_line_trim >= 2
+		&& line_trim[len_line_trim - 1] == '|')
+	{
+		line_read = readline("> ");
+		write(pipefd[WRITE], " ", 1);
+		write(pipefd[WRITE], line_read, ft_strlen(line_read));
+		dmy_free(line_trim);
+		line_trim = ft_strtrim(line_read, "\f\n\r\t\v ");
+		len_line_trim = ft_strlen(line_trim);
+		free(line_read);
+	}
+	dmy_free(line_trim);
+	close(pipefd[WRITE]);
+	exit(0);
+}*/

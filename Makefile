@@ -6,7 +6,7 @@
 #    By: kkaczoro <kkaczoro@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/03/08 14:17:01 by yaretel-          #+#    #+#              #
-#    Updated: 2023/05/16 10:33:45 by kkaczoro         ###   ########.fr        #
+#    Updated: 2023/05/20 18:33:51 by kkaczoro         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,7 +17,8 @@ LIB =			lib$(PROJECT).a
 DEPS_NAME =		ft\
 				dmy
 DEPS =			$(foreach dep, $(DEPS_NAME), deps/$(dep)/lib$(dep).a)
-SRCS =			create_tokcod\
+SRCS =			get_line\
+				create_tokcod\
 				utils\
 				utils2\
 				utils3\
@@ -27,7 +28,7 @@ SRCS =			create_tokcod\
 				expand_toknode_utils\
 				lex_it\
 				executor\
-				executor_rdr\
+				handle_redirections\
 				executor_utils\
 				parser\
 				parser_utils\
@@ -46,12 +47,13 @@ SRCS =			create_tokcod\
 				builtins_utils\
 				expander\
 				main_utils\
-				get_next_line
+				get_next_line\
+				signals
 SRC_MAIN = 		main
 OBJS =			$(addprefix obj/, $(addsuffix .o, $(SRCS)))
 OBJS_MAIN =		$(addprefix obj/, $(addsuffix .o, $(SRC_MAIN)))
 OBJS_DEPS :=	$(foreach dep, $(DEPS_NAME), $(addprefix deps/$(dep)/, $(shell $(MAKE) --no-print-directory -C deps/$(dep) print_obj_names)))
-CFLAGS =		-fsanitize=address
+CFLAGS =		#-fsanitize=address
 FTFLAGS = 		-Wall -Wextra -Werror
 FLAGS =			$(CFLAGS) $(FTFLAGS)
 

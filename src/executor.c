@@ -6,14 +6,13 @@
 /*   By: kkaczoro <kkaczoro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/25 17:41:31 by yaretel-          #+#    #+#             */
-/*   Updated: 2023/05/15 16:14:12 by kkaczoro         ###   ########.fr       */
+/*   Updated: 2023/05/20 17:36:18 by kkaczoro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-static int	builtin_is_alone_and_non_rdr(t_cmd **lst);
-static void	handle_alone_builtin(t_cmd **lst, char ***ep, pid_t *pids);
+static int	builtin_is_alone_and_modifies_current_process(t_cmd **lst);
 static void	handle_exit_codes(pid_t	*pids);
 
 void	executor(t_cmd **lst, char ***ep)
@@ -26,9 +25,10 @@ void	executor(t_cmd **lst, char ***ep)
 	pids = dmy_malloc(sizeof(pid_t) * (get_nb_cmd(lst) + 1));
 	if (pids == NULL || lst == NULL || *lst == NULL)
 		return ;
-	if (builtin_is_alone_and_non_rdr(lst))
+	if (builtin_is_alone_and_modifies_current_process(lst))
 	{
-		handle_alone_builtin(lst, ep, pids);
+		g_exit_code = lst[0]->builtin(lst[0]->args, ep);
+		dmy_free(pids);
 		return ;
 	}
 	fd_read_prev = -1;
@@ -44,7 +44,7 @@ void	executor(t_cmd **lst, char ***ep)
 	handle_exit_codes(pids);
 }
 
-static int	builtin_is_alone_and_non_rdr(t_cmd **lst)
+static int	builtin_is_alone_and_modifies_current_process(t_cmd **lst)
 {
 	if (lst[1] == NULL && lst[0]->builtin != NULL
 		&& (lst[0]->builtin == &ft_cd
@@ -53,17 +53,6 @@ static int	builtin_is_alone_and_non_rdr(t_cmd **lst)
 			|| lst[0]->builtin == &ft_exit))
 		return (TRUE);
 	return (FALSE);
-}
-
-static void	handle_alone_builtin(t_cmd **lst, char ***ep, pid_t *pids)
-{
-	process_redirections(lst[0]);
-	if (lst[0]->fd_in >= 0)
-		close(lst[0]->fd_in);
-	if (lst[0]->fd_out >= 0)
-		close(lst[0]->fd_out);
-	g_exit_code = lst[0]->builtin(lst[0]->args, ep);
-	dmy_free(pids);
 }
 
 static void	handle_exit_codes(pid_t	*pids)
@@ -87,22 +76,19 @@ static void	handle_exit_codes(pid_t	*pids)
 	dmy_free(pids);
 }
 
-/*
-static void	handle_exit_codes(pid_t	*pids)
+void	close_open_fds(t_cmd **lst)
 {
 	int	i;
 
+	if (lst == NULL)
+		return ;
 	i = 0;
-	while (pids[i])
+	while (lst[i])
 	{
-		waitpid(pids[i], &g_exit_code, 0);
+		if (lst[i]->fd_in >= 0)
+			close(lst[i]->fd_in);
+		if (lst[i]->fd_out >= 0)
+			close(lst[i]->fd_out);
 		i++;
 	}
-	if (g_exit_code >= 255)
-		g_exit_code %= 255;
-
-	// if (WIFSIGNALED(g_exit_code) == TRUE
-	// 	&& (g_exit_code == 2 || g_exit_code == 3))
-	// 	g_exit_code += 128;
-	dmy_free(pids);
-}*/
+}
