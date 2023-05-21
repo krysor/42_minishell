@@ -6,7 +6,7 @@
 /*   By: kkaczoro <kkaczoro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/06 15:36:10 by kkaczoro          #+#    #+#             */
-/*   Updated: 2023/05/08 09:35:01 by yaretel-         ###   ########.fr       */
+/*   Updated: 2023/05/21 12:10:12 by kkaczoro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,8 @@ char	*get_path(char *cmd, char **envp)
 	char	**arr;
 	char	*path;
 
+	if (cmd == NULL || cmd[0] == '\0')
+		return (NULL);
 	s = ft_strjoin("/", cmd);
 	if (!s)
 		return (NULL);

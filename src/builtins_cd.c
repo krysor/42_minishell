@@ -34,6 +34,7 @@ int	ft_cd(char **args, char ***envp)
 	if (check(cwd_next, pwd_old) || chdir(cwd_next)
 		|| (ft_strlen(args[1]) == 1 && *args[1] == '-' && ft_pwd(NULL, NULL)))
 	{
+		perror(NULL);
 		dmy_free(pwd_old);
 		return (1);
 	}

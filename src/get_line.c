@@ -56,7 +56,7 @@ static void	get_line_from_pipe(pid_t pid, int pipefd[2],
 		dmy_free(*line_pnt);
 		*line_pnt = ft_strdup("");
 	}
-	else if (*line_pnt != NULL)
+	else if (*line_pnt != NULL && ft_strlen(*line_pnt) > 0)
 		add_history(*line_pnt);
 	if (*exit_status_pnt != 0)
 	{
@@ -145,6 +145,7 @@ static void	write_readline_to_pipe(int pipefd[2])
 			&line_read, &line_trim, &len_line_trim);
 	dmy_free(line_trim);
 	close(pipefd[WRITE]);
+	dmy_freeall();
 	exit(0);
 }
 
@@ -165,6 +166,32 @@ static char	*read_line_from_pipe(int pipefd_read)
 	char	*full_line;
 	char	*full_line_old;
 	char	*next_line;
+	char	*full_line_trimmed;
+
+	full_line = get_next_line(pipefd_read);
+	next_line = get_next_line(pipefd_read);
+	while (next_line != NULL)
+	{
+		full_line_old = full_line;
+		full_line = ft_strjoin(full_line_old, next_line);
+		dmy_free(full_line_old);
+		dmy_free(next_line);
+		if (full_line == NULL)
+			break ;
+		next_line = get_next_line(pipefd_read);
+	}
+	close(pipefd_read);
+	full_line_trimmed = ft_strtrim(full_line, "\f\n\r\t\v ");
+	dmy_free(full_line);
+	return (full_line_trimmed);
+}
+
+/*
+static char	*read_line_from_pipe(int pipefd_read)
+{
+	char	*full_line;
+	char	*full_line_old;
+	char	*next_line;
 
 	full_line = get_next_line(pipefd_read);
 	next_line = get_next_line(pipefd_read);
@@ -180,4 +207,4 @@ static char	*read_line_from_pipe(int pipefd_read)
 	}
 	close(pipefd_read);
 	return (full_line);
-}
+}*/
