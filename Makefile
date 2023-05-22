@@ -6,7 +6,7 @@
 #    By: kkaczoro <kkaczoro@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/03/08 14:17:01 by yaretel-          #+#    #+#              #
-#    Updated: 2023/05/20 18:33:51 by kkaczoro         ###   ########.fr        #
+#    Updated: 2023/05/22 20:10:55 by yaretel-         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -39,6 +39,7 @@ SRCS =			get_line\
 				get_path\
 				builtins\
 				builtins_export_utils\
+				builtins_export_noargs\
 				builtins_unset\
 				builtins_echo\
 				expander_utils\
@@ -53,7 +54,7 @@ SRC_MAIN = 		main
 OBJS =			$(addprefix obj/, $(addsuffix .o, $(SRCS)))
 OBJS_MAIN =		$(addprefix obj/, $(addsuffix .o, $(SRC_MAIN)))
 OBJS_DEPS :=	$(foreach dep, $(DEPS_NAME), $(addprefix deps/$(dep)/, $(shell $(MAKE) --no-print-directory -C deps/$(dep) print_obj_names)))
-CFLAGS =		#-fsanitize=address
+CFLAGS =		
 FTFLAGS = 		-Wall -Wextra -Werror
 FLAGS =			$(CFLAGS) $(FTFLAGS)
 

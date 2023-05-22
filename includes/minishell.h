@@ -6,7 +6,7 @@
 /*   By: kkaczoro <kkaczoro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/08 16:57:36 by yaretel-          #+#    #+#             */
-/*   Updated: 2023/05/22 17:43:32 by yaretel-         ###   ########.fr       */
+/*   Updated: 2023/05/22 19:43:27 by yaretel-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -206,6 +206,7 @@ char			*ft_getcwd(void);
 int				get_i_var(char *var, char **envp);
 int				ft_cd(char **args, char ***envp);
 int				ft_export(char **args, char ***envp);
+int				ft_export_noargs(char *envp_og[]);
 int				ft_export_var(char **arg_pnt, char ***envp_pnt);
 int				ft_unset(char **args, char ***envp);
 void			ft_unset_var(char *arg, char ***envp_pnt);
