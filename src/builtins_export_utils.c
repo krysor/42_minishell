@@ -31,6 +31,8 @@ int	ft_export_var(char **arg_pnt, char ***envp_pnt)
 		return (2);
 	if (arg[0] == '=' || (arg[0] == '+' && arg[1] == '='))
 		return (3);
+	if (arg[0] == '_' && (arg[1] == '+' || arg[1] == '='))
+		return (0);
 	i_equal = arg_equal - arg;
 	if (arg[i_equal - 1] == '+' && handle_plus(arg_pnt, i_equal - 1, *envp_pnt))
 		return (4);
@@ -73,6 +75,13 @@ static int	var_name_illegal(char *arg)
 {
 	int	i;
 
+	if (arg == NULL || ft_isdigit(arg[0]))
+	{
+		ft_putstr_fd("export: `", STDERR_FILENO);
+		ft_putstr_fd(arg, STDERR_FILENO);
+		ft_putstr_fd("': not a valid identifier\n", STDERR_FILENO);
+		return (1);
+	}	
 	i = (char *)ft_memchr(arg, '=', ft_strlen(arg)) - arg;
 	i -= 1;
 	while (i >= 0)
@@ -80,7 +89,12 @@ static int	var_name_illegal(char *arg)
 		if (ft_isalnum(arg[i]) || arg[i] == '_')
 			i--;
 		else
+		{
+			ft_putstr_fd("export: `", STDERR_FILENO);
+			ft_putstr_fd(arg, STDERR_FILENO);
+			ft_putstr_fd("': not a valid identifier\n", STDERR_FILENO);
 			return (1);
+		}
 	}
 	return (0);
 }

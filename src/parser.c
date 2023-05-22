@@ -31,12 +31,8 @@ t_cmd	**parser(t_token *lst_tok, char **envp)
 	if (lst_tok == NULL)
 		return (NULL);
 	nb_cmd = get_nb_pipes(lst_tok) + 1;
-	if (nb_cmd < 0)
-	{
-		ft_putstr_fd("syntax error near unexpected token `|'\n", STDOUT_FILENO);
-		g_exit_code = 258;
+	if (invalid_nb_cmd(nb_cmd))
 		return (NULL);
-	}
 	arr = dmy_malloc(sizeof(t_cmd *) * (nb_cmd + 1));
 	if (arr == NULL)
 		return (NULL);
