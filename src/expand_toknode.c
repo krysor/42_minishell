@@ -6,7 +6,7 @@
 /*   By: kkaczoro <kkaczoro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 16:36:53 by yaretel-          #+#    #+#             */
-/*   Updated: 2023/05/22 17:43:48 by yaretel-         ###   ########.fr       */
+/*   Updated: 2023/05/22 19:01:12 by yaretel-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,10 @@ int	attempt_expansion(char **envp, char **tokcod, char **token, unsigned int *i)
 	size_t			keylen;
 
 	keylen = cstrlen((*tokcod)[*i], &(*tokcod)[*i + 1]);
-	if (strdlen(&(*token)[*i + 1], "$\"\' \t\n") < keylen)
-		keylen = strdlen(&(*token)[*i + 1], "$\"\' \t\n");
+	if (seqstrlen("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefg\
+	hijklmnopqrstuvwxyz0123456789_", &(*token)[*i + 1]) < keylen)
+		keylen = seqstrlen("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefg\
+		hijklmnopqrstuvwxyz0123456789_", &(*token)[*i + 1]);
 	ck = dmy_malloc(sizeof(*ck) * (keylen + 1));
 	if (!ck)
 		return (1);
