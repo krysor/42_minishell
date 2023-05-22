@@ -6,7 +6,7 @@
 /*   By: kkaczoro <kkaczoro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 16:36:53 by yaretel-          #+#    #+#             */
-/*   Updated: 2023/05/15 11:03:53 by yaretel-         ###   ########.fr       */
+/*   Updated: 2023/05/22 17:43:48 by yaretel-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,7 @@ int	remove_quotes(char **tokcod, char **pt)
 			distance = cstrlen((*tokcod)[i], &(*tokcod)[i]);
 			if (distance < 2)
 			{
-				write(2, ERR_MSG_RM_QUOTES, 70);
+				write(2, ERR_MSG_RM_QUOTES, ERR_MSG_RM_QUOTES_COUNT);
 				return (1);
 			}
 			ft_strtake_combo(pt, i, distance, tokcod);
