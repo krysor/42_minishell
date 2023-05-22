@@ -12,7 +12,6 @@
 
 #include "../includes/minishell.h"
 
-//error check done
 int	ft_pwd(char **args, char ***envp)
 {
 	char	*pwd;
@@ -38,13 +37,13 @@ int	ft_env(char **args, char ***ep)
 	envp = *ep;
 	if (get_i_var("PATH", envp) == -1)
 	{
-		ft_putstr_fd("env: No such file or directory\n", STDOUT_FILENO);
+		ft_putstr_fd("env: No such file or directory\n", STDERR_FILENO);
 		return (127);
 	}
 	if (args[1] != NULL)
 	{
-		ft_putstr_fd(args[1], STDOUT_FILENO);
-		ft_putstr_fd(": No such file or directory\n", STDOUT_FILENO);
+		ft_putstr_fd(args[1], STDERR_FILENO);
+		ft_putstr_fd(": No such file or directory\n", STDERR_FILENO);
 		return (127);
 	}
 	i = -1;
@@ -56,36 +55,15 @@ int	ft_env(char **args, char ***ep)
 	return (0);
 }
 
-/*
-//printf("LONG_MIN casted to int divided by 256: %d\n", (int)(LONG_MAX % 256));
-int	ft_exit(char **args, char ***envp)
-{
-	int	i;
-
-	(void)envp;
-	if (!args)
-		return (1);
-	if (args[0] && args[1] == NULL)
-		exit(0);
-	i = 0;
-
-	if (args[1][i] == '+' || args[1][i] == '-')
-		i++;
-	while (ft_isdigit(args[1][i]))
-		i++;
-
-	if (args[1][i] != '\0')
-		exit(1);
-
-	exit(ft_atoi(args[1]));
-}*/
-
 int	ft_export(char **args, char ***envp)
 {
 	int	i;
 
-	if (!args || !*args || !args[1] || !envp || !*envp)
+	if (args == NULL || args[0] == NULL
+		|| envp == NULL || *envp == NULL)
 		return (1);
+	if (args[1] == NULL)
+		return (0);//printing function here
 	i = 1;
 	while (args[i])
 	{

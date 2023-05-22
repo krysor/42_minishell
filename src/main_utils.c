@@ -57,36 +57,3 @@ static char	*get_updated_shlvl(char **envp[])
 	}
 	return (shlvl);
 }
-
-/*
-void	write_readline_to_pipe(int pipefd[2])
-{
-	char	*line_read;
-	char	*line_trim;
-	int		len_line_trim;
-
-	close(pipefd[READ]);
-	signal(SIGINT, &ft_ctrl_c);
-	line_read = readline("BIGmec-sHELL$ ");
-	signal(SIGINT, &ft_ctrl_c_exit);
-	write(pipefd[WRITE], line_read, ft_strlen(line_read));
-	if (line_read != NULL && line_read[0] == '\0')
-		write(pipefd[WRITE], EMPTY_STR, ft_strlen(EMPTY_STR));
-	line_trim = ft_strtrim(line_read, "\f\n\r\t\v ");
-	len_line_trim = ft_strlen(line_trim);
-	free(line_read);
-	while (line_trim != NULL && len_line_trim >= 2
-		&& line_trim[len_line_trim - 1] == '|')
-	{
-		line_read = readline("> ");
-		write(pipefd[WRITE], " ", 1);
-		write(pipefd[WRITE], line_read, ft_strlen(line_read));
-		dmy_free(line_trim);
-		line_trim = ft_strtrim(line_read, "\f\n\r\t\v ");
-		len_line_trim = ft_strlen(line_trim);
-		free(line_read);
-	}
-	dmy_free(line_trim);
-	close(pipefd[WRITE]);
-	exit(0);
-}*/

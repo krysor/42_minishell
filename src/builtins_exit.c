@@ -33,16 +33,16 @@ int	get_exit_code(char **args)
 	ft_putstr_fd(CMD_EXIT, STDOUT_FILENO);
 	if (args[1] != NULL && args[2] != NULL)
 	{
-		ft_putstr_fd("minishell: exit: too many arguments\n", 1);
+		ft_putstr_fd("minishell: exit: too many arguments\n", STDERR_FILENO);
 		exit_code = 256;
 	}
 	else if (args[1] == NULL)
 		exit_code = 0;
 	else if (arg_is_correct(args[1]) == FALSE)
 	{
-		ft_putstr_fd("exit: ", STDOUT_FILENO);
-		ft_putstr_fd(args[1], STDOUT_FILENO);
-		ft_putstr_fd(": numeric argument required\n", STDOUT_FILENO);
+		ft_putstr_fd("exit: ", STDERR_FILENO);
+		ft_putstr_fd(args[1], STDERR_FILENO);
+		ft_putstr_fd(": numeric argument required\n", STDERR_FILENO);
 		exit_code = 255;
 	}
 	else

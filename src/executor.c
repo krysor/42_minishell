@@ -12,6 +12,7 @@
 
 #include "../includes/minishell.h"
 
+static int	get_nb_cmd(t_cmd **lst);
 static int	builtin_is_alone_and_modifies_current_process(t_cmd **lst);
 static void	handle_exit_codes(pid_t	*pids);
 
@@ -42,6 +43,18 @@ void	executor(t_cmd **lst, char ***ep)
 	}
 	pids[i] = 0;
 	handle_exit_codes(pids);
+}
+
+static int	get_nb_cmd(t_cmd **lst)
+{	
+	int	nb_cmd;
+
+	if (lst == NULL || *lst == NULL)
+		return (0);
+	nb_cmd = 0;
+	while (lst[nb_cmd] != NULL)
+		nb_cmd++;
+	return (nb_cmd);
 }
 
 static int	builtin_is_alone_and_modifies_current_process(t_cmd **lst)

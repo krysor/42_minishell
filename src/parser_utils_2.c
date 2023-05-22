@@ -39,3 +39,20 @@ int	set_cmd_builtin(t_cmd *cmd)
 		return (1);
 	return (0);
 }
+
+int	invalid_nb_cmd(int nb_cmd)
+{
+	if (nb_cmd < 0)
+	{
+		ft_putstr_fd("syntax error near unexpected token `|'\n", STDERR_FILENO);
+		g_exit_code = 258;
+		return (1);
+	}
+	if (nb_cmd > NB_CMD_MAX)
+	{
+		ft_putstr_fd("too many commands as input\n", STDERR_FILENO);
+		g_exit_code = 1;
+		return (1);
+	}
+	return (0);
+}
