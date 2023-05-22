@@ -6,7 +6,7 @@
 /*   By: yaretel- <yaretel-@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/22 17:59:30 by yaretel-          #+#    #+#             */
-/*   Updated: 2023/05/22 20:10:06 by yaretel-         ###   ########.fr       */
+/*   Updated: 2023/05/22 21:00:40 by yaretel-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,23 @@ void	sort_arr(char *envp[])
 	}
 }
 
+static int	quote_env_values(char **envp)
+{
+	int	i;
+	int	pos;
+
+	i = 0;
+	while (envp[i])
+	{
+		if (!ft_strchr(envp[i], "="))
+		{
+			if (ft_strins(&envp[i], strdlen(envp[i], "=") + 1, "\"");
+			strins(&envp[i], strlen(envp[i]) + 1, "\"");
+		}
+		i++;
+	}
+}
+
 int	ft_export_noargs(char *envp_og[])
 {
 	char	**envp;
@@ -66,6 +83,7 @@ int	ft_export_noargs(char *envp_og[])
 	if (!envp)
 		return (1);
 	sort_arr(envp);
+
 	i = 0;
 	while (envp[i] && envp[i][0] != '_')
 	{
