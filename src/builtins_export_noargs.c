@@ -41,7 +41,7 @@ static int	unsorted(char *first, char *last)
 		return (1);
 }
 
-void	sort_arr(char *envp[])
+static void	sort_arr(char *envp[])
 {
 	int	i;
 

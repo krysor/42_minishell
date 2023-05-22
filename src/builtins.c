@@ -63,7 +63,7 @@ int	ft_export(char **args, char ***envp)
 		|| envp == NULL || *envp == NULL)
 		return (1);
 	if (args[1] == NULL)
-		return (0);//printing function here
+		return (ft_export_noargs(*envp));
 	i = 1;
 	while (args[i])
 	{
