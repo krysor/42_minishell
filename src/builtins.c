@@ -6,7 +6,7 @@
 /*   By: kkaczoro <kkaczoro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/07 16:26:26 by kkaczoro          #+#    #+#             */
-/*   Updated: 2023/05/12 18:34:16 by kkaczoro         ###   ########.fr       */
+/*   Updated: 2023/05/23 07:15:05 by yaretel-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,8 +84,13 @@ int	ft_export(char **args, char ***envp)
 {
 	int	i;
 
-	if (!args || !*args || !args[1] || !envp || !*envp)
+	if (!args || !*args || !envp || !*envp)
 		return (1);
+	if (!args[1])
+	{
+		ft_export_noargs(*envp);
+		return (0);
+	}
 	i = 1;
 	while (args[i])
 	{
