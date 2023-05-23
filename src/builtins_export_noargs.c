@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins_export_noargs.c                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yaretel- <yaretel-@student.s19.be>         +#+  +:+       +#+        */
+/*   By: kkaczoro <kkaczoro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/22 17:59:30 by yaretel-          #+#    #+#             */
-/*   Updated: 2023/05/23 10:37:27 by yaretel-         ###   ########.fr       */
+/*   Updated: 2023/05/23 10:45:30 by kkaczoro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ int	ft_export_noargs(char *envp_og[])
 	sort_arr(envp);
 	sort_arr(envp);
 	i = 0;
-	while (envp[i] && envp[i][0] != '_')
+	while (envp[i])
 	{
 		write(STDOUT_FILENO, "declare -x ", 11);
 		write(STDOUT_FILENO, envp[i], ft_strlen(envp[i]));
