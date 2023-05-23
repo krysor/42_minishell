@@ -6,31 +6,44 @@
 /*   By: kkaczoro <kkaczoro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 16:36:53 by yaretel-          #+#    #+#             */
-/*   Updated: 2023/05/22 19:01:12 by yaretel-         ###   ########.fr       */
+/*   Updated: 2023/05/23 09:14:58 by yaretel-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-int	attempt_expansion(char **envp, char **tokcod, char **token, unsigned int *i)
+static size_t	get_keylen(char **tokcod, char **token, unsigned int *i)
 {
-	char			*ck;
-	char			*cv;
-	size_t			keylen;
+	size_t	keylen;
 
 	keylen = cstrlen((*tokcod)[*i], &(*tokcod)[*i + 1]);
 	if (seqstrlen("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefg\
 	hijklmnopqrstuvwxyz0123456789_", &(*token)[*i + 1]) < keylen)
 		keylen = seqstrlen("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefg\
 		hijklmnopqrstuvwxyz0123456789_", &(*token)[*i + 1]);
+	return (keylen);
+}
+
+int	attempt_expansion(char **envp, char **tokcod, char **token, unsigned int *i)
+{
+	char			*ck;
+	char			*cv;
+	size_t			keylen;
+	int				dollar_questionmark;
+
+	dollar_questionmark = 0;
+	keylen = get_keylen(tokcod, token, i);
 	ck = dmy_malloc(sizeof(*ck) * (keylen + 1));
 	if (!ck)
 		return (1);
 	ft_strlcpy(ck, &(*token)[*i + 1], keylen + 1);
 	cv = ft_getenv(envp, ck);
 	if ((*token)[*i + 1] == '?' && (*token)[*i + 2] == '\0')
+	{
 		cv = ft_itoa(g_exit_code);
-	ft_strtake(token, *i, keylen + 1);
+		dollar_questionmark = 1;
+	}
+	ft_strtake(token, *i, keylen + 1 + dollar_questionmark);
 	ft_strins(token, *i, cv);
 	tokcodadjust(tokcod, *i, ft_strlen(cv) - ft_strlen(ck));
 	dmy_free(ck);
