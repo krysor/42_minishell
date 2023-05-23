@@ -6,7 +6,7 @@
 /*   By: kkaczoro <kkaczoro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/01 10:04:06 by kkaczoro          #+#    #+#             */
-/*   Updated: 2023/05/20 18:16:36 by kkaczoro         ###   ########.fr       */
+/*   Updated: 2023/05/23 12:14:20 by kkaczoro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,9 @@ pid_t	prepare_and_exec(t_cmd *cmd, char *ep[], int next, int *fd_read_prev)
 	if (pid == 0)
 	{
 		child(fd_read_prev, pipefd, next, cmd);
-		if (cmd->builtin)
+		if (g_exit_code == INT_MIN)
+			;
+		else if (cmd->builtin)
 			g_exit_code = cmd->builtin(cmd->args, &ep);
 		else if (cmd->file != NULL && execve(cmd->file, cmd->args, ep) == -1)
 			print_error_message_and_set_exit_code(cmd->file);

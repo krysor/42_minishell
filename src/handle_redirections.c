@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   executor_rdr.c                                     :+:      :+:    :+:   */
+/*   handle_redirections.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kkaczoro <kkaczoro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 16:15:35 by kkaczoro          #+#    #+#             */
-/*   Updated: 2023/05/20 17:56:05 by kkaczoro         ###   ########.fr       */
+/*   Updated: 2023/05/23 12:08:31 by kkaczoro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,10 @@ static void	handle_rdr(t_cmd *cmd, char *type, char *file)
 	}
 	fd = open(file, get_oflag(type), 0644);
 	if (fd == -1)
-		perror(NULL);
+	{
+		perror(file);
+		g_exit_code = INT_MIN;
+	}
 	else if (*type == '<')
 	{
 		if (cmd->fd_in >= 0)
