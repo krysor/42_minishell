@@ -6,7 +6,7 @@
 /*   By: kkaczoro <kkaczoro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/07 15:31:57 by kkaczoro          #+#    #+#             */
-/*   Updated: 2023/05/10 15:18:40 by kkaczoro         ###   ########.fr       */
+/*   Updated: 2023/05/23 10:09:45 by kkaczoro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,44 @@
 static int	arg_is_correct(char *arg);
 static int	arg_is_long(char *arg, int i);
 
+int	ft_exit(char **args, char ***envp)
+{
+	int	exit_code;
+
+	(void)envp;
+	if (args == NULL || args[0] == NULL)
+		return (1);
+	ft_putstr_fd(CMD_EXIT, STDOUT_FILENO);
+	exit_code = get_exit_code(args);
+	if (exit_code == 256)
+		return (1);
+	exit(exit_code);
+}
+
+int	get_exit_code(char **args)
+{
+	int	exit_code;
+
+	if (args[1] == NULL)
+		exit_code = 0;
+	else if (arg_is_correct(args[1]) == FALSE)
+	{
+		ft_putstr_fd("exit: ", STDERR_FILENO);
+		ft_putstr_fd(args[1], STDERR_FILENO);
+		ft_putstr_fd(": numeric argument required\n", STDERR_FILENO);
+		exit_code = 255;
+	}
+	else
+		exit_code = ft_atolong(args[1]) % 256;
+	if (exit_code != 255 && args[1] != NULL && args[2] != NULL)
+	{
+		ft_putstr_fd("minishell: exit: too many arguments\n", STDERR_FILENO);
+		exit_code = 256;
+	}
+	return (exit_code);
+}
+
+/*
 int	ft_exit(char **args, char ***envp)
 {
 	int	exit_code;
@@ -48,7 +86,7 @@ int	get_exit_code(char **args)
 	else
 		exit_code = ft_atolong(args[1]) % 256;
 	return (exit_code);
-}
+}*/
 
 static int	arg_is_correct(char *arg)
 {

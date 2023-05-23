@@ -6,7 +6,7 @@
 /*   By: kkaczoro <kkaczoro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/08 16:57:36 by yaretel-          #+#    #+#             */
-/*   Updated: 2023/05/22 19:43:27 by yaretel-         ###   ########.fr       */
+/*   Updated: 2023/05/23 10:27:04 by kkaczoro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@
 # define BUFFER_SIZE		1000
 
 //macro's for remove quotes
-# define ERR_MSG_RM_QUOTES			"error: quoted area of smaller than 2 chars found\n"
+# define ERR_MSG_RM_QUOTES	"error: quoted area of smaller than 2 chars found\n"
 # define ERR_MSG_RM_QUOTES_COUNT	50
 
 //macro's for empty string
