@@ -6,7 +6,7 @@
 /*   By: yaretel- <yaretel-@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/22 17:59:30 by yaretel-          #+#    #+#             */
-/*   Updated: 2023/05/23 09:56:39 by yaretel-         ###   ########.fr       */
+/*   Updated: 2023/05/23 10:37:27 by yaretel-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,6 @@ static void	sort_arr(char *envp[])
 		}
 		i++;
 	}
-	sort_arr(envp);
 }
 
 int	ft_export_noargs(char *envp_og[])
@@ -66,6 +65,7 @@ int	ft_export_noargs(char *envp_og[])
 	envp = arrdup(envp_og);
 	if (!envp)
 		return (1);
+	sort_arr(envp);
 	sort_arr(envp);
 	i = 0;
 	while (envp[i] && envp[i][0] != '_')
