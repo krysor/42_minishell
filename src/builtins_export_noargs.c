@@ -6,7 +6,7 @@
 /*   By: yaretel- <yaretel-@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/22 17:59:30 by yaretel-          #+#    #+#             */
-/*   Updated: 2023/05/22 21:00:40 by yaretel-         ###   ########.fr       */
+/*   Updated: 2023/05/23 07:16:31 by yaretel-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,18 +60,20 @@ void	sort_arr(char *envp[])
 static int	quote_env_values(char **envp)
 {
 	int	i;
-	int	pos;
 
 	i = 0;
 	while (envp[i])
 	{
-		if (!ft_strchr(envp[i], "="))
+		if (ft_strchr(envp[i], '='))
 		{
-			if (ft_strins(&envp[i], strdlen(envp[i], "=") + 1, "\"");
-			strins(&envp[i], strlen(envp[i]) + 1, "\"");
+			if (!ft_strins(&envp[i], strdlen(envp[i], "=") + 1, "\""))
+				return (1);
+			if (!ft_strins(&envp[i], strlen(envp[i]) + 1, "\""))
+				return (1);
 		}
 		i++;
 	}
+	return (0);
 }
 
 int	ft_export_noargs(char *envp_og[])
@@ -83,7 +85,7 @@ int	ft_export_noargs(char *envp_og[])
 	if (!envp)
 		return (1);
 	sort_arr(envp);
-
+	quote_env_values(envp);
 	i = 0;
 	while (envp[i] && envp[i][0] != '_')
 	{
