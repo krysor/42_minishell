@@ -13,7 +13,46 @@
 #include "../includes/minishell.h"
 
 static void	child(int *fd_read_prev, int *pipefd, int next, t_cmd *cmd);
+static void	print_error_message_and_set_exit_code(char *pathname);
 static void	parent(int next, int *pipefd, int *fd_read_prev);
+
+/*
+pid_t	prepare_and_exec(t_cmd *cmd, char *ep[], int next, int *fd_read_prev)
+{
+	int		pipefd[2];
+	pid_t	pid;
+
+	if (next && (pipe(pipefd)))
+		yikes("pipe failed", 0);
+	pid = fork();
+	if (pid == -1)
+		yikes("fork() failed", 0);
+	if (pid == 0)
+	{
+		child(fd_read_prev, pipefd, next, cmd);
+		if (cmd->builtin)
+			g_exit_code = cmd->builtin(cmd->args, &ep);
+		else if (cmd->file != NULL && execve(cmd->file, cmd->args, ep) == -1)
+		{
+			if (cmd->file != NULL && access(cmd->file, F_OK)
+				&& ft_memchr(cmd->file, '/', ft_strlen(cmd->file)) == NULL)
+			{
+				ft_putstr_fd(cmd->file, STDERR_FILENO);
+				ft_putstr_fd(": command not found\n", STDERR_FILENO);
+			}
+			else
+				perror(cmd->file);
+			if (errno == EACCES || errno == ENOTDIR)
+				g_exit_code = 126;
+			else if (errno == ENOENT || errno != 0)
+				g_exit_code = 127;
+		}
+		exit(g_exit_code);
+	}
+	else
+		parent(next, pipefd, fd_read_prev);
+	return (pid);
+}*/
 
 pid_t	prepare_and_exec(t_cmd *cmd, char *ep[], int next, int *fd_read_prev)
 {
@@ -30,13 +69,8 @@ pid_t	prepare_and_exec(t_cmd *cmd, char *ep[], int next, int *fd_read_prev)
 		child(fd_read_prev, pipefd, next, cmd);
 		if (cmd->builtin)
 			g_exit_code = cmd->builtin(cmd->args, &ep);
-		else if (execve(cmd->file, cmd->args, ep) == -1)
-		{
-			if (cmd->file != NULL)
-				ft_putstr_fd(cmd->file, STDERR_FILENO);
-			ft_putstr_fd(": command not found\n", STDERR_FILENO);
-			g_exit_code = 127;
-		}
+		else if (cmd->file != NULL && execve(cmd->file, cmd->args, ep) == -1)
+			print_error_message_and_set_exit_code(cmd->file);
 		exit(g_exit_code);
 	}
 	else
@@ -72,6 +106,22 @@ static void	child(int *fd_read_prev, int *pipefd, int next, t_cmd *cmd)
 	}
 }
 
+static void	print_error_message_and_set_exit_code(char *pathname)
+{
+	if (pathname != NULL && access(pathname, F_OK)
+		&& ft_memchr(pathname, '/', ft_strlen(pathname)) == NULL)
+	{
+		ft_putstr_fd(pathname, STDERR_FILENO);
+		ft_putstr_fd(": command not found\n", STDERR_FILENO);
+	}
+	else
+		perror(pathname);
+	if (errno == EACCES || errno == ENOTDIR)
+		g_exit_code = 126;
+	else if (errno == ENOENT || errno != 0)
+		g_exit_code = 127;
+}
+
 static void	parent(int next, int *pipefd, int *fd_read_prev)
 {
 	if (next && close(pipefd[WRITE]))
@@ -79,16 +129,4 @@ static void	parent(int next, int *pipefd, int *fd_read_prev)
 	if (*fd_read_prev != -1 && close(*fd_read_prev))
 		yikes("close(fd_read_prev) parent failed", 0);
 	*fd_read_prev = pipefd[READ];
-}
-
-int	get_nb_cmd(t_cmd **lst)
-{	
-	int	nb_cmd;
-
-	if (lst == NULL || *lst == NULL)
-		return (0);
-	nb_cmd = 0;
-	while (lst[nb_cmd] != NULL)
-		nb_cmd++;
-	return (nb_cmd);
 }

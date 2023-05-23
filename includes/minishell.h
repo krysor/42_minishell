@@ -20,7 +20,8 @@
 # include <stdint.h>
 # include <fcntl.h>
 # include "../deps/ft/libft.h"
-# include "../deps/dmy/includes/dmy.h" 
+# include "../deps/dmy/includes/dmy.h"
+# include <errno.h>
 
 //These headers are required for the readline function
 # include <stdio.h>
@@ -63,18 +64,21 @@
 # define BUFFER_SIZE_PWD_MAX	1000
 
 //macro's for exit
-# define STR_LONG_MIN	"9223372036854775808"
-# define STR_LONG_MAX	"9223372036854775807"
+# define STR_LONG_MIN		"9223372036854775808"
+# define STR_LONG_MAX		"9223372036854775807"
 
 //macro's for get_next_line
-# define BUFFER_SIZE	1000
+# define BUFFER_SIZE		1000
 
 //macro's for remove quotes
 # define ERR_MSG_RM_QUOTES			"error: quoted area of smaller than 2 chars found\n"
 # define ERR_MSG_RM_QUOTES_COUNT	50
 
 //macro's for empty string
-# define EMPTY_STR		"V3r1-uN1qU3-sTr"
+# define EMPTY_STR			"V3r1-uN1qU3-sTr"
+
+//macro's for the maximum number of commands
+# define NB_CMD_MAX			500
 
 extern int	g_exit_code;
 
@@ -148,7 +152,6 @@ char			*get_next_line(int fd);
 char			*ft_getenv(char *ep[], char *name);
 char			**arrdup(char **arr);
 char			*get_path(char *cmd, char **envp);
-int				get_nb_cmd(t_cmd **lst);
 
 t_token			*expander(t_token *lst, char **envp);
 size_t			strdlen(const char *s, const char *d);
@@ -177,6 +180,7 @@ int				rl_on_new_line(void);
 //parser and utils_parser functions
 t_cmd			**parser(t_token *lst_tok, char **envp);
 int				get_nb_pipes(t_token *lst_tok);
+int				invalid_nb_cmd(int nb_cmd);
 int				token_is_pipe(t_token *token);
 int				get_nb_tokens_before_pipe(t_token *lst_tok);
 int				token_is_operator(t_token *lst_tok);
