@@ -6,7 +6,7 @@
 /*   By: kkaczoro <kkaczoro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/22 17:59:30 by yaretel-          #+#    #+#             */
-/*   Updated: 2023/05/23 10:58:50 by yaretel-         ###   ########.fr       */
+/*   Updated: 2023/05/23 11:14:22 by yaretel-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,42 +57,26 @@ static void	sort_arr(char *envp[])
 	}
 }
 
-static int	quote_env_values(char **envp)
-{
-	int	i;
-
-	i = 0;
-	while (envp[i])
-	{
-		if (ft_strchr(envp[i], '='))
-		{
-			if (!ft_strins(&envp[i], strdlen(envp[i], "=") + 1, "\""))
-				return (1);
-			if (!ft_strins(&envp[i], ft_strlen(envp[i]) + 1, "\""))
-				return (1);
-		}
-		i++;
-	}
-	return (0);
-}
-
 int	ft_export_noargs(char *envp_og[])
 {
 	char	**envp;
 	int		i;
+	int		keylen;
 
 	envp = arrdup(envp_og);
 	if (!envp)
 		return (1);
 	sort_arr(envp);
 	sort_arr(envp);
-	quote_env_values(envp);
 	i = 0;
 	while (envp[i])
 	{
+		keylen = strdlen(envp[i], "=");
 		write(STDOUT_FILENO, "declare -x ", 11);
-		write(STDOUT_FILENO, envp[i], ft_strlen(envp[i]));
-		write(STDOUT_FILENO, "\n", 1);
+		write(STDOUT_FILENO, envp[i], keylen);
+		write(STDOUT_FILENO, "=\"", 2);
+		write(STDOUT_FILENO, envp[i + keylen + 1], ft_strlen(envp[i + keylen + 1]));
+		write(STDOUT_FILENO, "\"\n", 2);
 		i++;
 	}
 	free_arr(envp);
