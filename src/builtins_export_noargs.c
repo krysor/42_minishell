@@ -6,7 +6,7 @@
 /*   By: yaretel- <yaretel-@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/22 17:59:30 by yaretel-          #+#    #+#             */
-/*   Updated: 2023/05/22 20:10:06 by yaretel-         ###   ########.fr       */
+/*   Updated: 2023/05/23 09:56:39 by yaretel-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,7 @@ static void	sort_arr(char *envp[])
 		}
 		i++;
 	}
+	sort_arr(envp);
 }
 
 int	ft_export_noargs(char *envp_og[])
