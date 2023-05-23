@@ -6,7 +6,7 @@
 /*   By: kkaczoro <kkaczoro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/13 13:26:04 by kkaczoro          #+#    #+#             */
-/*   Updated: 2023/05/21 12:11:19 by kkaczoro         ###   ########.fr       */
+/*   Updated: 2023/05/23 10:05:20 by kkaczoro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,6 +92,7 @@ static int	execution(t_cmd **arr_cmd, char ***envp_dup_pnt)
 	if (arr_cmd && arr_cmd[0] && arr_cmd[1] == NULL
 		&& (arr_cmd[0]->builtin == &ft_exit))
 	{
+		ft_putstr_fd(CMD_EXIT, STDOUT_FILENO);
 		g_exit_code = get_exit_code(arr_cmd[0]->args);
 		if (g_exit_code != 256)
 			return (1);
@@ -103,92 +104,3 @@ static int	execution(t_cmd **arr_cmd, char ***envp_dup_pnt)
 	close_open_fds(arr_cmd);
 	return (0);
 }
-
-/*
-static void	main_loop(char *line, t_token *lst_tok,
-			t_cmd **arr_cmd, char **envp_dup)
-{
-	while (1)
-	{
-		free_intermediates(&line, &lst_tok, &arr_cmd);
-		signal(SIGQUIT, SIG_IGN);
-		line = get_line();
-		if (line == NULL && g_exit_code <= 0)
-		{			
-			g_exit_code *= -1;
-			ft_putstr_fd(CMD_EXIT, STDOUT_FILENO);
-			break ;
-		}
-
-		if (ft_strlen(line) == 0)
-			continue ;
-		lst_tok = lex_it(line, TRUE, NULL);
-		lst_tok = expander(lst_tok, envp_dup);
-		arr_cmd = parser(lst_tok, envp_dup);
-		if (arr_cmd == NULL)
-			continue ;
-		signal(SIGINT, &ft_ctrl_c_child);
-		handle_redirections(arr_cmd);
-		if (g_exit_code == INT_MAX)
-		{
-			g_exit_code = 1;
-			continue ;
-		}
-
-		if (execution(arr_cmd, &envp_dup))
-			break ;
-	}
-	free_intermediates(&line, &lst_tok, &arr_cmd);
-	free_arr(envp_dup);
-	dmy_freeall();
-}*/
-
-/*
-static void	main_loop(char *line, t_token *lst_tok,
-			t_cmd **arr_cmd, char **envp_dup)
-{
-	while (1)
-	{
-		free_intermediates(&line, &lst_tok, &arr_cmd);
-		signal(SIGQUIT, SIG_IGN);
-		line = get_line();
-		if (line == NULL && g_exit_code <= 0)
-		{			
-			g_exit_code *= -1;
-			ft_putstr_fd(CMD_EXIT, STDOUT_FILENO);
-			break ;
-		}
-		if (ft_strlen(line) == 0)
-			continue ;
-		lst_tok = lex_it(line, TRUE, NULL);
-		lst_tok = expander(lst_tok, envp_dup);
-		arr_cmd = parser(lst_tok, envp_dup);
-		if (arr_cmd == NULL)
-			continue ;
-		signal(SIGINT, &ft_ctrl_c_child);
-		handle_redirections(arr_cmd);
-		if (g_exit_code == INT_MAX)
-		{
-			g_exit_code = 1;
-			continue ;
-		}
-
-		signal(SIGQUIT, &ft_ctrl_slash_child);
-		if (arr_cmd && arr_cmd[0] && arr_cmd[1] == NULL
-			&& (arr_cmd[0]->builtin == &ft_exit))
-		{
-			g_exit_code = get_exit_code(arr_cmd[0]->args);
-			if (g_exit_code != 256)
-				break ;
-			else
-				g_exit_code = 1;
-		}
-		else
-			executor(arr_cmd, &envp_dup);
-		close_open_fds(arr_cmd);
-	}
-	free_intermediates(&line, &lst_tok, &arr_cmd);
-	free_arr(envp_dup);
-	dmy_freeall();
-}
-*/

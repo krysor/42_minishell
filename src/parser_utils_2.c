@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils_parser_update_cmd.c                          :+:      :+:    :+:   */
+/*   parser_utils_2.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kkaczoro <kkaczoro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/28 17:28:09 by kkaczoro          #+#    #+#             */
-/*   Updated: 2023/04/28 17:28:11 by kkaczoro         ###   ########.fr       */
+/*   Updated: 2023/05/23 10:15:57 by kkaczoro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ int	invalid_nb_cmd(int nb_cmd)
 	}
 	if (nb_cmd > NB_CMD_MAX)
 	{
-		ft_putstr_fd("too many commands as input\n", STDERR_FILENO);
+		ft_putstr_fd("fork: Resource temporarily unavailable\n", STDERR_FILENO);
 		g_exit_code = 1;
 		return (1);
 	}
