@@ -6,23 +6,11 @@
 /*   By: kkaczoro <kkaczoro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 16:36:53 by yaretel-          #+#    #+#             */
-/*   Updated: 2023/05/23 09:14:58 by yaretel-         ###   ########.fr       */
+/*   Updated: 2023/05/23 11:26:59 by yaretel-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
-
-static size_t	get_keylen(char **tokcod, char **token, unsigned int *i)
-{
-	size_t	keylen;
-
-	keylen = cstrlen((*tokcod)[*i], &(*tokcod)[*i + 1]);
-	if (seqstrlen("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefg\
-	hijklmnopqrstuvwxyz0123456789_", &(*token)[*i + 1]) < keylen)
-		keylen = seqstrlen("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefg\
-		hijklmnopqrstuvwxyz0123456789_", &(*token)[*i + 1]);
-	return (keylen);
-}
 
 int	attempt_expansion(char **envp, char **tokcod, char **token, unsigned int *i)
 {

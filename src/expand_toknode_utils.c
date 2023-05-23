@@ -6,11 +6,23 @@
 /*   By: kkaczoro <kkaczoro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/21 11:00:44 by yaretel-          #+#    #+#             */
-/*   Updated: 2023/05/08 09:34:56 by yaretel-         ###   ########.fr       */
+/*   Updated: 2023/05/23 11:30:54 by yaretel-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
+
+size_t	get_keylen(char **tokcod, char **token, unsigned int *i)
+{
+	size_t	keylen;
+
+	keylen = cstrlen((*tokcod)[*i], &(*tokcod)[*i + 1]);
+	if (seqstrlen("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefg\
+	hijklmnopqrstuvwxyz0123456789_", &(*token)[*i + 1]) < keylen)
+		keylen = seqstrlen("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefg\
+		hijklmnopqrstuvwxyz0123456789_", &(*token)[*i + 1]);
+	return (keylen);
+}
 
 ssize_t	value_len_diff(char *dlr, char **envp)
 {
