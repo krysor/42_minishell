@@ -6,7 +6,7 @@
 /*   By: kkaczoro <kkaczoro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/22 17:59:30 by yaretel-          #+#    #+#             */
-/*   Updated: 2023/05/23 10:45:30 by kkaczoro         ###   ########.fr       */
+/*   Updated: 2023/05/23 11:04:35 by kkaczoro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,11 @@ int	ft_export_noargs(char *envp_og[])
 	i = 0;
 	while (envp[i])
 	{
+		if (ft_strncmp(envp[i], "_=", 2) == 0)
+		{
+			i++;
+			continue ;
+		}
 		write(STDOUT_FILENO, "declare -x ", 11);
 		write(STDOUT_FILENO, envp[i], ft_strlen(envp[i]));
 		write(STDOUT_FILENO, "\n", 1);
